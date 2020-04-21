@@ -9,12 +9,6 @@ precedence = (
     ('left','OPMATRIZ')
 )
 
-def p_expresion_4(p):
-    '''
-    expresion : expresion OPMATRIZ LOGIC expresion
-    '''
-    p[0] = (p[3],p[1],p[2],p[4])
-
 def p_expresion_3(p):
     '''
     expresion : expresion LOGIC expresion
@@ -24,7 +18,7 @@ def p_expresion_3(p):
 
 def p_expresion_2(p):
     '''
-    expresion : termino OPMATRIZ
+    expresion : termino1 OPMATRIZ
     '''
     p[0] = (p[1],p[2])
 
@@ -52,6 +46,12 @@ def p_termino_3(p):
             | termino DIVIDE termino
     '''
     p[0] = (p[2],p[1],p[3])
+
+def p_termino_2(p):
+        '''
+        termino : termino1 OPMATRIZ
+        '''
+        p[0] = (p[1],p[2])
 
 def p_termino_1(p):
     '''
