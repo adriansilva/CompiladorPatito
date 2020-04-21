@@ -92,6 +92,7 @@ def t_ASSIGN(t):
 
 def t_IGNORE(t):
     r'\ '
+    pass
     #t.lexer.skip(1)
 
 def t_NEWLINE(t):
@@ -264,9 +265,7 @@ def t_error(t):
 
 lexer = lex.lex()
 
-lexer.input('''
-A + B - (C*D/E?)
-''')
+lexer.input('!')
 
 while True:
     tok = lexer.token()

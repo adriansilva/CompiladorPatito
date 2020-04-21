@@ -2,563 +2,662 @@ Created by PLY version 3.11 (http://www.dabeaz.com/ply)
 
 Unused terminals:
 
-    COMENTARIO
-    LEE
     NUMBER
-    ASSIGN
-    VOID
-    HAZ
-    SINO
-    FLOAT
+    OBRACKET
+    HASTA
+    PRINCIPAL
+    LEE
+    ENTONCES
     INT
-    DESDE
-    NEWLINE
-    VAR
     PROGRAMA
     IGNORE
-    HASTA
-    SI
-    PRINCIPAL
-    ESCRIBE
-    REGRESA
-    ENTONCES
     MIENTRAS
-    FUNCION
-    OBRACKET
+    REGRESA
+    ASSIGN
     SEMICOLON
+    FUNCION
+    NEWLINE
+    SINO
+    SI
+    COMENTARIO
+    FLOAT
+    VOID
+    DESDE
+    ESCRIBE
+    VAR
     CBRACKET
+    HAZ
 
 Grammar
 
 Rule 0     S' -> expresion
-Rule 1     expresion -> expresion LOGIC expresion
-Rule 2     expresion -> termino RELOP expresion
-Rule 3     expresion -> termino
-Rule 4     termino -> termino1
-Rule 5     termino -> termino PLUS termino
-Rule 6     termino -> termino MINUS termino
-Rule 7     termino -> termino MULTIPLY termino
-Rule 8     termino -> termino DIVIDE termino
-Rule 9     termino1 -> ID
-Rule 10    termino1 -> ID OPMATRIZ
-Rule 11    termino1 -> ENTERO
-Rule 12    termino1 -> FLOTANTE
-Rule 13    termino1 -> CARACTER
-Rule 14    termino1 -> LPAREN expresion RPAREN
+Rule 1     expresion -> expresion OPMATRIZ LOGIC expresion
+Rule 2     expresion -> expresion LOGIC expresion
+Rule 3     expresion -> expresion RELOP expresion
+Rule 4     expresion -> termino OPMATRIZ
+Rule 5     expresion -> termino
+Rule 6     termino -> termino PLUS termino
+Rule 7     termino -> termino MINUS termino
+Rule 8     termino -> termino MULTIPLY termino
+Rule 9     termino -> termino DIVIDE termino
+Rule 10    termino -> termino1
+Rule 11    termino1 -> ID
+Rule 12    termino1 -> ENTERO
+Rule 13    termino1 -> FLOTANTE
+Rule 14    termino1 -> CARACTER
+Rule 15    termino1 -> LPAREN expresion RPAREN
 
 Terminals, with rules where they appear
 
-ASSIGN               :
-CARACTER             : 13
-CBRACKET             :
-COMENTARIO           :
-DESDE                :
-DIVIDE               : 8
-ENTERO               : 11
-ENTONCES             :
-ESCRIBE              :
-FLOAT                :
-FLOTANTE             : 12
-FUNCION              :
-HASTA                :
-HAZ                  :
-ID                   : 9 10
-IGNORE               :
-INT                  :
-LEE                  :
-LOGIC                : 1
-LPAREN               : 14
-MIENTRAS             :
-MINUS                : 6
-MULTIPLY             : 7
-NEWLINE              :
-NUMBER               :
-OBRACKET             :
-OPMATRIZ             : 10
-PLUS                 : 5
-PRINCIPAL            :
-PROGRAMA             :
-REGRESA              :
-RELOP                : 2
-RPAREN               : 14
-SEMICOLON            :
-SI                   :
-SINO                 :
-VAR                  :
-VOID                 :
-error                :
+ASSIGN               : 
+CARACTER             : 14
+CBRACKET             : 
+COMENTARIO           : 
+DESDE                : 
+DIVIDE               : 9
+ENTERO               : 12
+ENTONCES             : 
+ESCRIBE              : 
+FLOAT                : 
+FLOTANTE             : 13
+FUNCION              : 
+HASTA                : 
+HAZ                  : 
+ID                   : 11
+IGNORE               : 
+INT                  : 
+LEE                  : 
+LOGIC                : 1 2
+LPAREN               : 15
+MIENTRAS             : 
+MINUS                : 7
+MULTIPLY             : 8
+NEWLINE              : 
+NUMBER               : 
+OBRACKET             : 
+OPMATRIZ             : 1 4
+PLUS                 : 6
+PRINCIPAL            : 
+PROGRAMA             : 
+REGRESA              : 
+RELOP                : 3
+RPAREN               : 15
+SEMICOLON            : 
+SI                   : 
+SINO                 : 
+VAR                  : 
+VOID                 : 
+error                : 
 
 Nonterminals, with rules where they appear
 
-expresion            : 1 1 2 14 0
-termino              : 2 3 5 5 6 6 7 7 8 8
-termino1             : 4
+expresion            : 1 1 2 2 3 3 15 0
+termino              : 4 5 6 6 7 7 8 8 9 9
+termino1             : 10
 
 Parsing method: LALR
 
 state 0
 
     (0) S' -> . expresion
-    (1) expresion -> . expresion LOGIC expresion
-    (2) expresion -> . termino RELOP expresion
-    (3) expresion -> . termino
-    (4) termino -> . termino1
-    (5) termino -> . termino PLUS termino
-    (6) termino -> . termino MINUS termino
-    (7) termino -> . termino MULTIPLY termino
-    (8) termino -> . termino DIVIDE termino
-    (9) termino1 -> . ID
-    (10) termino1 -> . ID OPMATRIZ
-    (11) termino1 -> . ENTERO
-    (12) termino1 -> . FLOTANTE
-    (13) termino1 -> . CARACTER
-    (14) termino1 -> . LPAREN expresion RPAREN
+    (1) expresion -> . expresion OPMATRIZ LOGIC expresion
+    (2) expresion -> . expresion LOGIC expresion
+    (3) expresion -> . expresion RELOP expresion
+    (4) expresion -> . termino OPMATRIZ
+    (5) expresion -> . termino
+    (6) termino -> . termino PLUS termino
+    (7) termino -> . termino MINUS termino
+    (8) termino -> . termino MULTIPLY termino
+    (9) termino -> . termino DIVIDE termino
+    (10) termino -> . termino1
+    (11) termino1 -> . ID
+    (12) termino1 -> . ENTERO
+    (13) termino1 -> . FLOTANTE
+    (14) termino1 -> . CARACTER
+    (15) termino1 -> . LPAREN expresion RPAREN
 
-    ID              shift and go to state 6
-    ENTERO          shift and go to state 3
-    FLOTANTE        shift and go to state 7
-    CARACTER        shift and go to state 2
-    LPAREN          shift and go to state 1
+    ID              shift and go to state 1
+    ENTERO          shift and go to state 2
+    FLOTANTE        shift and go to state 3
+    CARACTER        shift and go to state 6
+    LPAREN          shift and go to state 7
 
-    expresion                      shift and go to state 8
-    termino1                       shift and go to state 5
     termino                        shift and go to state 4
+    termino1                       shift and go to state 5
+    expresion                      shift and go to state 8
 
 state 1
 
-    (14) termino1 -> LPAREN . expresion RPAREN
-    (1) expresion -> . expresion LOGIC expresion
-    (2) expresion -> . termino RELOP expresion
-    (3) expresion -> . termino
-    (4) termino -> . termino1
-    (5) termino -> . termino PLUS termino
-    (6) termino -> . termino MINUS termino
-    (7) termino -> . termino MULTIPLY termino
-    (8) termino -> . termino DIVIDE termino
-    (9) termino1 -> . ID
-    (10) termino1 -> . ID OPMATRIZ
-    (11) termino1 -> . ENTERO
-    (12) termino1 -> . FLOTANTE
-    (13) termino1 -> . CARACTER
-    (14) termino1 -> . LPAREN expresion RPAREN
+    (11) termino1 -> ID .
 
-    ID              shift and go to state 6
-    ENTERO          shift and go to state 3
-    FLOTANTE        shift and go to state 7
-    CARACTER        shift and go to state 2
-    LPAREN          shift and go to state 1
+    PLUS            reduce using rule 11 (termino1 -> ID .)
+    MINUS           reduce using rule 11 (termino1 -> ID .)
+    MULTIPLY        reduce using rule 11 (termino1 -> ID .)
+    DIVIDE          reduce using rule 11 (termino1 -> ID .)
+    OPMATRIZ        reduce using rule 11 (termino1 -> ID .)
+    LOGIC           reduce using rule 11 (termino1 -> ID .)
+    RELOP           reduce using rule 11 (termino1 -> ID .)
+    $end            reduce using rule 11 (termino1 -> ID .)
+    RPAREN          reduce using rule 11 (termino1 -> ID .)
 
-    expresion                      shift and go to state 9
-    termino1                       shift and go to state 5
-    termino                        shift and go to state 4
 
 state 2
 
-    (13) termino1 -> CARACTER .
+    (12) termino1 -> ENTERO .
 
-    PLUS            reduce using rule 13 (termino1 -> CARACTER .)
-    MINUS           reduce using rule 13 (termino1 -> CARACTER .)
-    MULTIPLY        reduce using rule 13 (termino1 -> CARACTER .)
-    DIVIDE          reduce using rule 13 (termino1 -> CARACTER .)
-    RELOP           reduce using rule 13 (termino1 -> CARACTER .)
-    LOGIC           reduce using rule 13 (termino1 -> CARACTER .)
-    $end            reduce using rule 13 (termino1 -> CARACTER .)
-    RPAREN          reduce using rule 13 (termino1 -> CARACTER .)
+    PLUS            reduce using rule 12 (termino1 -> ENTERO .)
+    MINUS           reduce using rule 12 (termino1 -> ENTERO .)
+    MULTIPLY        reduce using rule 12 (termino1 -> ENTERO .)
+    DIVIDE          reduce using rule 12 (termino1 -> ENTERO .)
+    OPMATRIZ        reduce using rule 12 (termino1 -> ENTERO .)
+    LOGIC           reduce using rule 12 (termino1 -> ENTERO .)
+    RELOP           reduce using rule 12 (termino1 -> ENTERO .)
+    $end            reduce using rule 12 (termino1 -> ENTERO .)
+    RPAREN          reduce using rule 12 (termino1 -> ENTERO .)
 
 
 state 3
 
-    (11) termino1 -> ENTERO .
+    (13) termino1 -> FLOTANTE .
 
-    PLUS            reduce using rule 11 (termino1 -> ENTERO .)
-    MINUS           reduce using rule 11 (termino1 -> ENTERO .)
-    MULTIPLY        reduce using rule 11 (termino1 -> ENTERO .)
-    DIVIDE          reduce using rule 11 (termino1 -> ENTERO .)
-    RELOP           reduce using rule 11 (termino1 -> ENTERO .)
-    LOGIC           reduce using rule 11 (termino1 -> ENTERO .)
-    $end            reduce using rule 11 (termino1 -> ENTERO .)
-    RPAREN          reduce using rule 11 (termino1 -> ENTERO .)
+    PLUS            reduce using rule 13 (termino1 -> FLOTANTE .)
+    MINUS           reduce using rule 13 (termino1 -> FLOTANTE .)
+    MULTIPLY        reduce using rule 13 (termino1 -> FLOTANTE .)
+    DIVIDE          reduce using rule 13 (termino1 -> FLOTANTE .)
+    OPMATRIZ        reduce using rule 13 (termino1 -> FLOTANTE .)
+    LOGIC           reduce using rule 13 (termino1 -> FLOTANTE .)
+    RELOP           reduce using rule 13 (termino1 -> FLOTANTE .)
+    $end            reduce using rule 13 (termino1 -> FLOTANTE .)
+    RPAREN          reduce using rule 13 (termino1 -> FLOTANTE .)
 
 
 state 4
 
-    (2) expresion -> termino . RELOP expresion
-    (3) expresion -> termino .
-    (5) termino -> termino . PLUS termino
-    (6) termino -> termino . MINUS termino
-    (7) termino -> termino . MULTIPLY termino
-    (8) termino -> termino . DIVIDE termino
+    (4) expresion -> termino . OPMATRIZ
+    (5) expresion -> termino .
+    (6) termino -> termino . PLUS termino
+    (7) termino -> termino . MINUS termino
+    (8) termino -> termino . MULTIPLY termino
+    (9) termino -> termino . DIVIDE termino
 
-    RELOP           shift and go to state 12
-    LOGIC           reduce using rule 3 (expresion -> termino .)
-    $end            reduce using rule 3 (expresion -> termino .)
-    RPAREN          reduce using rule 3 (expresion -> termino .)
+  ! shift/reduce conflict for OPMATRIZ resolved as shift
+    OPMATRIZ        shift and go to state 9
+    LOGIC           reduce using rule 5 (expresion -> termino .)
+    RELOP           reduce using rule 5 (expresion -> termino .)
+    $end            reduce using rule 5 (expresion -> termino .)
+    RPAREN          reduce using rule 5 (expresion -> termino .)
     PLUS            shift and go to state 11
     MINUS           shift and go to state 10
     MULTIPLY        shift and go to state 13
-    DIVIDE          shift and go to state 14
+    DIVIDE          shift and go to state 12
+
+  ! OPMATRIZ        [ reduce using rule 5 (expresion -> termino .) ]
 
 
 state 5
 
-    (4) termino -> termino1 .
+    (10) termino -> termino1 .
 
-    PLUS            reduce using rule 4 (termino -> termino1 .)
-    MINUS           reduce using rule 4 (termino -> termino1 .)
-    MULTIPLY        reduce using rule 4 (termino -> termino1 .)
-    DIVIDE          reduce using rule 4 (termino -> termino1 .)
-    RELOP           reduce using rule 4 (termino -> termino1 .)
-    LOGIC           reduce using rule 4 (termino -> termino1 .)
-    $end            reduce using rule 4 (termino -> termino1 .)
-    RPAREN          reduce using rule 4 (termino -> termino1 .)
+    OPMATRIZ        reduce using rule 10 (termino -> termino1 .)
+    PLUS            reduce using rule 10 (termino -> termino1 .)
+    MINUS           reduce using rule 10 (termino -> termino1 .)
+    MULTIPLY        reduce using rule 10 (termino -> termino1 .)
+    DIVIDE          reduce using rule 10 (termino -> termino1 .)
+    LOGIC           reduce using rule 10 (termino -> termino1 .)
+    RELOP           reduce using rule 10 (termino -> termino1 .)
+    $end            reduce using rule 10 (termino -> termino1 .)
+    RPAREN          reduce using rule 10 (termino -> termino1 .)
 
 
 state 6
 
-    (9) termino1 -> ID .
-    (10) termino1 -> ID . OPMATRIZ
+    (14) termino1 -> CARACTER .
 
-    PLUS            reduce using rule 9 (termino1 -> ID .)
-    MINUS           reduce using rule 9 (termino1 -> ID .)
-    MULTIPLY        reduce using rule 9 (termino1 -> ID .)
-    DIVIDE          reduce using rule 9 (termino1 -> ID .)
-    RELOP           reduce using rule 9 (termino1 -> ID .)
-    LOGIC           reduce using rule 9 (termino1 -> ID .)
-    $end            reduce using rule 9 (termino1 -> ID .)
-    RPAREN          reduce using rule 9 (termino1 -> ID .)
-    OPMATRIZ        shift and go to state 15
+    PLUS            reduce using rule 14 (termino1 -> CARACTER .)
+    MINUS           reduce using rule 14 (termino1 -> CARACTER .)
+    MULTIPLY        reduce using rule 14 (termino1 -> CARACTER .)
+    DIVIDE          reduce using rule 14 (termino1 -> CARACTER .)
+    OPMATRIZ        reduce using rule 14 (termino1 -> CARACTER .)
+    LOGIC           reduce using rule 14 (termino1 -> CARACTER .)
+    RELOP           reduce using rule 14 (termino1 -> CARACTER .)
+    $end            reduce using rule 14 (termino1 -> CARACTER .)
+    RPAREN          reduce using rule 14 (termino1 -> CARACTER .)
 
 
 state 7
 
-    (12) termino1 -> FLOTANTE .
+    (15) termino1 -> LPAREN . expresion RPAREN
+    (1) expresion -> . expresion OPMATRIZ LOGIC expresion
+    (2) expresion -> . expresion LOGIC expresion
+    (3) expresion -> . expresion RELOP expresion
+    (4) expresion -> . termino OPMATRIZ
+    (5) expresion -> . termino
+    (6) termino -> . termino PLUS termino
+    (7) termino -> . termino MINUS termino
+    (8) termino -> . termino MULTIPLY termino
+    (9) termino -> . termino DIVIDE termino
+    (10) termino -> . termino1
+    (11) termino1 -> . ID
+    (12) termino1 -> . ENTERO
+    (13) termino1 -> . FLOTANTE
+    (14) termino1 -> . CARACTER
+    (15) termino1 -> . LPAREN expresion RPAREN
 
-    PLUS            reduce using rule 12 (termino1 -> FLOTANTE .)
-    MINUS           reduce using rule 12 (termino1 -> FLOTANTE .)
-    MULTIPLY        reduce using rule 12 (termino1 -> FLOTANTE .)
-    DIVIDE          reduce using rule 12 (termino1 -> FLOTANTE .)
-    RELOP           reduce using rule 12 (termino1 -> FLOTANTE .)
-    LOGIC           reduce using rule 12 (termino1 -> FLOTANTE .)
-    $end            reduce using rule 12 (termino1 -> FLOTANTE .)
-    RPAREN          reduce using rule 12 (termino1 -> FLOTANTE .)
+    ID              shift and go to state 1
+    ENTERO          shift and go to state 2
+    FLOTANTE        shift and go to state 3
+    CARACTER        shift and go to state 6
+    LPAREN          shift and go to state 7
 
+    termino                        shift and go to state 4
+    termino1                       shift and go to state 5
+    expresion                      shift and go to state 14
 
 state 8
 
     (0) S' -> expresion .
-    (1) expresion -> expresion . LOGIC expresion
+    (1) expresion -> expresion . OPMATRIZ LOGIC expresion
+    (2) expresion -> expresion . LOGIC expresion
+    (3) expresion -> expresion . RELOP expresion
 
+    OPMATRIZ        shift and go to state 15
     LOGIC           shift and go to state 16
+    RELOP           shift and go to state 17
 
 
 state 9
 
-    (14) termino1 -> LPAREN expresion . RPAREN
-    (1) expresion -> expresion . LOGIC expresion
+    (4) expresion -> termino OPMATRIZ .
 
-    RPAREN          shift and go to state 17
-    LOGIC           shift and go to state 16
+    OPMATRIZ        reduce using rule 4 (expresion -> termino OPMATRIZ .)
+    LOGIC           reduce using rule 4 (expresion -> termino OPMATRIZ .)
+    RELOP           reduce using rule 4 (expresion -> termino OPMATRIZ .)
+    $end            reduce using rule 4 (expresion -> termino OPMATRIZ .)
+    RPAREN          reduce using rule 4 (expresion -> termino OPMATRIZ .)
 
 
 state 10
 
-    (6) termino -> termino MINUS . termino
-    (4) termino -> . termino1
-    (5) termino -> . termino PLUS termino
-    (6) termino -> . termino MINUS termino
-    (7) termino -> . termino MULTIPLY termino
-    (8) termino -> . termino DIVIDE termino
-    (9) termino1 -> . ID
-    (10) termino1 -> . ID OPMATRIZ
-    (11) termino1 -> . ENTERO
-    (12) termino1 -> . FLOTANTE
-    (13) termino1 -> . CARACTER
-    (14) termino1 -> . LPAREN expresion RPAREN
+    (7) termino -> termino MINUS . termino
+    (6) termino -> . termino PLUS termino
+    (7) termino -> . termino MINUS termino
+    (8) termino -> . termino MULTIPLY termino
+    (9) termino -> . termino DIVIDE termino
+    (10) termino -> . termino1
+    (11) termino1 -> . ID
+    (12) termino1 -> . ENTERO
+    (13) termino1 -> . FLOTANTE
+    (14) termino1 -> . CARACTER
+    (15) termino1 -> . LPAREN expresion RPAREN
 
-    ID              shift and go to state 6
-    ENTERO          shift and go to state 3
-    FLOTANTE        shift and go to state 7
-    CARACTER        shift and go to state 2
-    LPAREN          shift and go to state 1
+    ID              shift and go to state 1
+    ENTERO          shift and go to state 2
+    FLOTANTE        shift and go to state 3
+    CARACTER        shift and go to state 6
+    LPAREN          shift and go to state 7
 
     termino                        shift and go to state 18
     termino1                       shift and go to state 5
 
 state 11
 
-    (5) termino -> termino PLUS . termino
-    (4) termino -> . termino1
-    (5) termino -> . termino PLUS termino
-    (6) termino -> . termino MINUS termino
-    (7) termino -> . termino MULTIPLY termino
-    (8) termino -> . termino DIVIDE termino
-    (9) termino1 -> . ID
-    (10) termino1 -> . ID OPMATRIZ
-    (11) termino1 -> . ENTERO
-    (12) termino1 -> . FLOTANTE
-    (13) termino1 -> . CARACTER
-    (14) termino1 -> . LPAREN expresion RPAREN
+    (6) termino -> termino PLUS . termino
+    (6) termino -> . termino PLUS termino
+    (7) termino -> . termino MINUS termino
+    (8) termino -> . termino MULTIPLY termino
+    (9) termino -> . termino DIVIDE termino
+    (10) termino -> . termino1
+    (11) termino1 -> . ID
+    (12) termino1 -> . ENTERO
+    (13) termino1 -> . FLOTANTE
+    (14) termino1 -> . CARACTER
+    (15) termino1 -> . LPAREN expresion RPAREN
 
-    ID              shift and go to state 6
-    ENTERO          shift and go to state 3
-    FLOTANTE        shift and go to state 7
-    CARACTER        shift and go to state 2
-    LPAREN          shift and go to state 1
+    ID              shift and go to state 1
+    ENTERO          shift and go to state 2
+    FLOTANTE        shift and go to state 3
+    CARACTER        shift and go to state 6
+    LPAREN          shift and go to state 7
 
     termino                        shift and go to state 19
     termino1                       shift and go to state 5
 
 state 12
 
-    (2) expresion -> termino RELOP . expresion
-    (1) expresion -> . expresion LOGIC expresion
-    (2) expresion -> . termino RELOP expresion
-    (3) expresion -> . termino
-    (4) termino -> . termino1
-    (5) termino -> . termino PLUS termino
-    (6) termino -> . termino MINUS termino
-    (7) termino -> . termino MULTIPLY termino
-    (8) termino -> . termino DIVIDE termino
-    (9) termino1 -> . ID
-    (10) termino1 -> . ID OPMATRIZ
-    (11) termino1 -> . ENTERO
-    (12) termino1 -> . FLOTANTE
-    (13) termino1 -> . CARACTER
-    (14) termino1 -> . LPAREN expresion RPAREN
+    (9) termino -> termino DIVIDE . termino
+    (6) termino -> . termino PLUS termino
+    (7) termino -> . termino MINUS termino
+    (8) termino -> . termino MULTIPLY termino
+    (9) termino -> . termino DIVIDE termino
+    (10) termino -> . termino1
+    (11) termino1 -> . ID
+    (12) termino1 -> . ENTERO
+    (13) termino1 -> . FLOTANTE
+    (14) termino1 -> . CARACTER
+    (15) termino1 -> . LPAREN expresion RPAREN
 
-    ID              shift and go to state 6
-    ENTERO          shift and go to state 3
-    FLOTANTE        shift and go to state 7
-    CARACTER        shift and go to state 2
-    LPAREN          shift and go to state 1
+    ID              shift and go to state 1
+    ENTERO          shift and go to state 2
+    FLOTANTE        shift and go to state 3
+    CARACTER        shift and go to state 6
+    LPAREN          shift and go to state 7
 
-    termino                        shift and go to state 4
+    termino                        shift and go to state 20
     termino1                       shift and go to state 5
-    expresion                      shift and go to state 20
 
 state 13
 
-    (7) termino -> termino MULTIPLY . termino
-    (4) termino -> . termino1
-    (5) termino -> . termino PLUS termino
-    (6) termino -> . termino MINUS termino
-    (7) termino -> . termino MULTIPLY termino
-    (8) termino -> . termino DIVIDE termino
-    (9) termino1 -> . ID
-    (10) termino1 -> . ID OPMATRIZ
-    (11) termino1 -> . ENTERO
-    (12) termino1 -> . FLOTANTE
-    (13) termino1 -> . CARACTER
-    (14) termino1 -> . LPAREN expresion RPAREN
+    (8) termino -> termino MULTIPLY . termino
+    (6) termino -> . termino PLUS termino
+    (7) termino -> . termino MINUS termino
+    (8) termino -> . termino MULTIPLY termino
+    (9) termino -> . termino DIVIDE termino
+    (10) termino -> . termino1
+    (11) termino1 -> . ID
+    (12) termino1 -> . ENTERO
+    (13) termino1 -> . FLOTANTE
+    (14) termino1 -> . CARACTER
+    (15) termino1 -> . LPAREN expresion RPAREN
 
-    ID              shift and go to state 6
-    ENTERO          shift and go to state 3
-    FLOTANTE        shift and go to state 7
-    CARACTER        shift and go to state 2
-    LPAREN          shift and go to state 1
+    ID              shift and go to state 1
+    ENTERO          shift and go to state 2
+    FLOTANTE        shift and go to state 3
+    CARACTER        shift and go to state 6
+    LPAREN          shift and go to state 7
 
     termino                        shift and go to state 21
     termino1                       shift and go to state 5
 
 state 14
 
-    (8) termino -> termino DIVIDE . termino
-    (4) termino -> . termino1
-    (5) termino -> . termino PLUS termino
-    (6) termino -> . termino MINUS termino
-    (7) termino -> . termino MULTIPLY termino
-    (8) termino -> . termino DIVIDE termino
-    (9) termino1 -> . ID
-    (10) termino1 -> . ID OPMATRIZ
-    (11) termino1 -> . ENTERO
-    (12) termino1 -> . FLOTANTE
-    (13) termino1 -> . CARACTER
-    (14) termino1 -> . LPAREN expresion RPAREN
+    (15) termino1 -> LPAREN expresion . RPAREN
+    (1) expresion -> expresion . OPMATRIZ LOGIC expresion
+    (2) expresion -> expresion . LOGIC expresion
+    (3) expresion -> expresion . RELOP expresion
 
-    ID              shift and go to state 6
-    ENTERO          shift and go to state 3
-    FLOTANTE        shift and go to state 7
-    CARACTER        shift and go to state 2
-    LPAREN          shift and go to state 1
+    RPAREN          shift and go to state 22
+    OPMATRIZ        shift and go to state 15
+    LOGIC           shift and go to state 16
+    RELOP           shift and go to state 17
 
-    termino                        shift and go to state 22
-    termino1                       shift and go to state 5
 
 state 15
 
-    (10) termino1 -> ID OPMATRIZ .
+    (1) expresion -> expresion OPMATRIZ . LOGIC expresion
 
-    PLUS            reduce using rule 10 (termino1 -> ID OPMATRIZ .)
-    MINUS           reduce using rule 10 (termino1 -> ID OPMATRIZ .)
-    MULTIPLY        reduce using rule 10 (termino1 -> ID OPMATRIZ .)
-    DIVIDE          reduce using rule 10 (termino1 -> ID OPMATRIZ .)
-    RELOP           reduce using rule 10 (termino1 -> ID OPMATRIZ .)
-    LOGIC           reduce using rule 10 (termino1 -> ID OPMATRIZ .)
-    $end            reduce using rule 10 (termino1 -> ID OPMATRIZ .)
-    RPAREN          reduce using rule 10 (termino1 -> ID OPMATRIZ .)
+    LOGIC           shift and go to state 23
 
 
 state 16
 
-    (1) expresion -> expresion LOGIC . expresion
-    (1) expresion -> . expresion LOGIC expresion
-    (2) expresion -> . termino RELOP expresion
-    (3) expresion -> . termino
-    (4) termino -> . termino1
-    (5) termino -> . termino PLUS termino
-    (6) termino -> . termino MINUS termino
-    (7) termino -> . termino MULTIPLY termino
-    (8) termino -> . termino DIVIDE termino
-    (9) termino1 -> . ID
-    (10) termino1 -> . ID OPMATRIZ
-    (11) termino1 -> . ENTERO
-    (12) termino1 -> . FLOTANTE
-    (13) termino1 -> . CARACTER
-    (14) termino1 -> . LPAREN expresion RPAREN
+    (2) expresion -> expresion LOGIC . expresion
+    (1) expresion -> . expresion OPMATRIZ LOGIC expresion
+    (2) expresion -> . expresion LOGIC expresion
+    (3) expresion -> . expresion RELOP expresion
+    (4) expresion -> . termino OPMATRIZ
+    (5) expresion -> . termino
+    (6) termino -> . termino PLUS termino
+    (7) termino -> . termino MINUS termino
+    (8) termino -> . termino MULTIPLY termino
+    (9) termino -> . termino DIVIDE termino
+    (10) termino -> . termino1
+    (11) termino1 -> . ID
+    (12) termino1 -> . ENTERO
+    (13) termino1 -> . FLOTANTE
+    (14) termino1 -> . CARACTER
+    (15) termino1 -> . LPAREN expresion RPAREN
 
-    ID              shift and go to state 6
-    ENTERO          shift and go to state 3
-    FLOTANTE        shift and go to state 7
-    CARACTER        shift and go to state 2
-    LPAREN          shift and go to state 1
+    ID              shift and go to state 1
+    ENTERO          shift and go to state 2
+    FLOTANTE        shift and go to state 3
+    CARACTER        shift and go to state 6
+    LPAREN          shift and go to state 7
 
-    expresion                      shift and go to state 23
-    termino1                       shift and go to state 5
     termino                        shift and go to state 4
+    termino1                       shift and go to state 5
+    expresion                      shift and go to state 24
 
 state 17
 
-    (14) termino1 -> LPAREN expresion RPAREN .
+    (3) expresion -> expresion RELOP . expresion
+    (1) expresion -> . expresion OPMATRIZ LOGIC expresion
+    (2) expresion -> . expresion LOGIC expresion
+    (3) expresion -> . expresion RELOP expresion
+    (4) expresion -> . termino OPMATRIZ
+    (5) expresion -> . termino
+    (6) termino -> . termino PLUS termino
+    (7) termino -> . termino MINUS termino
+    (8) termino -> . termino MULTIPLY termino
+    (9) termino -> . termino DIVIDE termino
+    (10) termino -> . termino1
+    (11) termino1 -> . ID
+    (12) termino1 -> . ENTERO
+    (13) termino1 -> . FLOTANTE
+    (14) termino1 -> . CARACTER
+    (15) termino1 -> . LPAREN expresion RPAREN
 
-    PLUS            reduce using rule 14 (termino1 -> LPAREN expresion RPAREN .)
-    MINUS           reduce using rule 14 (termino1 -> LPAREN expresion RPAREN .)
-    MULTIPLY        reduce using rule 14 (termino1 -> LPAREN expresion RPAREN .)
-    DIVIDE          reduce using rule 14 (termino1 -> LPAREN expresion RPAREN .)
-    RELOP           reduce using rule 14 (termino1 -> LPAREN expresion RPAREN .)
-    LOGIC           reduce using rule 14 (termino1 -> LPAREN expresion RPAREN .)
-    $end            reduce using rule 14 (termino1 -> LPAREN expresion RPAREN .)
-    RPAREN          reduce using rule 14 (termino1 -> LPAREN expresion RPAREN .)
+    ID              shift and go to state 1
+    ENTERO          shift and go to state 2
+    FLOTANTE        shift and go to state 3
+    CARACTER        shift and go to state 6
+    LPAREN          shift and go to state 7
 
+    termino                        shift and go to state 4
+    termino1                       shift and go to state 5
+    expresion                      shift and go to state 25
 
 state 18
 
-    (6) termino -> termino MINUS termino .
-    (5) termino -> termino . PLUS termino
-    (6) termino -> termino . MINUS termino
-    (7) termino -> termino . MULTIPLY termino
-    (8) termino -> termino . DIVIDE termino
+    (7) termino -> termino MINUS termino .
+    (6) termino -> termino . PLUS termino
+    (7) termino -> termino . MINUS termino
+    (8) termino -> termino . MULTIPLY termino
+    (9) termino -> termino . DIVIDE termino
 
-    PLUS            reduce using rule 6 (termino -> termino MINUS termino .)
-    MINUS           reduce using rule 6 (termino -> termino MINUS termino .)
-    RELOP           reduce using rule 6 (termino -> termino MINUS termino .)
-    LOGIC           reduce using rule 6 (termino -> termino MINUS termino .)
-    $end            reduce using rule 6 (termino -> termino MINUS termino .)
-    RPAREN          reduce using rule 6 (termino -> termino MINUS termino .)
+    OPMATRIZ        reduce using rule 7 (termino -> termino MINUS termino .)
+    PLUS            reduce using rule 7 (termino -> termino MINUS termino .)
+    MINUS           reduce using rule 7 (termino -> termino MINUS termino .)
+    LOGIC           reduce using rule 7 (termino -> termino MINUS termino .)
+    RELOP           reduce using rule 7 (termino -> termino MINUS termino .)
+    $end            reduce using rule 7 (termino -> termino MINUS termino .)
+    RPAREN          reduce using rule 7 (termino -> termino MINUS termino .)
     MULTIPLY        shift and go to state 13
-    DIVIDE          shift and go to state 14
+    DIVIDE          shift and go to state 12
 
-  ! MULTIPLY        [ reduce using rule 6 (termino -> termino MINUS termino .) ]
-  ! DIVIDE          [ reduce using rule 6 (termino -> termino MINUS termino .) ]
+  ! MULTIPLY        [ reduce using rule 7 (termino -> termino MINUS termino .) ]
+  ! DIVIDE          [ reduce using rule 7 (termino -> termino MINUS termino .) ]
   ! PLUS            [ shift and go to state 11 ]
   ! MINUS           [ shift and go to state 10 ]
 
 
 state 19
 
-    (5) termino -> termino PLUS termino .
-    (5) termino -> termino . PLUS termino
-    (6) termino -> termino . MINUS termino
-    (7) termino -> termino . MULTIPLY termino
-    (8) termino -> termino . DIVIDE termino
+    (6) termino -> termino PLUS termino .
+    (6) termino -> termino . PLUS termino
+    (7) termino -> termino . MINUS termino
+    (8) termino -> termino . MULTIPLY termino
+    (9) termino -> termino . DIVIDE termino
 
-    PLUS            reduce using rule 5 (termino -> termino PLUS termino .)
-    MINUS           reduce using rule 5 (termino -> termino PLUS termino .)
-    RELOP           reduce using rule 5 (termino -> termino PLUS termino .)
-    LOGIC           reduce using rule 5 (termino -> termino PLUS termino .)
-    $end            reduce using rule 5 (termino -> termino PLUS termino .)
-    RPAREN          reduce using rule 5 (termino -> termino PLUS termino .)
+    OPMATRIZ        reduce using rule 6 (termino -> termino PLUS termino .)
+    PLUS            reduce using rule 6 (termino -> termino PLUS termino .)
+    MINUS           reduce using rule 6 (termino -> termino PLUS termino .)
+    LOGIC           reduce using rule 6 (termino -> termino PLUS termino .)
+    RELOP           reduce using rule 6 (termino -> termino PLUS termino .)
+    $end            reduce using rule 6 (termino -> termino PLUS termino .)
+    RPAREN          reduce using rule 6 (termino -> termino PLUS termino .)
     MULTIPLY        shift and go to state 13
-    DIVIDE          shift and go to state 14
+    DIVIDE          shift and go to state 12
 
-  ! MULTIPLY        [ reduce using rule 5 (termino -> termino PLUS termino .) ]
-  ! DIVIDE          [ reduce using rule 5 (termino -> termino PLUS termino .) ]
+  ! MULTIPLY        [ reduce using rule 6 (termino -> termino PLUS termino .) ]
+  ! DIVIDE          [ reduce using rule 6 (termino -> termino PLUS termino .) ]
   ! PLUS            [ shift and go to state 11 ]
   ! MINUS           [ shift and go to state 10 ]
 
 
 state 20
 
-    (2) expresion -> termino RELOP expresion .
-    (1) expresion -> expresion . LOGIC expresion
+    (9) termino -> termino DIVIDE termino .
+    (6) termino -> termino . PLUS termino
+    (7) termino -> termino . MINUS termino
+    (8) termino -> termino . MULTIPLY termino
+    (9) termino -> termino . DIVIDE termino
 
-  ! shift/reduce conflict for LOGIC resolved as shift
-    $end            reduce using rule 2 (expresion -> termino RELOP expresion .)
-    RPAREN          reduce using rule 2 (expresion -> termino RELOP expresion .)
-    LOGIC           shift and go to state 16
+    OPMATRIZ        reduce using rule 9 (termino -> termino DIVIDE termino .)
+    PLUS            reduce using rule 9 (termino -> termino DIVIDE termino .)
+    MINUS           reduce using rule 9 (termino -> termino DIVIDE termino .)
+    MULTIPLY        reduce using rule 9 (termino -> termino DIVIDE termino .)
+    DIVIDE          reduce using rule 9 (termino -> termino DIVIDE termino .)
+    LOGIC           reduce using rule 9 (termino -> termino DIVIDE termino .)
+    RELOP           reduce using rule 9 (termino -> termino DIVIDE termino .)
+    $end            reduce using rule 9 (termino -> termino DIVIDE termino .)
+    RPAREN          reduce using rule 9 (termino -> termino DIVIDE termino .)
 
-  ! LOGIC           [ reduce using rule 2 (expresion -> termino RELOP expresion .) ]
+  ! PLUS            [ shift and go to state 11 ]
+  ! MINUS           [ shift and go to state 10 ]
+  ! MULTIPLY        [ shift and go to state 13 ]
+  ! DIVIDE          [ shift and go to state 12 ]
 
 
 state 21
 
-    (7) termino -> termino MULTIPLY termino .
-    (5) termino -> termino . PLUS termino
-    (6) termino -> termino . MINUS termino
-    (7) termino -> termino . MULTIPLY termino
-    (8) termino -> termino . DIVIDE termino
+    (8) termino -> termino MULTIPLY termino .
+    (6) termino -> termino . PLUS termino
+    (7) termino -> termino . MINUS termino
+    (8) termino -> termino . MULTIPLY termino
+    (9) termino -> termino . DIVIDE termino
 
-    PLUS            reduce using rule 7 (termino -> termino MULTIPLY termino .)
-    MINUS           reduce using rule 7 (termino -> termino MULTIPLY termino .)
-    MULTIPLY        reduce using rule 7 (termino -> termino MULTIPLY termino .)
-    DIVIDE          reduce using rule 7 (termino -> termino MULTIPLY termino .)
-    RELOP           reduce using rule 7 (termino -> termino MULTIPLY termino .)
-    LOGIC           reduce using rule 7 (termino -> termino MULTIPLY termino .)
-    $end            reduce using rule 7 (termino -> termino MULTIPLY termino .)
-    RPAREN          reduce using rule 7 (termino -> termino MULTIPLY termino .)
+    OPMATRIZ        reduce using rule 8 (termino -> termino MULTIPLY termino .)
+    PLUS            reduce using rule 8 (termino -> termino MULTIPLY termino .)
+    MINUS           reduce using rule 8 (termino -> termino MULTIPLY termino .)
+    MULTIPLY        reduce using rule 8 (termino -> termino MULTIPLY termino .)
+    DIVIDE          reduce using rule 8 (termino -> termino MULTIPLY termino .)
+    LOGIC           reduce using rule 8 (termino -> termino MULTIPLY termino .)
+    RELOP           reduce using rule 8 (termino -> termino MULTIPLY termino .)
+    $end            reduce using rule 8 (termino -> termino MULTIPLY termino .)
+    RPAREN          reduce using rule 8 (termino -> termino MULTIPLY termino .)
 
   ! PLUS            [ shift and go to state 11 ]
   ! MINUS           [ shift and go to state 10 ]
   ! MULTIPLY        [ shift and go to state 13 ]
-  ! DIVIDE          [ shift and go to state 14 ]
+  ! DIVIDE          [ shift and go to state 12 ]
 
 
 state 22
 
-    (8) termino -> termino DIVIDE termino .
-    (5) termino -> termino . PLUS termino
-    (6) termino -> termino . MINUS termino
-    (7) termino -> termino . MULTIPLY termino
-    (8) termino -> termino . DIVIDE termino
+    (15) termino1 -> LPAREN expresion RPAREN .
 
-    PLUS            reduce using rule 8 (termino -> termino DIVIDE termino .)
-    MINUS           reduce using rule 8 (termino -> termino DIVIDE termino .)
-    MULTIPLY        reduce using rule 8 (termino -> termino DIVIDE termino .)
-    DIVIDE          reduce using rule 8 (termino -> termino DIVIDE termino .)
-    RELOP           reduce using rule 8 (termino -> termino DIVIDE termino .)
-    LOGIC           reduce using rule 8 (termino -> termino DIVIDE termino .)
-    $end            reduce using rule 8 (termino -> termino DIVIDE termino .)
-    RPAREN          reduce using rule 8 (termino -> termino DIVIDE termino .)
-
-  ! PLUS            [ shift and go to state 11 ]
-  ! MINUS           [ shift and go to state 10 ]
-  ! MULTIPLY        [ shift and go to state 13 ]
-  ! DIVIDE          [ shift and go to state 14 ]
+    PLUS            reduce using rule 15 (termino1 -> LPAREN expresion RPAREN .)
+    MINUS           reduce using rule 15 (termino1 -> LPAREN expresion RPAREN .)
+    MULTIPLY        reduce using rule 15 (termino1 -> LPAREN expresion RPAREN .)
+    DIVIDE          reduce using rule 15 (termino1 -> LPAREN expresion RPAREN .)
+    OPMATRIZ        reduce using rule 15 (termino1 -> LPAREN expresion RPAREN .)
+    LOGIC           reduce using rule 15 (termino1 -> LPAREN expresion RPAREN .)
+    RELOP           reduce using rule 15 (termino1 -> LPAREN expresion RPAREN .)
+    $end            reduce using rule 15 (termino1 -> LPAREN expresion RPAREN .)
+    RPAREN          reduce using rule 15 (termino1 -> LPAREN expresion RPAREN .)
 
 
 state 23
 
-    (1) expresion -> expresion LOGIC expresion .
-    (1) expresion -> expresion . LOGIC expresion
+    (1) expresion -> expresion OPMATRIZ LOGIC . expresion
+    (1) expresion -> . expresion OPMATRIZ LOGIC expresion
+    (2) expresion -> . expresion LOGIC expresion
+    (3) expresion -> . expresion RELOP expresion
+    (4) expresion -> . termino OPMATRIZ
+    (5) expresion -> . termino
+    (6) termino -> . termino PLUS termino
+    (7) termino -> . termino MINUS termino
+    (8) termino -> . termino MULTIPLY termino
+    (9) termino -> . termino DIVIDE termino
+    (10) termino -> . termino1
+    (11) termino1 -> . ID
+    (12) termino1 -> . ENTERO
+    (13) termino1 -> . FLOTANTE
+    (14) termino1 -> . CARACTER
+    (15) termino1 -> . LPAREN expresion RPAREN
 
+    ID              shift and go to state 1
+    ENTERO          shift and go to state 2
+    FLOTANTE        shift and go to state 3
+    CARACTER        shift and go to state 6
+    LPAREN          shift and go to state 7
+
+    termino                        shift and go to state 4
+    termino1                       shift and go to state 5
+    expresion                      shift and go to state 26
+
+state 24
+
+    (2) expresion -> expresion LOGIC expresion .
+    (1) expresion -> expresion . OPMATRIZ LOGIC expresion
+    (2) expresion -> expresion . LOGIC expresion
+    (3) expresion -> expresion . RELOP expresion
+
+  ! shift/reduce conflict for OPMATRIZ resolved as shift
   ! shift/reduce conflict for LOGIC resolved as shift
-    $end            reduce using rule 1 (expresion -> expresion LOGIC expresion .)
-    RPAREN          reduce using rule 1 (expresion -> expresion LOGIC expresion .)
+  ! shift/reduce conflict for RELOP resolved as shift
+    $end            reduce using rule 2 (expresion -> expresion LOGIC expresion .)
+    RPAREN          reduce using rule 2 (expresion -> expresion LOGIC expresion .)
+    OPMATRIZ        shift and go to state 15
     LOGIC           shift and go to state 16
+    RELOP           shift and go to state 17
 
-  ! LOGIC           [ reduce using rule 1 (expresion -> expresion LOGIC expresion .) ]
+  ! OPMATRIZ        [ reduce using rule 2 (expresion -> expresion LOGIC expresion .) ]
+  ! LOGIC           [ reduce using rule 2 (expresion -> expresion LOGIC expresion .) ]
+  ! RELOP           [ reduce using rule 2 (expresion -> expresion LOGIC expresion .) ]
 
-WARNING:
+
+state 25
+
+    (3) expresion -> expresion RELOP expresion .
+    (1) expresion -> expresion . OPMATRIZ LOGIC expresion
+    (2) expresion -> expresion . LOGIC expresion
+    (3) expresion -> expresion . RELOP expresion
+
+  ! shift/reduce conflict for OPMATRIZ resolved as shift
+  ! shift/reduce conflict for LOGIC resolved as shift
+  ! shift/reduce conflict for RELOP resolved as shift
+    $end            reduce using rule 3 (expresion -> expresion RELOP expresion .)
+    RPAREN          reduce using rule 3 (expresion -> expresion RELOP expresion .)
+    OPMATRIZ        shift and go to state 15
+    LOGIC           shift and go to state 16
+    RELOP           shift and go to state 17
+
+  ! OPMATRIZ        [ reduce using rule 3 (expresion -> expresion RELOP expresion .) ]
+  ! LOGIC           [ reduce using rule 3 (expresion -> expresion RELOP expresion .) ]
+  ! RELOP           [ reduce using rule 3 (expresion -> expresion RELOP expresion .) ]
+
+
+state 26
+
+    (1) expresion -> expresion OPMATRIZ LOGIC expresion .
+    (1) expresion -> expresion . OPMATRIZ LOGIC expresion
+    (2) expresion -> expresion . LOGIC expresion
+    (3) expresion -> expresion . RELOP expresion
+
+  ! shift/reduce conflict for OPMATRIZ resolved as shift
+  ! shift/reduce conflict for LOGIC resolved as shift
+  ! shift/reduce conflict for RELOP resolved as shift
+    $end            reduce using rule 1 (expresion -> expresion OPMATRIZ LOGIC expresion .)
+    RPAREN          reduce using rule 1 (expresion -> expresion OPMATRIZ LOGIC expresion .)
+    OPMATRIZ        shift and go to state 15
+    LOGIC           shift and go to state 16
+    RELOP           shift and go to state 17
+
+  ! OPMATRIZ        [ reduce using rule 1 (expresion -> expresion OPMATRIZ LOGIC expresion .) ]
+  ! LOGIC           [ reduce using rule 1 (expresion -> expresion OPMATRIZ LOGIC expresion .) ]
+  ! RELOP           [ reduce using rule 1 (expresion -> expresion OPMATRIZ LOGIC expresion .) ]
+
+WARNING: 
 WARNING: Conflicts:
-WARNING:
-WARNING: shift/reduce conflict for LOGIC in state 20 resolved as shift
-WARNING: shift/reduce conflict for LOGIC in state 23 resolved as shift
+WARNING: 
+WARNING: shift/reduce conflict for OPMATRIZ in state 4 resolved as shift
+WARNING: shift/reduce conflict for OPMATRIZ in state 24 resolved as shift
+WARNING: shift/reduce conflict for LOGIC in state 24 resolved as shift
+WARNING: shift/reduce conflict for RELOP in state 24 resolved as shift
+WARNING: shift/reduce conflict for OPMATRIZ in state 25 resolved as shift
+WARNING: shift/reduce conflict for LOGIC in state 25 resolved as shift
+WARNING: shift/reduce conflict for RELOP in state 25 resolved as shift
+WARNING: shift/reduce conflict for OPMATRIZ in state 26 resolved as shift
+WARNING: shift/reduce conflict for LOGIC in state 26 resolved as shift
+WARNING: shift/reduce conflict for RELOP in state 26 resolved as shift

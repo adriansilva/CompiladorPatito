@@ -6,9 +6,9 @@ _tabversion = '3.10'
 
 _lr_method = 'LALR'
 
-_lr_signature = 'leftPLUSMINUSleftMULTIPLYDIVIDEleftOPMATRIZASSIGN CARACTER CBRACKET COMENTARIO DESDE DIVIDE ENTERO ENTONCES ESCRIBE FLOAT FLOTANTE FUNCION HASTA HAZ ID IGNORE INT LEE LOGIC LPAREN MIENTRAS MINUS MULTIPLY NEWLINE NUMBER OBRACKET OPMATRIZ PLUS PRINCIPAL PROGRAMA REGRESA RELOP RPAREN SEMICOLON SI SINO VAR VOID\n    expresion : expresion LOGIC expresion\n              | termino RELOP expresion\n              | termino\n    \n    termino : termino1\n            | termino PLUS termino\n            | termino MINUS termino\n            | termino MULTIPLY termino\n            | termino DIVIDE termino\n    \n    termino1 : ID\n             | ID OPMATRIZ\n             | ENTERO\n             | FLOTANTE\n             | CARACTER\n             | LPAREN expresion RPAREN\n    '
-
-_lr_action_items = {'LPAREN':([0,1,10,11,12,13,14,16,],[1,1,1,1,1,1,1,1,]),'PLUS':([2,3,4,5,6,7,15,17,18,19,21,22,],[-13,-11,11,-4,-9,-12,-10,-14,-6,-5,-7,-8,]),'CARACTER':([0,1,10,11,12,13,14,16,],[2,2,2,2,2,2,2,2,]),'RPAREN':([2,3,4,5,6,7,9,15,17,18,19,20,21,22,23,],[-13,-11,-3,-4,-9,-12,17,-10,-14,-6,-5,-2,-7,-8,-1,]),'DIVIDE':([2,3,4,5,6,7,15,17,18,19,21,22,],[-13,-11,14,-4,-9,-12,-10,-14,14,14,-7,-8,]),'FLOTANTE':([0,1,10,11,12,13,14,16,],[7,7,7,7,7,7,7,7,]),'ID':([0,1,10,11,12,13,14,16,],[6,6,6,6,6,6,6,6,]),'OPMATRIZ':([6,],[15,]),'$end':([2,3,4,5,6,7,8,15,17,18,19,20,21,22,23,],[-13,-11,-3,-4,-9,-12,0,-10,-14,-6,-5,-2,-7,-8,-1,]),'MULTIPLY':([2,3,4,5,6,7,15,17,18,19,21,22,],[-13,-11,13,-4,-9,-12,-10,-14,13,13,-7,-8,]),'MINUS':([2,3,4,5,6,7,15,17,18,19,21,22,],[-13,-11,10,-4,-9,-12,-10,-14,-6,-5,-7,-8,]),'LOGIC':([2,3,4,5,6,7,8,9,15,17,18,19,20,21,22,23,],[-13,-11,-3,-4,-9,-12,16,16,-10,-14,-6,-5,16,-7,-8,16,]),'RELOP':([2,3,4,5,6,7,15,17,18,19,21,22,],[-13,-11,12,-4,-9,-12,-10,-14,-6,-5,-7,-8,]),'ENTERO':([0,1,10,11,12,13,14,16,],[3,3,3,3,3,3,3,3,]),}
+_lr_signature = 'leftPLUSMINUSleftMULTIPLYDIVIDEleftOPMATRIZASSIGN CARACTER CBRACKET COMENTARIO DESDE DIVIDE ENTERO ENTONCES ESCRIBE FLOAT FLOTANTE FUNCION HASTA HAZ ID IGNORE INT LEE LOGIC LPAREN MIENTRAS MINUS MULTIPLY NEWLINE NUMBER OBRACKET OPMATRIZ PLUS PRINCIPAL PROGRAMA REGRESA RELOP RPAREN SEMICOLON SI SINO VAR VOID\n    expresion : expresion OPMATRIZ LOGIC expresion\n    \n    expresion : expresion LOGIC expresion\n              | expresion RELOP expresion\n    \n    expresion : termino OPMATRIZ\n    \n    expresion : termino\n    \n    termino : termino PLUS termino\n            | termino MINUS termino\n            | termino MULTIPLY termino\n            | termino DIVIDE termino\n    \n    termino : termino1\n    \n    termino1 : ID\n             | ENTERO\n             | FLOTANTE\n             | CARACTER\n    \n    termino1 : LPAREN expresion RPAREN\n    '
+    
+_lr_action_items = {'FLOTANTE':([0,7,10,11,12,13,16,17,23,],[3,3,3,3,3,3,3,3,3,]),'OPMATRIZ':([1,2,3,4,5,6,8,9,14,18,19,20,21,22,24,25,26,],[-11,-12,-13,9,-10,-14,15,-4,15,-7,-6,-9,-8,-15,15,15,15,]),'PLUS':([1,2,3,4,5,6,18,19,20,21,22,],[-11,-12,-13,11,-10,-14,-7,-6,-9,-8,-15,]),'RPAREN':([1,2,3,4,5,6,9,14,18,19,20,21,22,24,25,26,],[-11,-12,-13,-5,-10,-14,-4,22,-7,-6,-9,-8,-15,-2,-3,-1,]),'MINUS':([1,2,3,4,5,6,18,19,20,21,22,],[-11,-12,-13,10,-10,-14,-7,-6,-9,-8,-15,]),'ID':([0,7,10,11,12,13,16,17,23,],[1,1,1,1,1,1,1,1,1,]),'CARACTER':([0,7,10,11,12,13,16,17,23,],[6,6,6,6,6,6,6,6,6,]),'RELOP':([1,2,3,4,5,6,8,9,14,18,19,20,21,22,24,25,26,],[-11,-12,-13,-5,-10,-14,17,-4,17,-7,-6,-9,-8,-15,17,17,17,]),'$end':([1,2,3,4,5,6,8,9,18,19,20,21,22,24,25,26,],[-11,-12,-13,-5,-10,-14,0,-4,-7,-6,-9,-8,-15,-2,-3,-1,]),'ENTERO':([0,7,10,11,12,13,16,17,23,],[2,2,2,2,2,2,2,2,2,]),'DIVIDE':([1,2,3,4,5,6,18,19,20,21,22,],[-11,-12,-13,12,-10,-14,12,12,-9,-8,-15,]),'LOGIC':([1,2,3,4,5,6,8,9,14,15,18,19,20,21,22,24,25,26,],[-11,-12,-13,-5,-10,-14,16,-4,16,23,-7,-6,-9,-8,-15,16,16,16,]),'MULTIPLY':([1,2,3,4,5,6,18,19,20,21,22,],[-11,-12,-13,13,-10,-14,13,13,-9,-8,-15,]),'LPAREN':([0,7,10,11,12,13,16,17,23,],[7,7,7,7,7,7,7,7,7,]),}
 
 _lr_action = {}
 for _k, _v in _lr_action_items.items():
@@ -17,7 +17,7 @@ for _k, _v in _lr_action_items.items():
       _lr_action[_x][_k] = _y
 del _lr_action_items
 
-_lr_goto_items = {'expresion':([0,1,12,16,],[8,9,20,23,]),'termino1':([0,1,10,11,12,13,14,16,],[5,5,5,5,5,5,5,5,]),'termino':([0,1,10,11,12,13,14,16,],[4,4,18,19,4,21,22,4,]),}
+_lr_goto_items = {'termino':([0,7,10,11,12,13,16,17,23,],[4,4,18,19,20,21,4,4,4,]),'termino1':([0,7,10,11,12,13,16,17,23,],[5,5,5,5,5,5,5,5,5,]),'expresion':([0,7,16,17,23,],[8,14,24,25,26,]),}
 
 _lr_goto = {}
 for _k, _v in _lr_goto_items.items():
@@ -27,18 +27,19 @@ for _k, _v in _lr_goto_items.items():
 del _lr_goto_items
 _lr_productions = [
   ("S' -> expresion","S'",1,None,None,None),
-  ('expresion -> expresion LOGIC expresion','expresion',3,'p_expresion','patito++.py',270),
-  ('expresion -> termino RELOP expresion','expresion',3,'p_expresion','patito++.py',271),
-  ('expresion -> termino','expresion',1,'p_expresion','patito++.py',272),
-  ('termino -> termino1','termino',1,'p_termino','patito++.py',295),
-  ('termino -> termino PLUS termino','termino',3,'p_termino','patito++.py',296),
-  ('termino -> termino MINUS termino','termino',3,'p_termino','patito++.py',297),
-  ('termino -> termino MULTIPLY termino','termino',3,'p_termino','patito++.py',298),
-  ('termino -> termino DIVIDE termino','termino',3,'p_termino','patito++.py',299),
-  ('termino1 -> ID','termino1',1,'p_termino1','patito++.py',310),
-  ('termino1 -> ID OPMATRIZ','termino1',2,'p_termino1','patito++.py',311),
-  ('termino1 -> ENTERO','termino1',1,'p_termino1','patito++.py',312),
-  ('termino1 -> FLOTANTE','termino1',1,'p_termino1','patito++.py',313),
-  ('termino1 -> CARACTER','termino1',1,'p_termino1','patito++.py',314),
-  ('termino1 -> LPAREN expresion RPAREN','termino1',3,'p_termino1','patito++.py',315),
+  ('expresion -> expresion OPMATRIZ LOGIC expresion','expresion',4,'p_expresion_4','yaccPatito.py',14),
+  ('expresion -> expresion LOGIC expresion','expresion',3,'p_expresion_3','yaccPatito.py',20),
+  ('expresion -> expresion RELOP expresion','expresion',3,'p_expresion_3','yaccPatito.py',21),
+  ('expresion -> termino OPMATRIZ','expresion',2,'p_expresion_2','yaccPatito.py',27),
+  ('expresion -> termino','expresion',1,'p_expresion_1','yaccPatito.py',33),
+  ('termino -> termino PLUS termino','termino',3,'p_termino_3','yaccPatito.py',49),
+  ('termino -> termino MINUS termino','termino',3,'p_termino_3','yaccPatito.py',50),
+  ('termino -> termino MULTIPLY termino','termino',3,'p_termino_3','yaccPatito.py',51),
+  ('termino -> termino DIVIDE termino','termino',3,'p_termino_3','yaccPatito.py',52),
+  ('termino -> termino1','termino',1,'p_termino_1','yaccPatito.py',58),
+  ('termino1 -> ID','termino1',1,'p_termino1_1','yaccPatito.py',64),
+  ('termino1 -> ENTERO','termino1',1,'p_termino1_1','yaccPatito.py',65),
+  ('termino1 -> FLOTANTE','termino1',1,'p_termino1_1','yaccPatito.py',66),
+  ('termino1 -> CARACTER','termino1',1,'p_termino1_1','yaccPatito.py',67),
+  ('termino1 -> LPAREN expresion RPAREN','termino1',3,'p_termino1_3','yaccPatito.py',73),
 ]

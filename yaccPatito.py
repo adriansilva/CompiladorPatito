@@ -1,4 +1,5 @@
 import ply.yacc as yacc
+import sys
 
 from lexPatito import tokens
 
@@ -8,20 +9,30 @@ precedence = (
     ('left','OPMATRIZ')
 )
 
-def p_expresion(p):
+def p_expresion_4(p):
+    '''
+    expresion : expresion OPMATRIZ LOGIC expresion
+    '''
+    p[0] = (p[3],p[1],p[2],p[4])
+
+def p_expresion_3(p):
     '''
     expresion : expresion LOGIC expresion
-              | termino RELOP expresion
-              | termino
+              | expresion RELOP expresion
     '''
-    print(p)
+    p[0] = (p[2],p[1],p[3])
 
-    if(len(p) == 1):
-        p[0] = p[1]
-    else:
-        p[0] = (p[2],p[1],p[3])
+def p_expresion_2(p):
+    '''
+    expresion : termino OPMATRIZ
+    '''
+    p[0] = (p[1],p[2])
 
-
+def p_expresion_1(p):
+    '''
+    expresion : termino
+    '''
+    p[0] = p[1]
 
     #elif p[2] == "&&" || p[2] == "||":
     #    if p[2] == "&&":
@@ -33,50 +44,45 @@ def p_expresion(p):
     #        p[0] =
 
 
-def p_termino(p):
+def p_termino_3(p):
     '''
-    termino : termino1
-            | termino PLUS termino
+    termino : termino PLUS termino
             | termino MINUS termino
             | termino MULTIPLY termino
             | termino DIVIDE termino
     '''
-    print(p)
+    p[0] = (p[2],p[1],p[3])
 
-    if(len(p) == 1):
-        p[0] = p[1]
-    else:
-        p[0] = (p[2],p[1],p[3])
+def p_termino_1(p):
+    '''
+    termino : termino1
+    '''
+    p[0] = p[1]
 
-def p_termino1(p):
+def p_termino1_1(p):
     '''
     termino1 : ID
-             | ID OPMATRIZ
              | ENTERO
              | FLOTANTE
              | CARACTER
-             | LPAREN expresion RPAREN
     '''
-    print(p)
+    p[0] = p[1]
 
-    if(len(p) == 1):
-        p[0] = p[1]
-    elif(len(p) == 2):
-        p[0] = (p[2],p[1])
-    elif(len(p) == 3):
-        p[0] = (p[1],p[2],p[3])
+def p_termino1_3(p):
+    '''
+    termino1 : LPAREN expresion RPAREN
+    '''
+    p[0] = (p[1],p[2],p[3])
 
-#def p_empty(p):
-#    '''
-#    empty :
-#    '''
-#    p[0] = None
+def p_error(p):
+    print("Something's wrong baby :(")
+
 
 parser = yacc.yacc()
 
 while True:
     try:
-        s = raw_input('calc > ')
+        s = input('')
     except EOFError:
         break
     if not s: continue
