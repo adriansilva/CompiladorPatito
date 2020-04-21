@@ -37,6 +37,7 @@ tokens = [
     'ID',
     'INT',
     'FLOAT',
+    'CHAR',
     'ENTERO',
     'FLOTANTE',
     'CARACTER',
@@ -56,6 +57,8 @@ tokens = [
     'LOGIC',
     'OBRACKET',
     'CBRACKET',
+    'OCORCH',
+    'CCORCH',
     'SEMICOLON',
     'OPMATRIZ'
 ]
@@ -132,6 +135,16 @@ def t_OBRACKET(t):
 def t_CBRACKET(t):
     r'\}'
     t.type = 'CBRACKET'
+    return t
+
+def t_OCORCH(t):
+    r'\['
+    t.type = 'OCORCH'
+    return t
+
+def t_CCORCH(t):
+    r'\]'
+    t.type = 'CCORCH'
     return t
 
 def t_SEMICOLON(t):
@@ -265,6 +278,7 @@ def t_error(t):
 
 lexer = lex.lex()
 
+'''
 lexer.input('!')
 
 while True:
@@ -272,3 +286,4 @@ while True:
     if not tok:
         break
     print(tok)
+'''
