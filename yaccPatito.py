@@ -45,15 +45,9 @@ def p_programa3(p):
 
 def p_principal(p):
     '''
-    principal : PRINCIPAL OPAREN CPAREN OBRACKET principal1 CBRACKET
+    principal : PRINCIPAL OPAREN CPAREN OBRACKET estatutos CBRACKET
     '''
     p[0] = p[1]
-
-def p_principal1(p):
-    '''
-    principal1 : estatutos principal1
-               | empty
-    '''
 
 def p_declaracion(p):
     '''
@@ -101,10 +95,10 @@ def p_declaracion3_4(p):
 
 def p_declaracionFuncion(p):
     '''
-    declaracionFuncion : FUNCION VOID ID LPAREN declaracionFuncion2 RPAREN declaracion OBRACKET estatutos
-                       | FUNCION INT ID LPAREN declaracionFuncion2 RPAREN declaracion OBRACKET estatutos
-                       | FUNCION FLOAT ID LPAREN declaracionFuncion2 RPAREN declaracion OBRACKET estatutos
-                       | FUNCION CHAR ID LPAREN declaracionFuncion2 RPAREN declaracion OBRACKET estatutos
+    declaracionFuncion : FUNCION VOID ID OPAREN declaracionFuncion2 CPAREN declaracion OBRACKET estatutos
+                       | FUNCION INT ID OPAREN declaracionFuncion2 CPAREN declaracion OBRACKET estatutos
+                       | FUNCION FLOAT ID OPAREN declaracionFuncion2 CPAREN declaracion OBRACKET estatutos
+                       | FUNCION CHAR ID OPAREN declaracionFuncion2 CPAREN declaracion OBRACKET estatutos
     '''
     p[0] = "Successful Function Declaration"
 
@@ -112,14 +106,19 @@ def p_declaracionFuncion(p):
 def p_declaracionFuncion2(p): #define argumentos
     '''
     declaracionFuncion2 : ID
-                        | ID COMA declaracionFuncion2 
+                        | ID COMA declaracionFuncion2
     '''
     p[0] = None
 
-def p_estatutos(p):
+def p_estatutos_1(p):
     '''
-    estatutos : declaracion CBRACKET
-              | declaracion estatutos 
+    estatutos : empty
+    '''
+
+def p_estatutos_2(p):
+    '''
+    estatutos : declaracion estatutos
+              | estatutoRepeticionIncondicional estatutos
     '''
     p[0] = None
 
@@ -214,7 +213,7 @@ def p_termino1_3(p):
 
 def p_estatutoRepeticionIncondicional(p):
     '''
-    estatutoRepeticionIncondicional : DESDE ID ASSIGN expresion HASTA expresion HAZ OBRACKET CBRACKET
+    estatutoRepeticionIncondicional : DESDE ID ASSIGN expresion HASTA expresion HAZ OBRACKET estatutos CBRACKET
     '''
 
 def p_error(p):
