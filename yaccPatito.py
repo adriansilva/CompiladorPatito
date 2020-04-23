@@ -101,8 +101,27 @@ def p_declaracion3_4(p):
 
 def p_declaracionFuncion(p):
     '''
-    declaracionFuncion : FUNCION
+    declaracionFuncion : FUNCION VOID ID LPAREN declaracionFuncion2 RPAREN declaracion OBRACKET estatutos
+                       | FUNCION INT ID LPAREN declaracionFuncion2 RPAREN declaracion OBRACKET estatutos
+                       | FUNCION FLOAT ID LPAREN declaracionFuncion2 RPAREN declaracion OBRACKET estatutos
+                       | FUNCION CHAR ID LPAREN declaracionFuncion2 RPAREN declaracion OBRACKET estatutos
     '''
+    p[0] = "Successful Function Declaration"
+
+
+def p_declaracionFuncion2(p): #define argumentos
+    '''
+    declaracionFuncion2 : ID
+                        | ID COMA declaracionFuncion2 
+    '''
+    p[0] = None
+
+def p_estatutos(p):
+    '''
+    estatutos : declaracion CBRACKET
+              | declaracion estatutos 
+    '''
+    p[0] = None
 
 def p_asignacion_4(p):
     '''
