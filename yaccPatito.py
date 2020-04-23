@@ -51,27 +51,47 @@ def p_principal(p):
 
 def p_declaracion(p):
     '''
-    declaracion : VAR declaracion2
+    declaracion : VAR INT COLON declaracion2
+                | VAR FLOAT COLON declaracion2
+                | VAR CHAR COLON declaracion2
     '''
-    p[0] = p[2]
+    p[0] = p[1]
 
-def p_declaracion2(p):
+def p_declaracion2_1(p):
     '''
-    declaracion2 : INT ID declaracion3
-                 | FLOAT ID declaracion3
-                 | CHAR ID declaracion3
+    declaracion2 : SEMICOLON
     '''
-    p[0] = p[3]
+    p[0] = p[1]
 
-def p_declaracion3(p):
+def p_declaracion2_2(p):
+    '''
+    declaracion2 : ID declaracion3
+    '''
+    p[0] = p[1]
+
+def p_declaracion3_1(p):
     '''
     declaracion3 : SEMICOLON
-                 | ASSIGN expresion SEMICOLON
     '''
-    if p[1] == '=':
-        p[0] = p[2]
-    else:
-        p[0] = None
+    p[0] = p[1]
+
+def p_declaracion3_2(p):
+    '''
+    declaracion3 : COMA declaracion2
+    '''
+    p[0] = p[1]
+
+def p_declaracion3_3(p):
+    '''
+    declaracion3 : ASSIGN expresion SEMICOLON
+    '''
+    p[0] = p[1]
+
+def p_declaracion3_4(p):
+    '''
+    declaracion3 : ASSIGN expresion COMA declaracion2
+    '''
+    p[0] = p[1]
 
 def p_declaracionFuncion(p):
     '''

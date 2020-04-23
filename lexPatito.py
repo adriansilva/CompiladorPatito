@@ -61,7 +61,8 @@ tokens = [
     'CCORCH',
     'SEMICOLON',
     'OPMATRIZ',
-    'COLON'
+    'COLON',
+    'COMA'
 ]
 
 """
@@ -96,6 +97,11 @@ def t_ASSIGN(t):
 def t_COLON(t):
     r'\:'
     t.type = 'COLON'
+    return t
+
+def t_COMA(t):
+    r'\,'
+    t.type = 'COMA'
     return t
 
 def t_IGNORE(t):

@@ -2,26 +2,25 @@ Created by PLY version 3.11 (http://www.dabeaz.com/ply)
 
 Unused terminals:
 
+    CCORCH
+    OBRACKET
+    LEE
+    HAZ
+    REGRESA
+    COMENTARIO
+    NUMBER
+    IGNORE
     NEWLINE
     CBRACKET
     HASTA
-    CCORCH
-    HAZ
-    COMENTARIO
-    NUMBER
-    OBRACKET
-    ENTONCES
-    REGRESA
-    VOID
-    DESDE
-    OCORCH
-    ESCRIBE
-    SI
-    LEE
-    MIENTRAS
-    ASSIGN
     SINO
-    IGNORE
+    OCORCH
+    SI
+    MIENTRAS
+    ENTONCES
+    ESCRIBE
+    DESDE
+    VOID
 
 Grammar
 
@@ -32,66 +31,73 @@ Rule 3     programa2 -> programa3
 Rule 4     programa3 -> declaracionFuncion programa3
 Rule 5     programa3 -> principal
 Rule 6     principal -> PRINCIPAL
-Rule 7     declaracion -> VAR INT COLON
-Rule 8     declaracion -> VAR FLOAT COLON
-Rule 9     declaracion -> VAR CHAR COLON
-Rule 10    declaracionFuncion -> FUNCION
-Rule 11    expresion -> expresion LOGIC expresion
-Rule 12    expresion -> expresion RELOP expresion
-Rule 13    expresion -> termino1 OPMATRIZ
-Rule 14    expresion -> termino
-Rule 15    termino -> termino PLUS termino
-Rule 16    termino -> termino MINUS termino
-Rule 17    termino -> termino MULTIPLY termino
-Rule 18    termino -> termino DIVIDE termino
-Rule 19    termino -> termino1 OPMATRIZ
-Rule 20    termino -> termino1
-Rule 21    termino1 -> ID
-Rule 22    termino1 -> ENTERO
-Rule 23    termino1 -> FLOTANTE
-Rule 24    termino1 -> CARACTER
-Rule 25    termino1 -> LPAREN expresion RPAREN
+Rule 7     declaracion -> VAR INT COLON declaracion2
+Rule 8     declaracion -> VAR FLOAT COLON declaracion2
+Rule 9     declaracion -> VAR CHAR COLON declaracion2
+Rule 10    declaracion2 -> SEMICOLON
+Rule 11    declaracion2 -> ID declaracion3
+Rule 12    declaracion3 -> SEMICOLON
+Rule 13    declaracion3 -> COMA declaracion2
+Rule 14    declaracion3 -> ASSIGN expresion SEMICOLON
+Rule 15    declaracion3 -> ASSIGN expresion COMA declaracion2
+Rule 16    declaracionFuncion -> FUNCION
+Rule 17    expresion -> expresion LOGIC expresion
+Rule 18    expresion -> expresion RELOP expresion
+Rule 19    expresion -> termino1 OPMATRIZ
+Rule 20    expresion -> termino
+Rule 21    termino -> termino PLUS termino
+Rule 22    termino -> termino MINUS termino
+Rule 23    termino -> termino MULTIPLY termino
+Rule 24    termino -> termino DIVIDE termino
+Rule 25    termino -> termino1 OPMATRIZ
+Rule 26    termino -> termino1
+Rule 27    termino1 -> ID
+Rule 28    termino1 -> ENTERO
+Rule 29    termino1 -> FLOTANTE
+Rule 30    termino1 -> CARACTER
+Rule 31    termino1 -> LPAREN expresion RPAREN
 
 Terminals, with rules where they appear
 
-ASSIGN               : 
-CARACTER             : 24
+ASSIGN               : 14 15
+CARACTER             : 30
 CBRACKET             : 
 CCORCH               : 
 CHAR                 : 9
 COLON                : 7 8 9
+COMA                 : 13 15
 COMENTARIO           : 
 DESDE                : 
-DIVIDE               : 18
-ENTERO               : 22
+DIVIDE               : 24
+ENTERO               : 28
 ENTONCES             : 
 ESCRIBE              : 
 FLOAT                : 8
-FLOTANTE             : 23
-FUNCION              : 10
+FLOTANTE             : 29
+FUNCION              : 16
 HASTA                : 
 HAZ                  : 
-ID                   : 1 21
+ID                   : 1 11 27
 IGNORE               : 
 INT                  : 7
 LEE                  : 
-LOGIC                : 11
-LPAREN               : 25
+LOGIC                : 17
+LPAREN               : 31
 MIENTRAS             : 
-MINUS                : 16
-MULTIPLY             : 17
+MINUS                : 22
+MULTIPLY             : 23
 NEWLINE              : 
 NUMBER               : 
 OBRACKET             : 
 OCORCH               : 
-OPMATRIZ             : 13 19
-PLUS                 : 15
+OPMATRIZ             : 19 25
+PLUS                 : 21
 PRINCIPAL            : 6
 PROGRAMA             : 1
 REGRESA              : 
-RELOP                : 12
-RPAREN               : 25
-SEMICOLON            : 1
+RELOP                : 18
+RPAREN               : 31
+SEMICOLON            : 1 10 12 14
 SI                   : 
 SINO                 : 
 VAR                  : 7 8 9
@@ -101,14 +107,16 @@ error                :
 Nonterminals, with rules where they appear
 
 declaracion          : 2
+declaracion2         : 7 8 9 13 15
+declaracion3         : 11
 declaracionFuncion   : 4
-expresion            : 11 11 12 12 25
+expresion            : 14 15 17 17 18 18 31
 principal            : 5
 programa             : 0
 programa2            : 1 2
 programa3            : 3 4
-termino              : 14 15 15 16 16 17 17 18 18
-termino1             : 13 19 20
+termino              : 20 21 21 22 22 23 23 24 24
+termino1             : 19 25 26
 
 Parsing method: LALR
 
@@ -146,167 +154,844 @@ state 4
     (1) programa -> PROGRAMA ID SEMICOLON . programa2
     (2) programa2 -> . declaracion programa2
     (3) programa2 -> . programa3
-    (7) declaracion -> . VAR INT COLON
-    (8) declaracion -> . VAR FLOAT COLON
-    (9) declaracion -> . VAR CHAR COLON
+    (7) declaracion -> . VAR INT COLON declaracion2
+    (8) declaracion -> . VAR FLOAT COLON declaracion2
+    (9) declaracion -> . VAR CHAR COLON declaracion2
     (4) programa3 -> . declaracionFuncion programa3
     (5) programa3 -> . principal
-    (10) declaracionFuncion -> . FUNCION
+    (16) declaracionFuncion -> . FUNCION
     (6) principal -> . PRINCIPAL
 
-    VAR             shift and go to state 6
-    FUNCION         shift and go to state 5
-    PRINCIPAL       shift and go to state 8
+    VAR             shift and go to state 5
+    FUNCION         shift and go to state 7
+    PRINCIPAL       shift and go to state 6
 
-    principal                      shift and go to state 11
     declaracion                    shift and go to state 10
-    declaracionFuncion             shift and go to state 9
-    programa3                      shift and go to state 12
-    programa2                      shift and go to state 7
+    programa2                      shift and go to state 11
+    programa3                      shift and go to state 8
+    declaracionFuncion             shift and go to state 12
+    principal                      shift and go to state 9
 
 state 5
 
-    (10) declaracionFuncion -> FUNCION .
+    (7) declaracion -> VAR . INT COLON declaracion2
+    (8) declaracion -> VAR . FLOAT COLON declaracion2
+    (9) declaracion -> VAR . CHAR COLON declaracion2
 
-    FUNCION         reduce using rule 10 (declaracionFuncion -> FUNCION .)
-    PRINCIPAL       reduce using rule 10 (declaracionFuncion -> FUNCION .)
+    INT             shift and go to state 13
+    FLOAT           shift and go to state 15
+    CHAR            shift and go to state 14
 
 
 state 6
-
-    (7) declaracion -> VAR . INT COLON
-    (8) declaracion -> VAR . FLOAT COLON
-    (9) declaracion -> VAR . CHAR COLON
-
-    INT             shift and go to state 14
-    FLOAT           shift and go to state 15
-    CHAR            shift and go to state 13
-
-
-state 7
-
-    (1) programa -> PROGRAMA ID SEMICOLON programa2 .
-
-    $end            reduce using rule 1 (programa -> PROGRAMA ID SEMICOLON programa2 .)
-
-
-state 8
 
     (6) principal -> PRINCIPAL .
 
     $end            reduce using rule 6 (principal -> PRINCIPAL .)
 
 
-state 9
+state 7
 
-    (4) programa3 -> declaracionFuncion . programa3
-    (4) programa3 -> . declaracionFuncion programa3
-    (5) programa3 -> . principal
-    (10) declaracionFuncion -> . FUNCION
-    (6) principal -> . PRINCIPAL
+    (16) declaracionFuncion -> FUNCION .
 
-    FUNCION         shift and go to state 5
-    PRINCIPAL       shift and go to state 8
-
-    principal                      shift and go to state 11
-    programa3                      shift and go to state 16
-    declaracionFuncion             shift and go to state 9
-
-state 10
-
-    (2) programa2 -> declaracion . programa2
-    (2) programa2 -> . declaracion programa2
-    (3) programa2 -> . programa3
-    (7) declaracion -> . VAR INT COLON
-    (8) declaracion -> . VAR FLOAT COLON
-    (9) declaracion -> . VAR CHAR COLON
-    (4) programa3 -> . declaracionFuncion programa3
-    (5) programa3 -> . principal
-    (10) declaracionFuncion -> . FUNCION
-    (6) principal -> . PRINCIPAL
-
-    VAR             shift and go to state 6
-    FUNCION         shift and go to state 5
-    PRINCIPAL       shift and go to state 8
-
-    principal                      shift and go to state 11
-    declaracion                    shift and go to state 10
-    declaracionFuncion             shift and go to state 9
-    programa3                      shift and go to state 12
-    programa2                      shift and go to state 17
-
-state 11
-
-    (5) programa3 -> principal .
-
-    $end            reduce using rule 5 (programa3 -> principal .)
+    FUNCION         reduce using rule 16 (declaracionFuncion -> FUNCION .)
+    PRINCIPAL       reduce using rule 16 (declaracionFuncion -> FUNCION .)
 
 
-state 12
+state 8
 
     (3) programa2 -> programa3 .
 
     $end            reduce using rule 3 (programa2 -> programa3 .)
 
 
+state 9
+
+    (5) programa3 -> principal .
+
+    $end            reduce using rule 5 (programa3 -> principal .)
+
+
+state 10
+
+    (2) programa2 -> declaracion . programa2
+    (2) programa2 -> . declaracion programa2
+    (3) programa2 -> . programa3
+    (7) declaracion -> . VAR INT COLON declaracion2
+    (8) declaracion -> . VAR FLOAT COLON declaracion2
+    (9) declaracion -> . VAR CHAR COLON declaracion2
+    (4) programa3 -> . declaracionFuncion programa3
+    (5) programa3 -> . principal
+    (16) declaracionFuncion -> . FUNCION
+    (6) principal -> . PRINCIPAL
+
+    VAR             shift and go to state 5
+    FUNCION         shift and go to state 7
+    PRINCIPAL       shift and go to state 6
+
+    declaracion                    shift and go to state 10
+    programa2                      shift and go to state 16
+    programa3                      shift and go to state 8
+    declaracionFuncion             shift and go to state 12
+    principal                      shift and go to state 9
+
+state 11
+
+    (1) programa -> PROGRAMA ID SEMICOLON programa2 .
+
+    $end            reduce using rule 1 (programa -> PROGRAMA ID SEMICOLON programa2 .)
+
+
+state 12
+
+    (4) programa3 -> declaracionFuncion . programa3
+    (4) programa3 -> . declaracionFuncion programa3
+    (5) programa3 -> . principal
+    (16) declaracionFuncion -> . FUNCION
+    (6) principal -> . PRINCIPAL
+
+    FUNCION         shift and go to state 7
+    PRINCIPAL       shift and go to state 6
+
+    programa3                      shift and go to state 17
+    declaracionFuncion             shift and go to state 12
+    principal                      shift and go to state 9
+
 state 13
 
-    (9) declaracion -> VAR CHAR . COLON
+    (7) declaracion -> VAR INT . COLON declaracion2
 
     COLON           shift and go to state 18
 
 
 state 14
 
-    (7) declaracion -> VAR INT . COLON
+    (9) declaracion -> VAR CHAR . COLON declaracion2
 
     COLON           shift and go to state 19
 
 
 state 15
 
-    (8) declaracion -> VAR FLOAT . COLON
+    (8) declaracion -> VAR FLOAT . COLON declaracion2
 
     COLON           shift and go to state 20
 
 
 state 16
 
-    (4) programa3 -> declaracionFuncion programa3 .
-
-    $end            reduce using rule 4 (programa3 -> declaracionFuncion programa3 .)
-
-
-state 17
-
     (2) programa2 -> declaracion programa2 .
 
     $end            reduce using rule 2 (programa2 -> declaracion programa2 .)
 
 
+state 17
+
+    (4) programa3 -> declaracionFuncion programa3 .
+
+    $end            reduce using rule 4 (programa3 -> declaracionFuncion programa3 .)
+
+
 state 18
 
-    (9) declaracion -> VAR CHAR COLON .
+    (7) declaracion -> VAR INT COLON . declaracion2
+    (10) declaracion2 -> . SEMICOLON
+    (11) declaracion2 -> . ID declaracion3
 
-    VAR             reduce using rule 9 (declaracion -> VAR CHAR COLON .)
-    FUNCION         reduce using rule 9 (declaracion -> VAR CHAR COLON .)
-    PRINCIPAL       reduce using rule 9 (declaracion -> VAR CHAR COLON .)
+    SEMICOLON       shift and go to state 21
+    ID              shift and go to state 22
 
+    declaracion2                   shift and go to state 23
 
 state 19
 
-    (7) declaracion -> VAR INT COLON .
+    (9) declaracion -> VAR CHAR COLON . declaracion2
+    (10) declaracion2 -> . SEMICOLON
+    (11) declaracion2 -> . ID declaracion3
 
-    VAR             reduce using rule 7 (declaracion -> VAR INT COLON .)
-    FUNCION         reduce using rule 7 (declaracion -> VAR INT COLON .)
-    PRINCIPAL       reduce using rule 7 (declaracion -> VAR INT COLON .)
+    SEMICOLON       shift and go to state 21
+    ID              shift and go to state 22
 
+    declaracion2                   shift and go to state 24
 
 state 20
 
-    (8) declaracion -> VAR FLOAT COLON .
+    (8) declaracion -> VAR FLOAT COLON . declaracion2
+    (10) declaracion2 -> . SEMICOLON
+    (11) declaracion2 -> . ID declaracion3
 
-    VAR             reduce using rule 8 (declaracion -> VAR FLOAT COLON .)
-    FUNCION         reduce using rule 8 (declaracion -> VAR FLOAT COLON .)
-    PRINCIPAL       reduce using rule 8 (declaracion -> VAR FLOAT COLON .)
+    SEMICOLON       shift and go to state 21
+    ID              shift and go to state 22
 
+    declaracion2                   shift and go to state 25
+
+state 21
+
+    (10) declaracion2 -> SEMICOLON .
+
+    VAR             reduce using rule 10 (declaracion2 -> SEMICOLON .)
+    FUNCION         reduce using rule 10 (declaracion2 -> SEMICOLON .)
+    PRINCIPAL       reduce using rule 10 (declaracion2 -> SEMICOLON .)
+
+
+state 22
+
+    (11) declaracion2 -> ID . declaracion3
+    (12) declaracion3 -> . SEMICOLON
+    (13) declaracion3 -> . COMA declaracion2
+    (14) declaracion3 -> . ASSIGN expresion SEMICOLON
+    (15) declaracion3 -> . ASSIGN expresion COMA declaracion2
+
+    SEMICOLON       shift and go to state 28
+    COMA            shift and go to state 26
+    ASSIGN          shift and go to state 29
+
+    declaracion3                   shift and go to state 27
+
+state 23
+
+    (7) declaracion -> VAR INT COLON declaracion2 .
+
+    VAR             reduce using rule 7 (declaracion -> VAR INT COLON declaracion2 .)
+    FUNCION         reduce using rule 7 (declaracion -> VAR INT COLON declaracion2 .)
+    PRINCIPAL       reduce using rule 7 (declaracion -> VAR INT COLON declaracion2 .)
+
+
+state 24
+
+    (9) declaracion -> VAR CHAR COLON declaracion2 .
+
+    VAR             reduce using rule 9 (declaracion -> VAR CHAR COLON declaracion2 .)
+    FUNCION         reduce using rule 9 (declaracion -> VAR CHAR COLON declaracion2 .)
+    PRINCIPAL       reduce using rule 9 (declaracion -> VAR CHAR COLON declaracion2 .)
+
+
+state 25
+
+    (8) declaracion -> VAR FLOAT COLON declaracion2 .
+
+    VAR             reduce using rule 8 (declaracion -> VAR FLOAT COLON declaracion2 .)
+    FUNCION         reduce using rule 8 (declaracion -> VAR FLOAT COLON declaracion2 .)
+    PRINCIPAL       reduce using rule 8 (declaracion -> VAR FLOAT COLON declaracion2 .)
+
+
+state 26
+
+    (13) declaracion3 -> COMA . declaracion2
+    (10) declaracion2 -> . SEMICOLON
+    (11) declaracion2 -> . ID declaracion3
+
+    SEMICOLON       shift and go to state 21
+    ID              shift and go to state 22
+
+    declaracion2                   shift and go to state 30
+
+state 27
+
+    (11) declaracion2 -> ID declaracion3 .
+
+    VAR             reduce using rule 11 (declaracion2 -> ID declaracion3 .)
+    FUNCION         reduce using rule 11 (declaracion2 -> ID declaracion3 .)
+    PRINCIPAL       reduce using rule 11 (declaracion2 -> ID declaracion3 .)
+
+
+state 28
+
+    (12) declaracion3 -> SEMICOLON .
+
+    VAR             reduce using rule 12 (declaracion3 -> SEMICOLON .)
+    FUNCION         reduce using rule 12 (declaracion3 -> SEMICOLON .)
+    PRINCIPAL       reduce using rule 12 (declaracion3 -> SEMICOLON .)
+
+
+state 29
+
+    (14) declaracion3 -> ASSIGN . expresion SEMICOLON
+    (15) declaracion3 -> ASSIGN . expresion COMA declaracion2
+    (17) expresion -> . expresion LOGIC expresion
+    (18) expresion -> . expresion RELOP expresion
+    (19) expresion -> . termino1 OPMATRIZ
+    (20) expresion -> . termino
+    (27) termino1 -> . ID
+    (28) termino1 -> . ENTERO
+    (29) termino1 -> . FLOTANTE
+    (30) termino1 -> . CARACTER
+    (31) termino1 -> . LPAREN expresion RPAREN
+    (21) termino -> . termino PLUS termino
+    (22) termino -> . termino MINUS termino
+    (23) termino -> . termino MULTIPLY termino
+    (24) termino -> . termino DIVIDE termino
+    (25) termino -> . termino1 OPMATRIZ
+    (26) termino -> . termino1
+
+    ID              shift and go to state 38
+    ENTERO          shift and go to state 37
+    FLOTANTE        shift and go to state 33
+    CARACTER        shift and go to state 31
+    LPAREN          shift and go to state 35
+
+    termino1                       shift and go to state 32
+    termino                        shift and go to state 34
+    expresion                      shift and go to state 36
+
+state 30
+
+    (13) declaracion3 -> COMA declaracion2 .
+
+    VAR             reduce using rule 13 (declaracion3 -> COMA declaracion2 .)
+    FUNCION         reduce using rule 13 (declaracion3 -> COMA declaracion2 .)
+    PRINCIPAL       reduce using rule 13 (declaracion3 -> COMA declaracion2 .)
+
+
+state 31
+
+    (30) termino1 -> CARACTER .
+
+    OPMATRIZ        reduce using rule 30 (termino1 -> CARACTER .)
+    PLUS            reduce using rule 30 (termino1 -> CARACTER .)
+    MINUS           reduce using rule 30 (termino1 -> CARACTER .)
+    MULTIPLY        reduce using rule 30 (termino1 -> CARACTER .)
+    DIVIDE          reduce using rule 30 (termino1 -> CARACTER .)
+    SEMICOLON       reduce using rule 30 (termino1 -> CARACTER .)
+    COMA            reduce using rule 30 (termino1 -> CARACTER .)
+    LOGIC           reduce using rule 30 (termino1 -> CARACTER .)
+    RELOP           reduce using rule 30 (termino1 -> CARACTER .)
+    RPAREN          reduce using rule 30 (termino1 -> CARACTER .)
+
+
+state 32
+
+    (19) expresion -> termino1 . OPMATRIZ
+    (25) termino -> termino1 . OPMATRIZ
+    (26) termino -> termino1 .
+
+    OPMATRIZ        shift and go to state 39
+    PLUS            reduce using rule 26 (termino -> termino1 .)
+    MINUS           reduce using rule 26 (termino -> termino1 .)
+    MULTIPLY        reduce using rule 26 (termino -> termino1 .)
+    DIVIDE          reduce using rule 26 (termino -> termino1 .)
+    LOGIC           reduce using rule 26 (termino -> termino1 .)
+    RELOP           reduce using rule 26 (termino -> termino1 .)
+    SEMICOLON       reduce using rule 26 (termino -> termino1 .)
+    COMA            reduce using rule 26 (termino -> termino1 .)
+    RPAREN          reduce using rule 26 (termino -> termino1 .)
+
+
+state 33
+
+    (29) termino1 -> FLOTANTE .
+
+    OPMATRIZ        reduce using rule 29 (termino1 -> FLOTANTE .)
+    PLUS            reduce using rule 29 (termino1 -> FLOTANTE .)
+    MINUS           reduce using rule 29 (termino1 -> FLOTANTE .)
+    MULTIPLY        reduce using rule 29 (termino1 -> FLOTANTE .)
+    DIVIDE          reduce using rule 29 (termino1 -> FLOTANTE .)
+    SEMICOLON       reduce using rule 29 (termino1 -> FLOTANTE .)
+    COMA            reduce using rule 29 (termino1 -> FLOTANTE .)
+    LOGIC           reduce using rule 29 (termino1 -> FLOTANTE .)
+    RELOP           reduce using rule 29 (termino1 -> FLOTANTE .)
+    RPAREN          reduce using rule 29 (termino1 -> FLOTANTE .)
+
+
+state 34
+
+    (20) expresion -> termino .
+    (21) termino -> termino . PLUS termino
+    (22) termino -> termino . MINUS termino
+    (23) termino -> termino . MULTIPLY termino
+    (24) termino -> termino . DIVIDE termino
+
+    LOGIC           reduce using rule 20 (expresion -> termino .)
+    RELOP           reduce using rule 20 (expresion -> termino .)
+    SEMICOLON       reduce using rule 20 (expresion -> termino .)
+    COMA            reduce using rule 20 (expresion -> termino .)
+    RPAREN          reduce using rule 20 (expresion -> termino .)
+    PLUS            shift and go to state 42
+    MINUS           shift and go to state 41
+    MULTIPLY        shift and go to state 43
+    DIVIDE          shift and go to state 40
+
+
+state 35
+
+    (31) termino1 -> LPAREN . expresion RPAREN
+    (17) expresion -> . expresion LOGIC expresion
+    (18) expresion -> . expresion RELOP expresion
+    (19) expresion -> . termino1 OPMATRIZ
+    (20) expresion -> . termino
+    (27) termino1 -> . ID
+    (28) termino1 -> . ENTERO
+    (29) termino1 -> . FLOTANTE
+    (30) termino1 -> . CARACTER
+    (31) termino1 -> . LPAREN expresion RPAREN
+    (21) termino -> . termino PLUS termino
+    (22) termino -> . termino MINUS termino
+    (23) termino -> . termino MULTIPLY termino
+    (24) termino -> . termino DIVIDE termino
+    (25) termino -> . termino1 OPMATRIZ
+    (26) termino -> . termino1
+
+    ID              shift and go to state 38
+    ENTERO          shift and go to state 37
+    FLOTANTE        shift and go to state 33
+    CARACTER        shift and go to state 31
+    LPAREN          shift and go to state 35
+
+    termino1                       shift and go to state 32
+    termino                        shift and go to state 34
+    expresion                      shift and go to state 44
+
+state 36
+
+    (14) declaracion3 -> ASSIGN expresion . SEMICOLON
+    (15) declaracion3 -> ASSIGN expresion . COMA declaracion2
+    (17) expresion -> expresion . LOGIC expresion
+    (18) expresion -> expresion . RELOP expresion
+
+    SEMICOLON       shift and go to state 47
+    COMA            shift and go to state 45
+    LOGIC           shift and go to state 46
+    RELOP           shift and go to state 48
+
+
+state 37
+
+    (28) termino1 -> ENTERO .
+
+    OPMATRIZ        reduce using rule 28 (termino1 -> ENTERO .)
+    PLUS            reduce using rule 28 (termino1 -> ENTERO .)
+    MINUS           reduce using rule 28 (termino1 -> ENTERO .)
+    MULTIPLY        reduce using rule 28 (termino1 -> ENTERO .)
+    DIVIDE          reduce using rule 28 (termino1 -> ENTERO .)
+    SEMICOLON       reduce using rule 28 (termino1 -> ENTERO .)
+    COMA            reduce using rule 28 (termino1 -> ENTERO .)
+    LOGIC           reduce using rule 28 (termino1 -> ENTERO .)
+    RELOP           reduce using rule 28 (termino1 -> ENTERO .)
+    RPAREN          reduce using rule 28 (termino1 -> ENTERO .)
+
+
+state 38
+
+    (27) termino1 -> ID .
+
+    OPMATRIZ        reduce using rule 27 (termino1 -> ID .)
+    PLUS            reduce using rule 27 (termino1 -> ID .)
+    MINUS           reduce using rule 27 (termino1 -> ID .)
+    MULTIPLY        reduce using rule 27 (termino1 -> ID .)
+    DIVIDE          reduce using rule 27 (termino1 -> ID .)
+    SEMICOLON       reduce using rule 27 (termino1 -> ID .)
+    COMA            reduce using rule 27 (termino1 -> ID .)
+    LOGIC           reduce using rule 27 (termino1 -> ID .)
+    RELOP           reduce using rule 27 (termino1 -> ID .)
+    RPAREN          reduce using rule 27 (termino1 -> ID .)
+
+
+state 39
+
+    (19) expresion -> termino1 OPMATRIZ .
+    (25) termino -> termino1 OPMATRIZ .
+
+  ! reduce/reduce conflict for LOGIC resolved using rule 19 (expresion -> termino1 OPMATRIZ .)
+  ! reduce/reduce conflict for RELOP resolved using rule 19 (expresion -> termino1 OPMATRIZ .)
+  ! reduce/reduce conflict for SEMICOLON resolved using rule 19 (expresion -> termino1 OPMATRIZ .)
+  ! reduce/reduce conflict for COMA resolved using rule 19 (expresion -> termino1 OPMATRIZ .)
+  ! reduce/reduce conflict for RPAREN resolved using rule 19 (expresion -> termino1 OPMATRIZ .)
+    LOGIC           reduce using rule 19 (expresion -> termino1 OPMATRIZ .)
+    RELOP           reduce using rule 19 (expresion -> termino1 OPMATRIZ .)
+    SEMICOLON       reduce using rule 19 (expresion -> termino1 OPMATRIZ .)
+    COMA            reduce using rule 19 (expresion -> termino1 OPMATRIZ .)
+    RPAREN          reduce using rule 19 (expresion -> termino1 OPMATRIZ .)
+    PLUS            reduce using rule 25 (termino -> termino1 OPMATRIZ .)
+    MINUS           reduce using rule 25 (termino -> termino1 OPMATRIZ .)
+    MULTIPLY        reduce using rule 25 (termino -> termino1 OPMATRIZ .)
+    DIVIDE          reduce using rule 25 (termino -> termino1 OPMATRIZ .)
+
+  ! LOGIC           [ reduce using rule 25 (termino -> termino1 OPMATRIZ .) ]
+  ! RELOP           [ reduce using rule 25 (termino -> termino1 OPMATRIZ .) ]
+  ! SEMICOLON       [ reduce using rule 25 (termino -> termino1 OPMATRIZ .) ]
+  ! COMA            [ reduce using rule 25 (termino -> termino1 OPMATRIZ .) ]
+  ! RPAREN          [ reduce using rule 25 (termino -> termino1 OPMATRIZ .) ]
+
+
+state 40
+
+    (24) termino -> termino DIVIDE . termino
+    (21) termino -> . termino PLUS termino
+    (22) termino -> . termino MINUS termino
+    (23) termino -> . termino MULTIPLY termino
+    (24) termino -> . termino DIVIDE termino
+    (25) termino -> . termino1 OPMATRIZ
+    (26) termino -> . termino1
+    (27) termino1 -> . ID
+    (28) termino1 -> . ENTERO
+    (29) termino1 -> . FLOTANTE
+    (30) termino1 -> . CARACTER
+    (31) termino1 -> . LPAREN expresion RPAREN
+
+    ID              shift and go to state 38
+    ENTERO          shift and go to state 37
+    FLOTANTE        shift and go to state 33
+    CARACTER        shift and go to state 31
+    LPAREN          shift and go to state 35
+
+    termino                        shift and go to state 49
+    termino1                       shift and go to state 50
+
+state 41
+
+    (22) termino -> termino MINUS . termino
+    (21) termino -> . termino PLUS termino
+    (22) termino -> . termino MINUS termino
+    (23) termino -> . termino MULTIPLY termino
+    (24) termino -> . termino DIVIDE termino
+    (25) termino -> . termino1 OPMATRIZ
+    (26) termino -> . termino1
+    (27) termino1 -> . ID
+    (28) termino1 -> . ENTERO
+    (29) termino1 -> . FLOTANTE
+    (30) termino1 -> . CARACTER
+    (31) termino1 -> . LPAREN expresion RPAREN
+
+    ID              shift and go to state 38
+    ENTERO          shift and go to state 37
+    FLOTANTE        shift and go to state 33
+    CARACTER        shift and go to state 31
+    LPAREN          shift and go to state 35
+
+    termino                        shift and go to state 51
+    termino1                       shift and go to state 50
+
+state 42
+
+    (21) termino -> termino PLUS . termino
+    (21) termino -> . termino PLUS termino
+    (22) termino -> . termino MINUS termino
+    (23) termino -> . termino MULTIPLY termino
+    (24) termino -> . termino DIVIDE termino
+    (25) termino -> . termino1 OPMATRIZ
+    (26) termino -> . termino1
+    (27) termino1 -> . ID
+    (28) termino1 -> . ENTERO
+    (29) termino1 -> . FLOTANTE
+    (30) termino1 -> . CARACTER
+    (31) termino1 -> . LPAREN expresion RPAREN
+
+    ID              shift and go to state 38
+    ENTERO          shift and go to state 37
+    FLOTANTE        shift and go to state 33
+    CARACTER        shift and go to state 31
+    LPAREN          shift and go to state 35
+
+    termino                        shift and go to state 52
+    termino1                       shift and go to state 50
+
+state 43
+
+    (23) termino -> termino MULTIPLY . termino
+    (21) termino -> . termino PLUS termino
+    (22) termino -> . termino MINUS termino
+    (23) termino -> . termino MULTIPLY termino
+    (24) termino -> . termino DIVIDE termino
+    (25) termino -> . termino1 OPMATRIZ
+    (26) termino -> . termino1
+    (27) termino1 -> . ID
+    (28) termino1 -> . ENTERO
+    (29) termino1 -> . FLOTANTE
+    (30) termino1 -> . CARACTER
+    (31) termino1 -> . LPAREN expresion RPAREN
+
+    ID              shift and go to state 38
+    ENTERO          shift and go to state 37
+    FLOTANTE        shift and go to state 33
+    CARACTER        shift and go to state 31
+    LPAREN          shift and go to state 35
+
+    termino                        shift and go to state 53
+    termino1                       shift and go to state 50
+
+state 44
+
+    (31) termino1 -> LPAREN expresion . RPAREN
+    (17) expresion -> expresion . LOGIC expresion
+    (18) expresion -> expresion . RELOP expresion
+
+    RPAREN          shift and go to state 54
+    LOGIC           shift and go to state 46
+    RELOP           shift and go to state 48
+
+
+state 45
+
+    (15) declaracion3 -> ASSIGN expresion COMA . declaracion2
+    (10) declaracion2 -> . SEMICOLON
+    (11) declaracion2 -> . ID declaracion3
+
+    SEMICOLON       shift and go to state 21
+    ID              shift and go to state 22
+
+    declaracion2                   shift and go to state 55
+
+state 46
+
+    (17) expresion -> expresion LOGIC . expresion
+    (17) expresion -> . expresion LOGIC expresion
+    (18) expresion -> . expresion RELOP expresion
+    (19) expresion -> . termino1 OPMATRIZ
+    (20) expresion -> . termino
+    (27) termino1 -> . ID
+    (28) termino1 -> . ENTERO
+    (29) termino1 -> . FLOTANTE
+    (30) termino1 -> . CARACTER
+    (31) termino1 -> . LPAREN expresion RPAREN
+    (21) termino -> . termino PLUS termino
+    (22) termino -> . termino MINUS termino
+    (23) termino -> . termino MULTIPLY termino
+    (24) termino -> . termino DIVIDE termino
+    (25) termino -> . termino1 OPMATRIZ
+    (26) termino -> . termino1
+
+    ID              shift and go to state 38
+    ENTERO          shift and go to state 37
+    FLOTANTE        shift and go to state 33
+    CARACTER        shift and go to state 31
+    LPAREN          shift and go to state 35
+
+    termino1                       shift and go to state 32
+    termino                        shift and go to state 34
+    expresion                      shift and go to state 56
+
+state 47
+
+    (14) declaracion3 -> ASSIGN expresion SEMICOLON .
+
+    VAR             reduce using rule 14 (declaracion3 -> ASSIGN expresion SEMICOLON .)
+    FUNCION         reduce using rule 14 (declaracion3 -> ASSIGN expresion SEMICOLON .)
+    PRINCIPAL       reduce using rule 14 (declaracion3 -> ASSIGN expresion SEMICOLON .)
+
+
+state 48
+
+    (18) expresion -> expresion RELOP . expresion
+    (17) expresion -> . expresion LOGIC expresion
+    (18) expresion -> . expresion RELOP expresion
+    (19) expresion -> . termino1 OPMATRIZ
+    (20) expresion -> . termino
+    (27) termino1 -> . ID
+    (28) termino1 -> . ENTERO
+    (29) termino1 -> . FLOTANTE
+    (30) termino1 -> . CARACTER
+    (31) termino1 -> . LPAREN expresion RPAREN
+    (21) termino -> . termino PLUS termino
+    (22) termino -> . termino MINUS termino
+    (23) termino -> . termino MULTIPLY termino
+    (24) termino -> . termino DIVIDE termino
+    (25) termino -> . termino1 OPMATRIZ
+    (26) termino -> . termino1
+
+    ID              shift and go to state 38
+    ENTERO          shift and go to state 37
+    FLOTANTE        shift and go to state 33
+    CARACTER        shift and go to state 31
+    LPAREN          shift and go to state 35
+
+    termino1                       shift and go to state 32
+    termino                        shift and go to state 34
+    expresion                      shift and go to state 57
+
+state 49
+
+    (24) termino -> termino DIVIDE termino .
+    (21) termino -> termino . PLUS termino
+    (22) termino -> termino . MINUS termino
+    (23) termino -> termino . MULTIPLY termino
+    (24) termino -> termino . DIVIDE termino
+
+    PLUS            reduce using rule 24 (termino -> termino DIVIDE termino .)
+    MINUS           reduce using rule 24 (termino -> termino DIVIDE termino .)
+    MULTIPLY        reduce using rule 24 (termino -> termino DIVIDE termino .)
+    DIVIDE          reduce using rule 24 (termino -> termino DIVIDE termino .)
+    LOGIC           reduce using rule 24 (termino -> termino DIVIDE termino .)
+    RELOP           reduce using rule 24 (termino -> termino DIVIDE termino .)
+    SEMICOLON       reduce using rule 24 (termino -> termino DIVIDE termino .)
+    COMA            reduce using rule 24 (termino -> termino DIVIDE termino .)
+    RPAREN          reduce using rule 24 (termino -> termino DIVIDE termino .)
+
+  ! PLUS            [ shift and go to state 42 ]
+  ! MINUS           [ shift and go to state 41 ]
+  ! MULTIPLY        [ shift and go to state 43 ]
+  ! DIVIDE          [ shift and go to state 40 ]
+
+
+state 50
+
+    (25) termino -> termino1 . OPMATRIZ
+    (26) termino -> termino1 .
+
+    OPMATRIZ        shift and go to state 58
+    PLUS            reduce using rule 26 (termino -> termino1 .)
+    MINUS           reduce using rule 26 (termino -> termino1 .)
+    MULTIPLY        reduce using rule 26 (termino -> termino1 .)
+    DIVIDE          reduce using rule 26 (termino -> termino1 .)
+    SEMICOLON       reduce using rule 26 (termino -> termino1 .)
+    COMA            reduce using rule 26 (termino -> termino1 .)
+    LOGIC           reduce using rule 26 (termino -> termino1 .)
+    RELOP           reduce using rule 26 (termino -> termino1 .)
+    RPAREN          reduce using rule 26 (termino -> termino1 .)
+
+
+state 51
+
+    (22) termino -> termino MINUS termino .
+    (21) termino -> termino . PLUS termino
+    (22) termino -> termino . MINUS termino
+    (23) termino -> termino . MULTIPLY termino
+    (24) termino -> termino . DIVIDE termino
+
+    PLUS            reduce using rule 22 (termino -> termino MINUS termino .)
+    MINUS           reduce using rule 22 (termino -> termino MINUS termino .)
+    LOGIC           reduce using rule 22 (termino -> termino MINUS termino .)
+    RELOP           reduce using rule 22 (termino -> termino MINUS termino .)
+    SEMICOLON       reduce using rule 22 (termino -> termino MINUS termino .)
+    COMA            reduce using rule 22 (termino -> termino MINUS termino .)
+    RPAREN          reduce using rule 22 (termino -> termino MINUS termino .)
+    MULTIPLY        shift and go to state 43
+    DIVIDE          shift and go to state 40
+
+  ! MULTIPLY        [ reduce using rule 22 (termino -> termino MINUS termino .) ]
+  ! DIVIDE          [ reduce using rule 22 (termino -> termino MINUS termino .) ]
+  ! PLUS            [ shift and go to state 42 ]
+  ! MINUS           [ shift and go to state 41 ]
+
+
+state 52
+
+    (21) termino -> termino PLUS termino .
+    (21) termino -> termino . PLUS termino
+    (22) termino -> termino . MINUS termino
+    (23) termino -> termino . MULTIPLY termino
+    (24) termino -> termino . DIVIDE termino
+
+    PLUS            reduce using rule 21 (termino -> termino PLUS termino .)
+    MINUS           reduce using rule 21 (termino -> termino PLUS termino .)
+    LOGIC           reduce using rule 21 (termino -> termino PLUS termino .)
+    RELOP           reduce using rule 21 (termino -> termino PLUS termino .)
+    SEMICOLON       reduce using rule 21 (termino -> termino PLUS termino .)
+    COMA            reduce using rule 21 (termino -> termino PLUS termino .)
+    RPAREN          reduce using rule 21 (termino -> termino PLUS termino .)
+    MULTIPLY        shift and go to state 43
+    DIVIDE          shift and go to state 40
+
+  ! MULTIPLY        [ reduce using rule 21 (termino -> termino PLUS termino .) ]
+  ! DIVIDE          [ reduce using rule 21 (termino -> termino PLUS termino .) ]
+  ! PLUS            [ shift and go to state 42 ]
+  ! MINUS           [ shift and go to state 41 ]
+
+
+state 53
+
+    (23) termino -> termino MULTIPLY termino .
+    (21) termino -> termino . PLUS termino
+    (22) termino -> termino . MINUS termino
+    (23) termino -> termino . MULTIPLY termino
+    (24) termino -> termino . DIVIDE termino
+
+    PLUS            reduce using rule 23 (termino -> termino MULTIPLY termino .)
+    MINUS           reduce using rule 23 (termino -> termino MULTIPLY termino .)
+    MULTIPLY        reduce using rule 23 (termino -> termino MULTIPLY termino .)
+    DIVIDE          reduce using rule 23 (termino -> termino MULTIPLY termino .)
+    LOGIC           reduce using rule 23 (termino -> termino MULTIPLY termino .)
+    RELOP           reduce using rule 23 (termino -> termino MULTIPLY termino .)
+    SEMICOLON       reduce using rule 23 (termino -> termino MULTIPLY termino .)
+    COMA            reduce using rule 23 (termino -> termino MULTIPLY termino .)
+    RPAREN          reduce using rule 23 (termino -> termino MULTIPLY termino .)
+
+  ! PLUS            [ shift and go to state 42 ]
+  ! MINUS           [ shift and go to state 41 ]
+  ! MULTIPLY        [ shift and go to state 43 ]
+  ! DIVIDE          [ shift and go to state 40 ]
+
+
+state 54
+
+    (31) termino1 -> LPAREN expresion RPAREN .
+
+    OPMATRIZ        reduce using rule 31 (termino1 -> LPAREN expresion RPAREN .)
+    PLUS            reduce using rule 31 (termino1 -> LPAREN expresion RPAREN .)
+    MINUS           reduce using rule 31 (termino1 -> LPAREN expresion RPAREN .)
+    MULTIPLY        reduce using rule 31 (termino1 -> LPAREN expresion RPAREN .)
+    DIVIDE          reduce using rule 31 (termino1 -> LPAREN expresion RPAREN .)
+    SEMICOLON       reduce using rule 31 (termino1 -> LPAREN expresion RPAREN .)
+    COMA            reduce using rule 31 (termino1 -> LPAREN expresion RPAREN .)
+    LOGIC           reduce using rule 31 (termino1 -> LPAREN expresion RPAREN .)
+    RELOP           reduce using rule 31 (termino1 -> LPAREN expresion RPAREN .)
+    RPAREN          reduce using rule 31 (termino1 -> LPAREN expresion RPAREN .)
+
+
+state 55
+
+    (15) declaracion3 -> ASSIGN expresion COMA declaracion2 .
+
+    VAR             reduce using rule 15 (declaracion3 -> ASSIGN expresion COMA declaracion2 .)
+    FUNCION         reduce using rule 15 (declaracion3 -> ASSIGN expresion COMA declaracion2 .)
+    PRINCIPAL       reduce using rule 15 (declaracion3 -> ASSIGN expresion COMA declaracion2 .)
+
+
+state 56
+
+    (17) expresion -> expresion LOGIC expresion .
+    (17) expresion -> expresion . LOGIC expresion
+    (18) expresion -> expresion . RELOP expresion
+
+  ! shift/reduce conflict for LOGIC resolved as shift
+  ! shift/reduce conflict for RELOP resolved as shift
+    SEMICOLON       reduce using rule 17 (expresion -> expresion LOGIC expresion .)
+    COMA            reduce using rule 17 (expresion -> expresion LOGIC expresion .)
+    RPAREN          reduce using rule 17 (expresion -> expresion LOGIC expresion .)
+    LOGIC           shift and go to state 46
+    RELOP           shift and go to state 48
+
+  ! LOGIC           [ reduce using rule 17 (expresion -> expresion LOGIC expresion .) ]
+  ! RELOP           [ reduce using rule 17 (expresion -> expresion LOGIC expresion .) ]
+
+
+state 57
+
+    (18) expresion -> expresion RELOP expresion .
+    (17) expresion -> expresion . LOGIC expresion
+    (18) expresion -> expresion . RELOP expresion
+
+  ! shift/reduce conflict for LOGIC resolved as shift
+  ! shift/reduce conflict for RELOP resolved as shift
+    SEMICOLON       reduce using rule 18 (expresion -> expresion RELOP expresion .)
+    COMA            reduce using rule 18 (expresion -> expresion RELOP expresion .)
+    RPAREN          reduce using rule 18 (expresion -> expresion RELOP expresion .)
+    LOGIC           shift and go to state 46
+    RELOP           shift and go to state 48
+
+  ! LOGIC           [ reduce using rule 18 (expresion -> expresion RELOP expresion .) ]
+  ! RELOP           [ reduce using rule 18 (expresion -> expresion RELOP expresion .) ]
+
+
+state 58
+
+    (25) termino -> termino1 OPMATRIZ .
+
+    PLUS            reduce using rule 25 (termino -> termino1 OPMATRIZ .)
+    MINUS           reduce using rule 25 (termino -> termino1 OPMATRIZ .)
+    MULTIPLY        reduce using rule 25 (termino -> termino1 OPMATRIZ .)
+    DIVIDE          reduce using rule 25 (termino -> termino1 OPMATRIZ .)
+    SEMICOLON       reduce using rule 25 (termino -> termino1 OPMATRIZ .)
+    COMA            reduce using rule 25 (termino -> termino1 OPMATRIZ .)
+    LOGIC           reduce using rule 25 (termino -> termino1 OPMATRIZ .)
+    RELOP           reduce using rule 25 (termino -> termino1 OPMATRIZ .)
+    RPAREN          reduce using rule 25 (termino -> termino1 OPMATRIZ .)
+
+WARNING: 
+WARNING: Conflicts:
+WARNING: 
+WARNING: shift/reduce conflict for LOGIC in state 56 resolved as shift
+WARNING: shift/reduce conflict for RELOP in state 56 resolved as shift
+WARNING: shift/reduce conflict for LOGIC in state 57 resolved as shift
+WARNING: shift/reduce conflict for RELOP in state 57 resolved as shift
+WARNING: reduce/reduce conflict in state 39 resolved using rule (expresion -> termino1 OPMATRIZ)
+WARNING: rejected rule (termino -> termino1 OPMATRIZ) in state 39
