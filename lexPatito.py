@@ -60,9 +60,9 @@ tokens = [
     'OCORCH',
     'CCORCH',
     'SEMICOLON',
-    'OPMATRIZ'
+    'OPMATRIZ',
+    'COLON'
 ]
-
 
 """
 Digito:  [0-9]
@@ -91,6 +91,11 @@ def t_RELOP(t):
 def t_ASSIGN(t):
     r'='
     t.type = 'ASSIGN'
+    return t
+
+def t_COLON(t):
+    r'\:'
+    t.type = 'COLON'
     return t
 
 def t_IGNORE(t):
@@ -202,6 +207,21 @@ def t_VAR(t):
     t.type = 'VAR'
     return t
 
+def t_INT(t):
+    r'INT'
+    t.type = 'INT'
+    return t
+
+def t_FLOAT(t):
+    r'FLOAT'
+    t.type = 'FLOAT'
+    return t
+
+def t_CHAR(t):
+    r'CHAR'
+    t.type = 'CHAR'
+    return t
+
 def t_LEE(t):
     r'LEE'
     t.type = 'LEE'
@@ -252,21 +272,6 @@ def t_ID(t):
     t.type = 'ID'
     return t
 
-def t_INT(t):
-    r'INT'
-    t.type = 'INT'
-    return t
-
-def t_FLOAT(t):
-    r'FLOAT'
-    t.type = 'FLOAT'
-    return t
-
-def t_CHAR(t):
-    r'CHAR'
-    t.type = 'CHAR'
-    return t
-
 def t_CARACTER(t):
     r'[\w\W]'
     t.type = 'CARACTER'
@@ -279,7 +284,7 @@ def t_error(t):
 lexer = lex.lex()
 
 '''
-lexer.input('!')
+lexer.input('VAR INT:')
 
 while True:
     tok = lexer.token()
