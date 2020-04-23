@@ -20,7 +20,7 @@ precedence = (
     ('left','MULTIPLY','DIVIDE'),
     ('left','OPMATRIZ')
 )
-"""
+
 def p_programa(p):
     '''
     programa : PROGRAMA ID SEMICOLON programa2
@@ -32,11 +32,12 @@ def p_programa2(p):
     programa2 : declaracion programa2
               | programa3
     '''
+    print(p[1])
     p[0] = p[1]
 
 def p_programa3(p):
     '''
-    programa3 : delaracionFuncion programa3
+    programa3 : declaracionFuncion programa3
               | principal
     '''
     p[0] = p[1]
@@ -58,9 +59,9 @@ def p_declaracion(p):
 
 def p_declaracionFuncion(p):
     '''
-    decalaracionFuncion : FUNCION
+    declaracionFuncion : FUNCION
     '''
-"""
+
 def p_expresion_3(p):
     '''
     expresion : expresion LOGIC expresion
@@ -147,7 +148,7 @@ def p_termino1_3(p):
 def p_error(p):
     print("Something's wrong baby :(")
 
-parser = yacc.yacc(start='expresion')
+parser = yacc.yacc(start='programa')
 
 while True:
     try:
