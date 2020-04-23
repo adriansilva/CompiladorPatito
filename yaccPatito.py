@@ -51,12 +51,27 @@ def p_principal(p):
 
 def p_declaracion(p):
     '''
-    declaracion : VAR INT COLON
-                | VAR FLOAT COLON
-                | VAR CHAR COLON
+    declaracion : VAR declaracion2
     '''
-    print(p[1])
-    p[0] = (p[1],p[2],p[3])
+    p[0] = p[2]
+
+def p_declaracion2(p):
+    '''
+    declaracion2 : INT ID declaracion3
+                 | FLOAT ID declaracion3
+                 | CHAR ID declaracion3
+    '''
+    p[0] = p[3]
+
+def p_declaracion3(p):
+    '''
+    declaracion3 : SEMICOLON
+                 | ASSIGN expresion SEMICOLON
+    '''
+    if p[1] == '=':
+        p[0] = p[2]
+    else:
+        p[0] = None
 
 def p_declaracionFuncion(p):
     '''
@@ -149,7 +164,7 @@ def p_termino1_3(p):
 def p_error(p):
     print("Something's wrong baby :(")
 
-parser = yacc.yacc(start='programa')
+parser = yacc.yacc()
 
 while True:
     try:
