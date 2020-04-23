@@ -50,8 +50,8 @@ tokens = [
     'MINUS',
     'MULTIPLY',
     'DIVIDE',
-    'LPAREN',
-    'RPAREN',
+    'OPAREN',
+    'CPAREN',
     'RELOP',
     'ASSIGN',
     'LOGIC',
@@ -163,14 +163,14 @@ def t_SEMICOLON(t):
     t.type = 'SEMICOLON'
     return t
 
-def t_LPAREN(t):
+def t_OPAREN(t):
     r'\('
-    t.type = 'LPAREN'
+    t.type = 'OPAREN'
     return t
 
-def t_RPAREN(t):
+def t_CPAREN(t):
     r'\)'
-    t.type = 'RPAREN'
+    t.type = 'CPAREN'
     return t
 
 def t_FLOTANTE(t):

@@ -45,9 +45,15 @@ def p_programa3(p):
 
 def p_principal(p):
     '''
-    principal : PRINCIPAL
+    principal : PRINCIPAL OPAREN CPAREN OBRACKET principal1 CBRACKET
     '''
     p[0] = p[1]
+
+def p_principal1(p):
+    '''
+    principal1 : estatutos principal1
+               | empty
+    '''
 
 def p_declaracion(p):
     '''
@@ -96,6 +102,11 @@ def p_declaracion3_4(p):
 def p_declaracionFuncion(p):
     '''
     declaracionFuncion : FUNCION
+    '''
+
+def p_asignacion_4(p):
+    '''
+    asignacion : ID ASSIGN expresion SEMICOLON
     '''
 
 def p_expresion_3(p):
@@ -177,12 +188,23 @@ def p_termino1_1(p):
 
 def p_termino1_3(p):
     '''
-    termino1 : LPAREN expresion RPAREN
+    termino1 : OPAREN expresion CPAREN
     '''
     p[0] = (p[1],p[2],p[3])
 
+
+def p_estatutoRepeticionIncondicional(p):
+    '''
+    estatutoRepeticionIncondicional : DESDE ID ASSIGN expresion HASTA expresion HAZ OBRACKET CBRACKET
+    '''
+
 def p_error(p):
     print("Something's wrong baby :(")
+
+def p_empty(p):
+    '''
+    empty :
+    '''
 
 parser = yacc.yacc()
 
