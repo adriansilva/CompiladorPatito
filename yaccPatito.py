@@ -65,7 +65,7 @@ def p_declaracion2_1(p):
 
 def p_declaracion2_2(p):
     '''
-    declaracion2 : ID declaracion3
+    declaracion2 : posibleID declaracion3
     '''
     p[0] = p[1]
 
@@ -95,20 +95,57 @@ def p_declaracion3_4(p):
 
 def p_declaracionFuncion(p):
     '''
-    declaracionFuncion : FUNCION VOID ID OPAREN declaracionFuncion2 CPAREN declaracion OBRACKET estatutos
-                       | FUNCION INT ID OPAREN declaracionFuncion2 CPAREN declaracion OBRACKET estatutos
-                       | FUNCION FLOAT ID OPAREN declaracionFuncion2 CPAREN declaracion OBRACKET estatutos
-                       | FUNCION CHAR ID OPAREN declaracionFuncion2 CPAREN declaracion OBRACKET estatutos
+    declaracionFuncion : FUNCION VOID ID OPAREN declaracionFuncionParametros CPAREN declaracionFuncionVariables OBRACKET estatutos CBRACKET
+                       | FUNCION INT ID OPAREN declaracionFuncionParametros CPAREN declaracionFuncionVariables OBRACKET estatutos CBRACKET
+                       | FUNCION FLOAT ID OPAREN declaracionFuncionParametros CPAREN declaracionFuncionVariables OBRACKET estatutos CBRACKET
+                       | FUNCION CHAR ID OPAREN declaracionFuncionParametros CPAREN declaracionFuncionVariables OBRACKET estatutos CBRACKET
     '''
     p[0] = "Successful Function Declaration"
 
 
-def p_declaracionFuncion2(p): #define argumentos
+def p_declaracionFuncionParametros_1(p): #define argumentos
     '''
-    declaracionFuncion2 : ID
-                        | ID COMA declaracionFuncion2
+    declaracionFuncionParametros : empty
     '''
     p[0] = None
+
+def p_declaracionFuncionParametros_2(p): #define argumentos
+    '''
+    declaracionFuncionParametros : INT ID
+                                 | FLOAT ID
+                                 | CHAR ID
+    '''
+    p[0] = None
+
+def p_declaracionFuncionParametros_3(p): #define argumentos
+    '''
+    declaracionFuncionParametros : INT ID declaracionFuncionParametros2
+                                 | FLOAT ID declaracionFuncionParametros2
+                                 | CHAR ID declaracionFuncionParametros2
+    '''
+    p[0] = None
+
+def p_declaracionFuncionParametros2_3(p): #define argumentos
+    '''
+    declaracionFuncionParametros2 : COMA INT ID
+                                  | COMA FLOAT ID
+                                  | COMA CHAR ID
+    '''
+    p[0] = None
+
+def p_declaracionFuncionParametros2_4(p): #define argumentos
+    '''
+    declaracionFuncionParametros2 : COMA INT ID declaracionFuncionParametros2
+                                  | COMA FLOAT ID declaracionFuncionParametros2
+                                  | COMA CHAR ID declaracionFuncionParametros2
+    '''
+    p[0] = None
+
+def p_declaracionFuncionVariables(p):
+    '''
+    declaracionFuncionVariables : empty
+                                | declaracion
+    '''
 
 def p_estatutos_1(p):
     '''
@@ -119,8 +156,24 @@ def p_estatutos_2(p):
     '''
     estatutos : declaracion estatutos
               | estatutoRepeticionIncondicional estatutos
+              | lectura estatutos
     '''
     p[0] = None
+
+def p_lectura(p):
+    '''
+    lectura : LEE OPAREN posibleID lectura2 CPAREN SEMICOLON
+    '''
+
+def p_lectura2_1(p):
+    '''
+    lectura2 : empty
+    '''
+
+def p_lectura2_3(p):
+    '''
+    lectura2 : COMA posibleID lectura2
+    '''
 
 def p_asignacion_4(p):
     '''
@@ -163,6 +216,8 @@ def p_termino_3(p):
             | termino MULTIPLY termino
             | termino DIVIDE termino
     '''
+    #Este código se va a usar cuando ya tengamos tabla de variables
+    """
     if(isinstance(p[3], tuple)):
         if (len(p[3]) == 3) & (p[3][0] == '(') & (p[3][2] == ')'):
             if p[2] == '+':
@@ -182,12 +237,13 @@ def p_termino_3(p):
             p[0] = p[1] * p[3]
         elif p[2] == '/':
             p[0] = p[1] / p[3]
-
+    """
+    p[0] = (p[2],p[1],p[3])
 def p_termino_2(p):
-        '''
-        termino : termino1 OPMATRIZ
-        '''
-        p[0] = (p[1],p[2])
+    '''
+    termino : termino1 OPMATRIZ
+    '''
+    p[0] = (p[1],p[2])
 
 def p_termino_1(p):
     '''
@@ -197,12 +253,30 @@ def p_termino_1(p):
 
 def p_termino1_1(p):
     '''
-    termino1 : ID
+    termino1 : posibleID
              | ENTERO
              | FLOTANTE
              | CARACTER
     '''
     p[0] = p[1]
+
+def p_posibleID_1(p):
+    '''
+    posibleID : ID
+    '''
+    p[0] = p[1]
+
+def p_posibleID_4(p):
+    '''
+    posibleID : ID OCORCH expresion CCORCH
+    '''
+    p[0] = (p[1],'[',p[3],']')
+
+def p_posibleID_6(p):
+    '''
+    posibleID : ID OCORCH expresion COMA expresion CCORCH
+    '''
+    p[0] = (p[1],'[',p[3],',',p[5],']')
 
 def p_termino1_3(p):
     '''
@@ -224,7 +298,7 @@ def p_empty(p):
     empty :
     '''
 
-parser = yacc.yacc()
+parser = yacc.yacc(start='declaracionFuncion')
 
 while True:
     try:

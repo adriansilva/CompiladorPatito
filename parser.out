@@ -2,23 +2,20 @@ Created by PLY version 3.11 (http://www.dabeaz.com/ply)
 
 Unused terminals:
 
-    SINO
-    SI
     ESCRIBE
-    ENTONCES
-    LEE
-    NUMBER
-    IGNORE
-    COMENTARIO
-    OCORCH
+    SINO
     NEWLINE
-    MIENTRAS
     REGRESA
-    CCORCH
+    COMENTARIO
+    MIENTRAS
+    NUMBER
+    SI
+    IGNORE
+    ENTONCES
 
 Grammar
 
-Rule 0     S' -> programa
+Rule 0     S' -> declaracionFuncion
 Rule 1     programa -> PROGRAMA ID SEMICOLON programa2
 Rule 2     programa2 -> declaracion programa2
 Rule 3     programa2 -> programa3
@@ -29,80 +26,100 @@ Rule 7     declaracion -> VAR INT COLON declaracion2
 Rule 8     declaracion -> VAR FLOAT COLON declaracion2
 Rule 9     declaracion -> VAR CHAR COLON declaracion2
 Rule 10    declaracion2 -> SEMICOLON
-Rule 11    declaracion2 -> ID declaracion3
+Rule 11    declaracion2 -> posibleID declaracion3
 Rule 12    declaracion3 -> SEMICOLON
 Rule 13    declaracion3 -> COMA declaracion2
 Rule 14    declaracion3 -> ASSIGN expresion SEMICOLON
 Rule 15    declaracion3 -> ASSIGN expresion COMA declaracion2
-Rule 16    declaracionFuncion -> FUNCION VOID ID OPAREN declaracionFuncion2 CPAREN declaracion OBRACKET estatutos
-Rule 17    declaracionFuncion -> FUNCION INT ID OPAREN declaracionFuncion2 CPAREN declaracion OBRACKET estatutos
-Rule 18    declaracionFuncion -> FUNCION FLOAT ID OPAREN declaracionFuncion2 CPAREN declaracion OBRACKET estatutos
-Rule 19    declaracionFuncion -> FUNCION CHAR ID OPAREN declaracionFuncion2 CPAREN declaracion OBRACKET estatutos
-Rule 20    declaracionFuncion2 -> ID
-Rule 21    declaracionFuncion2 -> ID COMA declaracionFuncion2
-Rule 22    estatutos -> empty
-Rule 23    estatutos -> declaracion estatutos
-Rule 24    estatutos -> estatutoRepeticionIncondicional estatutos
-Rule 25    asignacion -> ID ASSIGN expresion SEMICOLON
-Rule 26    expresion -> expresion LOGIC expresion
-Rule 27    expresion -> expresion RELOP expresion
-Rule 28    expresion -> termino1 OPMATRIZ
-Rule 29    expresion -> termino
-Rule 30    termino -> termino PLUS termino
-Rule 31    termino -> termino MINUS termino
-Rule 32    termino -> termino MULTIPLY termino
-Rule 33    termino -> termino DIVIDE termino
-Rule 34    termino -> termino1 OPMATRIZ
-Rule 35    termino -> termino1
-Rule 36    termino1 -> ID
-Rule 37    termino1 -> ENTERO
-Rule 38    termino1 -> FLOTANTE
-Rule 39    termino1 -> CARACTER
-Rule 40    termino1 -> OPAREN expresion CPAREN
-Rule 41    estatutoRepeticionIncondicional -> DESDE ID ASSIGN expresion HASTA expresion HAZ OBRACKET estatutos CBRACKET
-Rule 42    empty -> <empty>
+Rule 16    declaracionFuncion -> FUNCION VOID ID OPAREN declaracionFuncionParametros CPAREN declaracionFuncionVariables OBRACKET estatutos CBRACKET
+Rule 17    declaracionFuncion -> FUNCION INT ID OPAREN declaracionFuncionParametros CPAREN declaracionFuncionVariables OBRACKET estatutos CBRACKET
+Rule 18    declaracionFuncion -> FUNCION FLOAT ID OPAREN declaracionFuncionParametros CPAREN declaracionFuncionVariables OBRACKET estatutos CBRACKET
+Rule 19    declaracionFuncion -> FUNCION CHAR ID OPAREN declaracionFuncionParametros CPAREN declaracionFuncionVariables OBRACKET estatutos CBRACKET
+Rule 20    declaracionFuncionParametros -> empty
+Rule 21    declaracionFuncionParametros -> INT ID
+Rule 22    declaracionFuncionParametros -> FLOAT ID
+Rule 23    declaracionFuncionParametros -> CHAR ID
+Rule 24    declaracionFuncionParametros -> INT ID declaracionFuncionParametros2
+Rule 25    declaracionFuncionParametros -> FLOAT ID declaracionFuncionParametros2
+Rule 26    declaracionFuncionParametros -> CHAR ID declaracionFuncionParametros2
+Rule 27    declaracionFuncionParametros2 -> COMA INT ID
+Rule 28    declaracionFuncionParametros2 -> COMA FLOAT ID
+Rule 29    declaracionFuncionParametros2 -> COMA CHAR ID
+Rule 30    declaracionFuncionParametros2 -> COMA INT ID declaracionFuncionParametros2
+Rule 31    declaracionFuncionParametros2 -> COMA FLOAT ID declaracionFuncionParametros2
+Rule 32    declaracionFuncionParametros2 -> COMA CHAR ID declaracionFuncionParametros2
+Rule 33    declaracionFuncionVariables -> empty
+Rule 34    declaracionFuncionVariables -> declaracion
+Rule 35    estatutos -> empty
+Rule 36    estatutos -> declaracion estatutos
+Rule 37    estatutos -> estatutoRepeticionIncondicional estatutos
+Rule 38    estatutos -> lectura estatutos
+Rule 39    lectura -> LEE OPAREN posibleID lectura2 CPAREN SEMICOLON
+Rule 40    lectura2 -> empty
+Rule 41    lectura2 -> COMA posibleID lectura2
+Rule 42    asignacion -> ID ASSIGN expresion SEMICOLON
+Rule 43    expresion -> expresion LOGIC expresion
+Rule 44    expresion -> expresion RELOP expresion
+Rule 45    expresion -> termino1 OPMATRIZ
+Rule 46    expresion -> termino
+Rule 47    termino -> termino PLUS termino
+Rule 48    termino -> termino MINUS termino
+Rule 49    termino -> termino MULTIPLY termino
+Rule 50    termino -> termino DIVIDE termino
+Rule 51    termino -> termino1 OPMATRIZ
+Rule 52    termino -> termino1
+Rule 53    termino1 -> posibleID
+Rule 54    termino1 -> ENTERO
+Rule 55    termino1 -> FLOTANTE
+Rule 56    termino1 -> CARACTER
+Rule 57    posibleID -> ID
+Rule 58    posibleID -> ID OCORCH expresion CCORCH
+Rule 59    posibleID -> ID OCORCH expresion COMA expresion CCORCH
+Rule 60    termino1 -> OPAREN expresion CPAREN
+Rule 61    estatutoRepeticionIncondicional -> DESDE ID ASSIGN expresion HASTA expresion HAZ OBRACKET estatutos CBRACKET
+Rule 62    empty -> <empty>
 
 Terminals, with rules where they appear
 
-ASSIGN               : 14 15 25 41
-CARACTER             : 39
-CBRACKET             : 6 41
-CCORCH               : 
-CHAR                 : 9 19
+ASSIGN               : 14 15 42 61
+CARACTER             : 56
+CBRACKET             : 6 16 17 18 19 61
+CCORCH               : 58 59
+CHAR                 : 9 19 23 26 29 32
 COLON                : 7 8 9
-COMA                 : 13 15 21
+COMA                 : 13 15 27 28 29 30 31 32 41 59
 COMENTARIO           : 
-CPAREN               : 6 16 17 18 19 40
-DESDE                : 41
-DIVIDE               : 33
-ENTERO               : 37
+CPAREN               : 6 16 17 18 19 39 60
+DESDE                : 61
+DIVIDE               : 50
+ENTERO               : 54
 ENTONCES             : 
 ESCRIBE              : 
-FLOAT                : 8 18
-FLOTANTE             : 38
+FLOAT                : 8 18 22 25 28 31
+FLOTANTE             : 55
 FUNCION              : 16 17 18 19
-HASTA                : 41
-HAZ                  : 41
-ID                   : 1 11 16 17 18 19 20 21 25 36 41
+HASTA                : 61
+HAZ                  : 61
+ID                   : 1 16 17 18 19 21 22 23 24 25 26 27 28 29 30 31 32 42 57 58 59 61
 IGNORE               : 
-INT                  : 7 17
-LEE                  : 
-LOGIC                : 26
+INT                  : 7 17 21 24 27 30
+LEE                  : 39
+LOGIC                : 43
 MIENTRAS             : 
-MINUS                : 31
-MULTIPLY             : 32
+MINUS                : 48
+MULTIPLY             : 49
 NEWLINE              : 
 NUMBER               : 
-OBRACKET             : 6 16 17 18 19 41
-OCORCH               : 
-OPAREN               : 6 16 17 18 19 40
-OPMATRIZ             : 28 34
-PLUS                 : 30
+OBRACKET             : 6 16 17 18 19 61
+OCORCH               : 58 59
+OPAREN               : 6 16 17 18 19 39 60
+OPMATRIZ             : 45 51
+PLUS                 : 47
 PRINCIPAL            : 6
 PROGRAMA             : 1
 REGRESA              : 
-RELOP                : 27
-SEMICOLON            : 1 10 12 14 25
+RELOP                : 44
+SEMICOLON            : 1 10 12 14 39 42
 SI                   : 
 SINO                 : 
 VAR                  : 7 8 9
@@ -112,1577 +129,2054 @@ error                :
 Nonterminals, with rules where they appear
 
 asignacion           : 
-declaracion          : 2 16 17 18 19 23
+declaracion          : 2 34 36
 declaracion2         : 7 8 9 13 15
 declaracion3         : 11
-declaracionFuncion   : 4
-declaracionFuncion2  : 16 17 18 19 21
-empty                : 22
-estatutoRepeticionIncondicional : 24
-estatutos            : 6 16 17 18 19 23 24 41
-expresion            : 14 15 25 26 26 27 27 40 41 41
+declaracionFuncion   : 4 0
+declaracionFuncionParametros : 16 17 18 19
+declaracionFuncionParametros2 : 24 25 26 30 31 32
+declaracionFuncionVariables : 16 17 18 19
+empty                : 20 33 35 40
+estatutoRepeticionIncondicional : 37
+estatutos            : 6 16 17 18 19 36 37 38 61
+expresion            : 14 15 42 43 43 44 44 58 59 59 60 61 61
+lectura              : 38
+lectura2             : 39 41
+posibleID            : 11 39 41 53
 principal            : 5
-programa             : 0
+programa             : 
 programa2            : 1 2
 programa3            : 3 4
-termino              : 29 30 30 31 31 32 32 33 33
-termino1             : 28 34 35
+termino              : 46 47 47 48 48 49 49 50 50
+termino1             : 45 51 52
 
 Parsing method: LALR
 
 state 0
 
-    (0) S' -> . programa
-    (1) programa -> . PROGRAMA ID SEMICOLON programa2
+    (0) S' -> . declaracionFuncion
+    (16) declaracionFuncion -> . FUNCION VOID ID OPAREN declaracionFuncionParametros CPAREN declaracionFuncionVariables OBRACKET estatutos CBRACKET
+    (17) declaracionFuncion -> . FUNCION INT ID OPAREN declaracionFuncionParametros CPAREN declaracionFuncionVariables OBRACKET estatutos CBRACKET
+    (18) declaracionFuncion -> . FUNCION FLOAT ID OPAREN declaracionFuncionParametros CPAREN declaracionFuncionVariables OBRACKET estatutos CBRACKET
+    (19) declaracionFuncion -> . FUNCION CHAR ID OPAREN declaracionFuncionParametros CPAREN declaracionFuncionVariables OBRACKET estatutos CBRACKET
 
-    PROGRAMA        shift and go to state 1
+    FUNCION         shift and go to state 1
 
-    programa                       shift and go to state 2
+    declaracionFuncion             shift and go to state 2
 
 state 1
 
-    (1) programa -> PROGRAMA . ID SEMICOLON programa2
+    (16) declaracionFuncion -> FUNCION . VOID ID OPAREN declaracionFuncionParametros CPAREN declaracionFuncionVariables OBRACKET estatutos CBRACKET
+    (17) declaracionFuncion -> FUNCION . INT ID OPAREN declaracionFuncionParametros CPAREN declaracionFuncionVariables OBRACKET estatutos CBRACKET
+    (18) declaracionFuncion -> FUNCION . FLOAT ID OPAREN declaracionFuncionParametros CPAREN declaracionFuncionVariables OBRACKET estatutos CBRACKET
+    (19) declaracionFuncion -> FUNCION . CHAR ID OPAREN declaracionFuncionParametros CPAREN declaracionFuncionVariables OBRACKET estatutos CBRACKET
 
-    ID              shift and go to state 3
+    VOID            shift and go to state 3
+    INT             shift and go to state 5
+    FLOAT           shift and go to state 6
+    CHAR            shift and go to state 4
 
 
 state 2
 
-    (0) S' -> programa .
+    (0) S' -> declaracionFuncion .
 
 
 
 state 3
 
-    (1) programa -> PROGRAMA ID . SEMICOLON programa2
+    (16) declaracionFuncion -> FUNCION VOID . ID OPAREN declaracionFuncionParametros CPAREN declaracionFuncionVariables OBRACKET estatutos CBRACKET
 
-    SEMICOLON       shift and go to state 4
+    ID              shift and go to state 7
 
 
 state 4
 
-    (1) programa -> PROGRAMA ID SEMICOLON . programa2
-    (2) programa2 -> . declaracion programa2
-    (3) programa2 -> . programa3
-    (7) declaracion -> . VAR INT COLON declaracion2
-    (8) declaracion -> . VAR FLOAT COLON declaracion2
-    (9) declaracion -> . VAR CHAR COLON declaracion2
-    (4) programa3 -> . declaracionFuncion programa3
-    (5) programa3 -> . principal
-    (16) declaracionFuncion -> . FUNCION VOID ID OPAREN declaracionFuncion2 CPAREN declaracion OBRACKET estatutos
-    (17) declaracionFuncion -> . FUNCION INT ID OPAREN declaracionFuncion2 CPAREN declaracion OBRACKET estatutos
-    (18) declaracionFuncion -> . FUNCION FLOAT ID OPAREN declaracionFuncion2 CPAREN declaracion OBRACKET estatutos
-    (19) declaracionFuncion -> . FUNCION CHAR ID OPAREN declaracionFuncion2 CPAREN declaracion OBRACKET estatutos
-    (6) principal -> . PRINCIPAL OPAREN CPAREN OBRACKET estatutos CBRACKET
+    (19) declaracionFuncion -> FUNCION CHAR . ID OPAREN declaracionFuncionParametros CPAREN declaracionFuncionVariables OBRACKET estatutos CBRACKET
 
-    VAR             shift and go to state 12
-    FUNCION         shift and go to state 8
-    PRINCIPAL       shift and go to state 7
+    ID              shift and go to state 8
 
-    declaracion                    shift and go to state 10
-    programa2                      shift and go to state 11
-    programa3                      shift and go to state 6
-    declaracionFuncion             shift and go to state 5
-    principal                      shift and go to state 9
 
 state 5
 
-    (4) programa3 -> declaracionFuncion . programa3
-    (4) programa3 -> . declaracionFuncion programa3
-    (5) programa3 -> . principal
-    (16) declaracionFuncion -> . FUNCION VOID ID OPAREN declaracionFuncion2 CPAREN declaracion OBRACKET estatutos
-    (17) declaracionFuncion -> . FUNCION INT ID OPAREN declaracionFuncion2 CPAREN declaracion OBRACKET estatutos
-    (18) declaracionFuncion -> . FUNCION FLOAT ID OPAREN declaracionFuncion2 CPAREN declaracion OBRACKET estatutos
-    (19) declaracionFuncion -> . FUNCION CHAR ID OPAREN declaracionFuncion2 CPAREN declaracion OBRACKET estatutos
-    (6) principal -> . PRINCIPAL OPAREN CPAREN OBRACKET estatutos CBRACKET
+    (17) declaracionFuncion -> FUNCION INT . ID OPAREN declaracionFuncionParametros CPAREN declaracionFuncionVariables OBRACKET estatutos CBRACKET
 
-    FUNCION         shift and go to state 8
-    PRINCIPAL       shift and go to state 7
+    ID              shift and go to state 9
 
-    declaracionFuncion             shift and go to state 5
-    programa3                      shift and go to state 13
-    principal                      shift and go to state 9
 
 state 6
 
-    (3) programa2 -> programa3 .
+    (18) declaracionFuncion -> FUNCION FLOAT . ID OPAREN declaracionFuncionParametros CPAREN declaracionFuncionVariables OBRACKET estatutos CBRACKET
 
-    $end            reduce using rule 3 (programa2 -> programa3 .)
+    ID              shift and go to state 10
 
 
 state 7
 
-    (6) principal -> PRINCIPAL . OPAREN CPAREN OBRACKET estatutos CBRACKET
+    (16) declaracionFuncion -> FUNCION VOID ID . OPAREN declaracionFuncionParametros CPAREN declaracionFuncionVariables OBRACKET estatutos CBRACKET
 
-    OPAREN          shift and go to state 14
+    OPAREN          shift and go to state 11
 
 
 state 8
 
-    (16) declaracionFuncion -> FUNCION . VOID ID OPAREN declaracionFuncion2 CPAREN declaracion OBRACKET estatutos
-    (17) declaracionFuncion -> FUNCION . INT ID OPAREN declaracionFuncion2 CPAREN declaracion OBRACKET estatutos
-    (18) declaracionFuncion -> FUNCION . FLOAT ID OPAREN declaracionFuncion2 CPAREN declaracion OBRACKET estatutos
-    (19) declaracionFuncion -> FUNCION . CHAR ID OPAREN declaracionFuncion2 CPAREN declaracion OBRACKET estatutos
+    (19) declaracionFuncion -> FUNCION CHAR ID . OPAREN declaracionFuncionParametros CPAREN declaracionFuncionVariables OBRACKET estatutos CBRACKET
 
-    VOID            shift and go to state 15
-    INT             shift and go to state 17
-    FLOAT           shift and go to state 18
-    CHAR            shift and go to state 16
+    OPAREN          shift and go to state 12
 
 
 state 9
 
-    (5) programa3 -> principal .
+    (17) declaracionFuncion -> FUNCION INT ID . OPAREN declaracionFuncionParametros CPAREN declaracionFuncionVariables OBRACKET estatutos CBRACKET
 
-    $end            reduce using rule 5 (programa3 -> principal .)
+    OPAREN          shift and go to state 13
 
 
 state 10
 
-    (2) programa2 -> declaracion . programa2
-    (2) programa2 -> . declaracion programa2
-    (3) programa2 -> . programa3
-    (7) declaracion -> . VAR INT COLON declaracion2
-    (8) declaracion -> . VAR FLOAT COLON declaracion2
-    (9) declaracion -> . VAR CHAR COLON declaracion2
-    (4) programa3 -> . declaracionFuncion programa3
-    (5) programa3 -> . principal
-    (16) declaracionFuncion -> . FUNCION VOID ID OPAREN declaracionFuncion2 CPAREN declaracion OBRACKET estatutos
-    (17) declaracionFuncion -> . FUNCION INT ID OPAREN declaracionFuncion2 CPAREN declaracion OBRACKET estatutos
-    (18) declaracionFuncion -> . FUNCION FLOAT ID OPAREN declaracionFuncion2 CPAREN declaracion OBRACKET estatutos
-    (19) declaracionFuncion -> . FUNCION CHAR ID OPAREN declaracionFuncion2 CPAREN declaracion OBRACKET estatutos
-    (6) principal -> . PRINCIPAL OPAREN CPAREN OBRACKET estatutos CBRACKET
+    (18) declaracionFuncion -> FUNCION FLOAT ID . OPAREN declaracionFuncionParametros CPAREN declaracionFuncionVariables OBRACKET estatutos CBRACKET
 
-    VAR             shift and go to state 12
-    FUNCION         shift and go to state 8
-    PRINCIPAL       shift and go to state 7
+    OPAREN          shift and go to state 14
 
-    declaracion                    shift and go to state 10
-    programa2                      shift and go to state 19
-    programa3                      shift and go to state 6
-    declaracionFuncion             shift and go to state 5
-    principal                      shift and go to state 9
 
 state 11
 
-    (1) programa -> PROGRAMA ID SEMICOLON programa2 .
+    (16) declaracionFuncion -> FUNCION VOID ID OPAREN . declaracionFuncionParametros CPAREN declaracionFuncionVariables OBRACKET estatutos CBRACKET
+    (20) declaracionFuncionParametros -> . empty
+    (21) declaracionFuncionParametros -> . INT ID
+    (22) declaracionFuncionParametros -> . FLOAT ID
+    (23) declaracionFuncionParametros -> . CHAR ID
+    (24) declaracionFuncionParametros -> . INT ID declaracionFuncionParametros2
+    (25) declaracionFuncionParametros -> . FLOAT ID declaracionFuncionParametros2
+    (26) declaracionFuncionParametros -> . CHAR ID declaracionFuncionParametros2
+    (62) empty -> .
 
-    $end            reduce using rule 1 (programa -> PROGRAMA ID SEMICOLON programa2 .)
+    INT             shift and go to state 17
+    FLOAT           shift and go to state 19
+    CHAR            shift and go to state 16
+    CPAREN          reduce using rule 62 (empty -> .)
 
+    declaracionFuncionParametros   shift and go to state 18
+    empty                          shift and go to state 15
 
 state 12
+
+    (19) declaracionFuncion -> FUNCION CHAR ID OPAREN . declaracionFuncionParametros CPAREN declaracionFuncionVariables OBRACKET estatutos CBRACKET
+    (20) declaracionFuncionParametros -> . empty
+    (21) declaracionFuncionParametros -> . INT ID
+    (22) declaracionFuncionParametros -> . FLOAT ID
+    (23) declaracionFuncionParametros -> . CHAR ID
+    (24) declaracionFuncionParametros -> . INT ID declaracionFuncionParametros2
+    (25) declaracionFuncionParametros -> . FLOAT ID declaracionFuncionParametros2
+    (26) declaracionFuncionParametros -> . CHAR ID declaracionFuncionParametros2
+    (62) empty -> .
+
+    INT             shift and go to state 17
+    FLOAT           shift and go to state 19
+    CHAR            shift and go to state 16
+    CPAREN          reduce using rule 62 (empty -> .)
+
+    declaracionFuncionParametros   shift and go to state 20
+    empty                          shift and go to state 15
+
+state 13
+
+    (17) declaracionFuncion -> FUNCION INT ID OPAREN . declaracionFuncionParametros CPAREN declaracionFuncionVariables OBRACKET estatutos CBRACKET
+    (20) declaracionFuncionParametros -> . empty
+    (21) declaracionFuncionParametros -> . INT ID
+    (22) declaracionFuncionParametros -> . FLOAT ID
+    (23) declaracionFuncionParametros -> . CHAR ID
+    (24) declaracionFuncionParametros -> . INT ID declaracionFuncionParametros2
+    (25) declaracionFuncionParametros -> . FLOAT ID declaracionFuncionParametros2
+    (26) declaracionFuncionParametros -> . CHAR ID declaracionFuncionParametros2
+    (62) empty -> .
+
+    INT             shift and go to state 17
+    FLOAT           shift and go to state 19
+    CHAR            shift and go to state 16
+    CPAREN          reduce using rule 62 (empty -> .)
+
+    declaracionFuncionParametros   shift and go to state 21
+    empty                          shift and go to state 15
+
+state 14
+
+    (18) declaracionFuncion -> FUNCION FLOAT ID OPAREN . declaracionFuncionParametros CPAREN declaracionFuncionVariables OBRACKET estatutos CBRACKET
+    (20) declaracionFuncionParametros -> . empty
+    (21) declaracionFuncionParametros -> . INT ID
+    (22) declaracionFuncionParametros -> . FLOAT ID
+    (23) declaracionFuncionParametros -> . CHAR ID
+    (24) declaracionFuncionParametros -> . INT ID declaracionFuncionParametros2
+    (25) declaracionFuncionParametros -> . FLOAT ID declaracionFuncionParametros2
+    (26) declaracionFuncionParametros -> . CHAR ID declaracionFuncionParametros2
+    (62) empty -> .
+
+    INT             shift and go to state 17
+    FLOAT           shift and go to state 19
+    CHAR            shift and go to state 16
+    CPAREN          reduce using rule 62 (empty -> .)
+
+    declaracionFuncionParametros   shift and go to state 22
+    empty                          shift and go to state 15
+
+state 15
+
+    (20) declaracionFuncionParametros -> empty .
+
+    CPAREN          reduce using rule 20 (declaracionFuncionParametros -> empty .)
+
+
+state 16
+
+    (23) declaracionFuncionParametros -> CHAR . ID
+    (26) declaracionFuncionParametros -> CHAR . ID declaracionFuncionParametros2
+
+    ID              shift and go to state 23
+
+
+state 17
+
+    (21) declaracionFuncionParametros -> INT . ID
+    (24) declaracionFuncionParametros -> INT . ID declaracionFuncionParametros2
+
+    ID              shift and go to state 24
+
+
+state 18
+
+    (16) declaracionFuncion -> FUNCION VOID ID OPAREN declaracionFuncionParametros . CPAREN declaracionFuncionVariables OBRACKET estatutos CBRACKET
+
+    CPAREN          shift and go to state 25
+
+
+state 19
+
+    (22) declaracionFuncionParametros -> FLOAT . ID
+    (25) declaracionFuncionParametros -> FLOAT . ID declaracionFuncionParametros2
+
+    ID              shift and go to state 26
+
+
+state 20
+
+    (19) declaracionFuncion -> FUNCION CHAR ID OPAREN declaracionFuncionParametros . CPAREN declaracionFuncionVariables OBRACKET estatutos CBRACKET
+
+    CPAREN          shift and go to state 27
+
+
+state 21
+
+    (17) declaracionFuncion -> FUNCION INT ID OPAREN declaracionFuncionParametros . CPAREN declaracionFuncionVariables OBRACKET estatutos CBRACKET
+
+    CPAREN          shift and go to state 28
+
+
+state 22
+
+    (18) declaracionFuncion -> FUNCION FLOAT ID OPAREN declaracionFuncionParametros . CPAREN declaracionFuncionVariables OBRACKET estatutos CBRACKET
+
+    CPAREN          shift and go to state 29
+
+
+state 23
+
+    (23) declaracionFuncionParametros -> CHAR ID .
+    (26) declaracionFuncionParametros -> CHAR ID . declaracionFuncionParametros2
+    (27) declaracionFuncionParametros2 -> . COMA INT ID
+    (28) declaracionFuncionParametros2 -> . COMA FLOAT ID
+    (29) declaracionFuncionParametros2 -> . COMA CHAR ID
+    (30) declaracionFuncionParametros2 -> . COMA INT ID declaracionFuncionParametros2
+    (31) declaracionFuncionParametros2 -> . COMA FLOAT ID declaracionFuncionParametros2
+    (32) declaracionFuncionParametros2 -> . COMA CHAR ID declaracionFuncionParametros2
+
+    CPAREN          reduce using rule 23 (declaracionFuncionParametros -> CHAR ID .)
+    COMA            shift and go to state 30
+
+    declaracionFuncionParametros2  shift and go to state 31
+
+state 24
+
+    (21) declaracionFuncionParametros -> INT ID .
+    (24) declaracionFuncionParametros -> INT ID . declaracionFuncionParametros2
+    (27) declaracionFuncionParametros2 -> . COMA INT ID
+    (28) declaracionFuncionParametros2 -> . COMA FLOAT ID
+    (29) declaracionFuncionParametros2 -> . COMA CHAR ID
+    (30) declaracionFuncionParametros2 -> . COMA INT ID declaracionFuncionParametros2
+    (31) declaracionFuncionParametros2 -> . COMA FLOAT ID declaracionFuncionParametros2
+    (32) declaracionFuncionParametros2 -> . COMA CHAR ID declaracionFuncionParametros2
+
+    CPAREN          reduce using rule 21 (declaracionFuncionParametros -> INT ID .)
+    COMA            shift and go to state 30
+
+    declaracionFuncionParametros2  shift and go to state 32
+
+state 25
+
+    (16) declaracionFuncion -> FUNCION VOID ID OPAREN declaracionFuncionParametros CPAREN . declaracionFuncionVariables OBRACKET estatutos CBRACKET
+    (33) declaracionFuncionVariables -> . empty
+    (34) declaracionFuncionVariables -> . declaracion
+    (62) empty -> .
+    (7) declaracion -> . VAR INT COLON declaracion2
+    (8) declaracion -> . VAR FLOAT COLON declaracion2
+    (9) declaracion -> . VAR CHAR COLON declaracion2
+
+    OBRACKET        reduce using rule 62 (empty -> .)
+    VAR             shift and go to state 34
+
+    declaracionFuncionVariables    shift and go to state 35
+    declaracion                    shift and go to state 36
+    empty                          shift and go to state 33
+
+state 26
+
+    (22) declaracionFuncionParametros -> FLOAT ID .
+    (25) declaracionFuncionParametros -> FLOAT ID . declaracionFuncionParametros2
+    (27) declaracionFuncionParametros2 -> . COMA INT ID
+    (28) declaracionFuncionParametros2 -> . COMA FLOAT ID
+    (29) declaracionFuncionParametros2 -> . COMA CHAR ID
+    (30) declaracionFuncionParametros2 -> . COMA INT ID declaracionFuncionParametros2
+    (31) declaracionFuncionParametros2 -> . COMA FLOAT ID declaracionFuncionParametros2
+    (32) declaracionFuncionParametros2 -> . COMA CHAR ID declaracionFuncionParametros2
+
+    CPAREN          reduce using rule 22 (declaracionFuncionParametros -> FLOAT ID .)
+    COMA            shift and go to state 30
+
+    declaracionFuncionParametros2  shift and go to state 37
+
+state 27
+
+    (19) declaracionFuncion -> FUNCION CHAR ID OPAREN declaracionFuncionParametros CPAREN . declaracionFuncionVariables OBRACKET estatutos CBRACKET
+    (33) declaracionFuncionVariables -> . empty
+    (34) declaracionFuncionVariables -> . declaracion
+    (62) empty -> .
+    (7) declaracion -> . VAR INT COLON declaracion2
+    (8) declaracion -> . VAR FLOAT COLON declaracion2
+    (9) declaracion -> . VAR CHAR COLON declaracion2
+
+    OBRACKET        reduce using rule 62 (empty -> .)
+    VAR             shift and go to state 34
+
+    declaracionFuncionVariables    shift and go to state 38
+    declaracion                    shift and go to state 36
+    empty                          shift and go to state 33
+
+state 28
+
+    (17) declaracionFuncion -> FUNCION INT ID OPAREN declaracionFuncionParametros CPAREN . declaracionFuncionVariables OBRACKET estatutos CBRACKET
+    (33) declaracionFuncionVariables -> . empty
+    (34) declaracionFuncionVariables -> . declaracion
+    (62) empty -> .
+    (7) declaracion -> . VAR INT COLON declaracion2
+    (8) declaracion -> . VAR FLOAT COLON declaracion2
+    (9) declaracion -> . VAR CHAR COLON declaracion2
+
+    OBRACKET        reduce using rule 62 (empty -> .)
+    VAR             shift and go to state 34
+
+    declaracionFuncionVariables    shift and go to state 39
+    declaracion                    shift and go to state 36
+    empty                          shift and go to state 33
+
+state 29
+
+    (18) declaracionFuncion -> FUNCION FLOAT ID OPAREN declaracionFuncionParametros CPAREN . declaracionFuncionVariables OBRACKET estatutos CBRACKET
+    (33) declaracionFuncionVariables -> . empty
+    (34) declaracionFuncionVariables -> . declaracion
+    (62) empty -> .
+    (7) declaracion -> . VAR INT COLON declaracion2
+    (8) declaracion -> . VAR FLOAT COLON declaracion2
+    (9) declaracion -> . VAR CHAR COLON declaracion2
+
+    OBRACKET        reduce using rule 62 (empty -> .)
+    VAR             shift and go to state 34
+
+    declaracionFuncionVariables    shift and go to state 40
+    declaracion                    shift and go to state 36
+    empty                          shift and go to state 33
+
+state 30
+
+    (27) declaracionFuncionParametros2 -> COMA . INT ID
+    (28) declaracionFuncionParametros2 -> COMA . FLOAT ID
+    (29) declaracionFuncionParametros2 -> COMA . CHAR ID
+    (30) declaracionFuncionParametros2 -> COMA . INT ID declaracionFuncionParametros2
+    (31) declaracionFuncionParametros2 -> COMA . FLOAT ID declaracionFuncionParametros2
+    (32) declaracionFuncionParametros2 -> COMA . CHAR ID declaracionFuncionParametros2
+
+    INT             shift and go to state 41
+    FLOAT           shift and go to state 43
+    CHAR            shift and go to state 42
+
+
+state 31
+
+    (26) declaracionFuncionParametros -> CHAR ID declaracionFuncionParametros2 .
+
+    CPAREN          reduce using rule 26 (declaracionFuncionParametros -> CHAR ID declaracionFuncionParametros2 .)
+
+
+state 32
+
+    (24) declaracionFuncionParametros -> INT ID declaracionFuncionParametros2 .
+
+    CPAREN          reduce using rule 24 (declaracionFuncionParametros -> INT ID declaracionFuncionParametros2 .)
+
+
+state 33
+
+    (33) declaracionFuncionVariables -> empty .
+
+    OBRACKET        reduce using rule 33 (declaracionFuncionVariables -> empty .)
+
+
+state 34
 
     (7) declaracion -> VAR . INT COLON declaracion2
     (8) declaracion -> VAR . FLOAT COLON declaracion2
     (9) declaracion -> VAR . CHAR COLON declaracion2
 
-    INT             shift and go to state 22
-    FLOAT           shift and go to state 21
-    CHAR            shift and go to state 20
+    INT             shift and go to state 45
+    FLOAT           shift and go to state 46
+    CHAR            shift and go to state 44
 
-
-state 13
-
-    (4) programa3 -> declaracionFuncion programa3 .
-
-    $end            reduce using rule 4 (programa3 -> declaracionFuncion programa3 .)
-
-
-state 14
-
-    (6) principal -> PRINCIPAL OPAREN . CPAREN OBRACKET estatutos CBRACKET
-
-    CPAREN          shift and go to state 23
-
-
-state 15
-
-    (16) declaracionFuncion -> FUNCION VOID . ID OPAREN declaracionFuncion2 CPAREN declaracion OBRACKET estatutos
-
-    ID              shift and go to state 24
-
-
-state 16
-
-    (19) declaracionFuncion -> FUNCION CHAR . ID OPAREN declaracionFuncion2 CPAREN declaracion OBRACKET estatutos
-
-    ID              shift and go to state 25
-
-
-state 17
-
-    (17) declaracionFuncion -> FUNCION INT . ID OPAREN declaracionFuncion2 CPAREN declaracion OBRACKET estatutos
-
-    ID              shift and go to state 26
-
-
-state 18
-
-    (18) declaracionFuncion -> FUNCION FLOAT . ID OPAREN declaracionFuncion2 CPAREN declaracion OBRACKET estatutos
-
-    ID              shift and go to state 27
-
-
-state 19
-
-    (2) programa2 -> declaracion programa2 .
-
-    $end            reduce using rule 2 (programa2 -> declaracion programa2 .)
-
-
-state 20
-
-    (9) declaracion -> VAR CHAR . COLON declaracion2
-
-    COLON           shift and go to state 28
-
-
-state 21
-
-    (8) declaracion -> VAR FLOAT . COLON declaracion2
-
-    COLON           shift and go to state 29
-
-
-state 22
-
-    (7) declaracion -> VAR INT . COLON declaracion2
-
-    COLON           shift and go to state 30
-
-
-state 23
-
-    (6) principal -> PRINCIPAL OPAREN CPAREN . OBRACKET estatutos CBRACKET
-
-    OBRACKET        shift and go to state 31
-
-
-state 24
-
-    (16) declaracionFuncion -> FUNCION VOID ID . OPAREN declaracionFuncion2 CPAREN declaracion OBRACKET estatutos
-
-    OPAREN          shift and go to state 32
-
-
-state 25
-
-    (19) declaracionFuncion -> FUNCION CHAR ID . OPAREN declaracionFuncion2 CPAREN declaracion OBRACKET estatutos
-
-    OPAREN          shift and go to state 33
-
-
-state 26
-
-    (17) declaracionFuncion -> FUNCION INT ID . OPAREN declaracionFuncion2 CPAREN declaracion OBRACKET estatutos
-
-    OPAREN          shift and go to state 34
-
-
-state 27
-
-    (18) declaracionFuncion -> FUNCION FLOAT ID . OPAREN declaracionFuncion2 CPAREN declaracion OBRACKET estatutos
-
-    OPAREN          shift and go to state 35
-
-
-state 28
-
-    (9) declaracion -> VAR CHAR COLON . declaracion2
-    (10) declaracion2 -> . SEMICOLON
-    (11) declaracion2 -> . ID declaracion3
-
-    SEMICOLON       shift and go to state 38
-    ID              shift and go to state 36
-
-    declaracion2                   shift and go to state 37
-
-state 29
-
-    (8) declaracion -> VAR FLOAT COLON . declaracion2
-    (10) declaracion2 -> . SEMICOLON
-    (11) declaracion2 -> . ID declaracion3
-
-    SEMICOLON       shift and go to state 38
-    ID              shift and go to state 36
-
-    declaracion2                   shift and go to state 39
-
-state 30
-
-    (7) declaracion -> VAR INT COLON . declaracion2
-    (10) declaracion2 -> . SEMICOLON
-    (11) declaracion2 -> . ID declaracion3
-
-    SEMICOLON       shift and go to state 38
-    ID              shift and go to state 36
-
-    declaracion2                   shift and go to state 40
-
-state 31
-
-    (6) principal -> PRINCIPAL OPAREN CPAREN OBRACKET . estatutos CBRACKET
-    (22) estatutos -> . empty
-    (23) estatutos -> . declaracion estatutos
-    (24) estatutos -> . estatutoRepeticionIncondicional estatutos
-    (42) empty -> .
-    (7) declaracion -> . VAR INT COLON declaracion2
-    (8) declaracion -> . VAR FLOAT COLON declaracion2
-    (9) declaracion -> . VAR CHAR COLON declaracion2
-    (41) estatutoRepeticionIncondicional -> . DESDE ID ASSIGN expresion HASTA expresion HAZ OBRACKET estatutos CBRACKET
-
-    CBRACKET        reduce using rule 42 (empty -> .)
-    VAR             shift and go to state 12
-    DESDE           shift and go to state 44
-
-    declaracion                    shift and go to state 41
-    empty                          shift and go to state 45
-    estatutos                      shift and go to state 43
-    estatutoRepeticionIncondicional shift and go to state 42
-
-state 32
-
-    (16) declaracionFuncion -> FUNCION VOID ID OPAREN . declaracionFuncion2 CPAREN declaracion OBRACKET estatutos
-    (20) declaracionFuncion2 -> . ID
-    (21) declaracionFuncion2 -> . ID COMA declaracionFuncion2
-
-    ID              shift and go to state 47
-
-    declaracionFuncion2            shift and go to state 46
-
-state 33
-
-    (19) declaracionFuncion -> FUNCION CHAR ID OPAREN . declaracionFuncion2 CPAREN declaracion OBRACKET estatutos
-    (20) declaracionFuncion2 -> . ID
-    (21) declaracionFuncion2 -> . ID COMA declaracionFuncion2
-
-    ID              shift and go to state 47
-
-    declaracionFuncion2            shift and go to state 48
-
-state 34
-
-    (17) declaracionFuncion -> FUNCION INT ID OPAREN . declaracionFuncion2 CPAREN declaracion OBRACKET estatutos
-    (20) declaracionFuncion2 -> . ID
-    (21) declaracionFuncion2 -> . ID COMA declaracionFuncion2
-
-    ID              shift and go to state 47
-
-    declaracionFuncion2            shift and go to state 49
 
 state 35
 
-    (18) declaracionFuncion -> FUNCION FLOAT ID OPAREN . declaracionFuncion2 CPAREN declaracion OBRACKET estatutos
-    (20) declaracionFuncion2 -> . ID
-    (21) declaracionFuncion2 -> . ID COMA declaracionFuncion2
+    (16) declaracionFuncion -> FUNCION VOID ID OPAREN declaracionFuncionParametros CPAREN declaracionFuncionVariables . OBRACKET estatutos CBRACKET
 
-    ID              shift and go to state 47
+    OBRACKET        shift and go to state 47
 
-    declaracionFuncion2            shift and go to state 50
 
 state 36
 
-    (11) declaracion2 -> ID . declaracion3
+    (34) declaracionFuncionVariables -> declaracion .
+
+    OBRACKET        reduce using rule 34 (declaracionFuncionVariables -> declaracion .)
+
+
+state 37
+
+    (25) declaracionFuncionParametros -> FLOAT ID declaracionFuncionParametros2 .
+
+    CPAREN          reduce using rule 25 (declaracionFuncionParametros -> FLOAT ID declaracionFuncionParametros2 .)
+
+
+state 38
+
+    (19) declaracionFuncion -> FUNCION CHAR ID OPAREN declaracionFuncionParametros CPAREN declaracionFuncionVariables . OBRACKET estatutos CBRACKET
+
+    OBRACKET        shift and go to state 48
+
+
+state 39
+
+    (17) declaracionFuncion -> FUNCION INT ID OPAREN declaracionFuncionParametros CPAREN declaracionFuncionVariables . OBRACKET estatutos CBRACKET
+
+    OBRACKET        shift and go to state 49
+
+
+state 40
+
+    (18) declaracionFuncion -> FUNCION FLOAT ID OPAREN declaracionFuncionParametros CPAREN declaracionFuncionVariables . OBRACKET estatutos CBRACKET
+
+    OBRACKET        shift and go to state 50
+
+
+state 41
+
+    (27) declaracionFuncionParametros2 -> COMA INT . ID
+    (30) declaracionFuncionParametros2 -> COMA INT . ID declaracionFuncionParametros2
+
+    ID              shift and go to state 51
+
+
+state 42
+
+    (29) declaracionFuncionParametros2 -> COMA CHAR . ID
+    (32) declaracionFuncionParametros2 -> COMA CHAR . ID declaracionFuncionParametros2
+
+    ID              shift and go to state 52
+
+
+state 43
+
+    (28) declaracionFuncionParametros2 -> COMA FLOAT . ID
+    (31) declaracionFuncionParametros2 -> COMA FLOAT . ID declaracionFuncionParametros2
+
+    ID              shift and go to state 53
+
+
+state 44
+
+    (9) declaracion -> VAR CHAR . COLON declaracion2
+
+    COLON           shift and go to state 54
+
+
+state 45
+
+    (7) declaracion -> VAR INT . COLON declaracion2
+
+    COLON           shift and go to state 55
+
+
+state 46
+
+    (8) declaracion -> VAR FLOAT . COLON declaracion2
+
+    COLON           shift and go to state 56
+
+
+state 47
+
+    (16) declaracionFuncion -> FUNCION VOID ID OPAREN declaracionFuncionParametros CPAREN declaracionFuncionVariables OBRACKET . estatutos CBRACKET
+    (35) estatutos -> . empty
+    (36) estatutos -> . declaracion estatutos
+    (37) estatutos -> . estatutoRepeticionIncondicional estatutos
+    (38) estatutos -> . lectura estatutos
+    (62) empty -> .
+    (7) declaracion -> . VAR INT COLON declaracion2
+    (8) declaracion -> . VAR FLOAT COLON declaracion2
+    (9) declaracion -> . VAR CHAR COLON declaracion2
+    (61) estatutoRepeticionIncondicional -> . DESDE ID ASSIGN expresion HASTA expresion HAZ OBRACKET estatutos CBRACKET
+    (39) lectura -> . LEE OPAREN posibleID lectura2 CPAREN SEMICOLON
+
+    CBRACKET        reduce using rule 62 (empty -> .)
+    VAR             shift and go to state 34
+    DESDE           shift and go to state 60
+    LEE             shift and go to state 62
+
+    declaracion                    shift and go to state 61
+    empty                          shift and go to state 57
+    lectura                        shift and go to state 63
+    estatutos                      shift and go to state 58
+    estatutoRepeticionIncondicional shift and go to state 59
+
+state 48
+
+    (19) declaracionFuncion -> FUNCION CHAR ID OPAREN declaracionFuncionParametros CPAREN declaracionFuncionVariables OBRACKET . estatutos CBRACKET
+    (35) estatutos -> . empty
+    (36) estatutos -> . declaracion estatutos
+    (37) estatutos -> . estatutoRepeticionIncondicional estatutos
+    (38) estatutos -> . lectura estatutos
+    (62) empty -> .
+    (7) declaracion -> . VAR INT COLON declaracion2
+    (8) declaracion -> . VAR FLOAT COLON declaracion2
+    (9) declaracion -> . VAR CHAR COLON declaracion2
+    (61) estatutoRepeticionIncondicional -> . DESDE ID ASSIGN expresion HASTA expresion HAZ OBRACKET estatutos CBRACKET
+    (39) lectura -> . LEE OPAREN posibleID lectura2 CPAREN SEMICOLON
+
+    CBRACKET        reduce using rule 62 (empty -> .)
+    VAR             shift and go to state 34
+    DESDE           shift and go to state 60
+    LEE             shift and go to state 62
+
+    declaracion                    shift and go to state 61
+    empty                          shift and go to state 57
+    lectura                        shift and go to state 63
+    estatutos                      shift and go to state 64
+    estatutoRepeticionIncondicional shift and go to state 59
+
+state 49
+
+    (17) declaracionFuncion -> FUNCION INT ID OPAREN declaracionFuncionParametros CPAREN declaracionFuncionVariables OBRACKET . estatutos CBRACKET
+    (35) estatutos -> . empty
+    (36) estatutos -> . declaracion estatutos
+    (37) estatutos -> . estatutoRepeticionIncondicional estatutos
+    (38) estatutos -> . lectura estatutos
+    (62) empty -> .
+    (7) declaracion -> . VAR INT COLON declaracion2
+    (8) declaracion -> . VAR FLOAT COLON declaracion2
+    (9) declaracion -> . VAR CHAR COLON declaracion2
+    (61) estatutoRepeticionIncondicional -> . DESDE ID ASSIGN expresion HASTA expresion HAZ OBRACKET estatutos CBRACKET
+    (39) lectura -> . LEE OPAREN posibleID lectura2 CPAREN SEMICOLON
+
+    CBRACKET        reduce using rule 62 (empty -> .)
+    VAR             shift and go to state 34
+    DESDE           shift and go to state 60
+    LEE             shift and go to state 62
+
+    declaracion                    shift and go to state 61
+    empty                          shift and go to state 57
+    lectura                        shift and go to state 63
+    estatutos                      shift and go to state 65
+    estatutoRepeticionIncondicional shift and go to state 59
+
+state 50
+
+    (18) declaracionFuncion -> FUNCION FLOAT ID OPAREN declaracionFuncionParametros CPAREN declaracionFuncionVariables OBRACKET . estatutos CBRACKET
+    (35) estatutos -> . empty
+    (36) estatutos -> . declaracion estatutos
+    (37) estatutos -> . estatutoRepeticionIncondicional estatutos
+    (38) estatutos -> . lectura estatutos
+    (62) empty -> .
+    (7) declaracion -> . VAR INT COLON declaracion2
+    (8) declaracion -> . VAR FLOAT COLON declaracion2
+    (9) declaracion -> . VAR CHAR COLON declaracion2
+    (61) estatutoRepeticionIncondicional -> . DESDE ID ASSIGN expresion HASTA expresion HAZ OBRACKET estatutos CBRACKET
+    (39) lectura -> . LEE OPAREN posibleID lectura2 CPAREN SEMICOLON
+
+    CBRACKET        reduce using rule 62 (empty -> .)
+    VAR             shift and go to state 34
+    DESDE           shift and go to state 60
+    LEE             shift and go to state 62
+
+    declaracion                    shift and go to state 61
+    empty                          shift and go to state 57
+    lectura                        shift and go to state 63
+    estatutos                      shift and go to state 66
+    estatutoRepeticionIncondicional shift and go to state 59
+
+state 51
+
+    (27) declaracionFuncionParametros2 -> COMA INT ID .
+    (30) declaracionFuncionParametros2 -> COMA INT ID . declaracionFuncionParametros2
+    (27) declaracionFuncionParametros2 -> . COMA INT ID
+    (28) declaracionFuncionParametros2 -> . COMA FLOAT ID
+    (29) declaracionFuncionParametros2 -> . COMA CHAR ID
+    (30) declaracionFuncionParametros2 -> . COMA INT ID declaracionFuncionParametros2
+    (31) declaracionFuncionParametros2 -> . COMA FLOAT ID declaracionFuncionParametros2
+    (32) declaracionFuncionParametros2 -> . COMA CHAR ID declaracionFuncionParametros2
+
+    CPAREN          reduce using rule 27 (declaracionFuncionParametros2 -> COMA INT ID .)
+    COMA            shift and go to state 30
+
+    declaracionFuncionParametros2  shift and go to state 67
+
+state 52
+
+    (29) declaracionFuncionParametros2 -> COMA CHAR ID .
+    (32) declaracionFuncionParametros2 -> COMA CHAR ID . declaracionFuncionParametros2
+    (27) declaracionFuncionParametros2 -> . COMA INT ID
+    (28) declaracionFuncionParametros2 -> . COMA FLOAT ID
+    (29) declaracionFuncionParametros2 -> . COMA CHAR ID
+    (30) declaracionFuncionParametros2 -> . COMA INT ID declaracionFuncionParametros2
+    (31) declaracionFuncionParametros2 -> . COMA FLOAT ID declaracionFuncionParametros2
+    (32) declaracionFuncionParametros2 -> . COMA CHAR ID declaracionFuncionParametros2
+
+    CPAREN          reduce using rule 29 (declaracionFuncionParametros2 -> COMA CHAR ID .)
+    COMA            shift and go to state 30
+
+    declaracionFuncionParametros2  shift and go to state 68
+
+state 53
+
+    (28) declaracionFuncionParametros2 -> COMA FLOAT ID .
+    (31) declaracionFuncionParametros2 -> COMA FLOAT ID . declaracionFuncionParametros2
+    (27) declaracionFuncionParametros2 -> . COMA INT ID
+    (28) declaracionFuncionParametros2 -> . COMA FLOAT ID
+    (29) declaracionFuncionParametros2 -> . COMA CHAR ID
+    (30) declaracionFuncionParametros2 -> . COMA INT ID declaracionFuncionParametros2
+    (31) declaracionFuncionParametros2 -> . COMA FLOAT ID declaracionFuncionParametros2
+    (32) declaracionFuncionParametros2 -> . COMA CHAR ID declaracionFuncionParametros2
+
+    CPAREN          reduce using rule 28 (declaracionFuncionParametros2 -> COMA FLOAT ID .)
+    COMA            shift and go to state 30
+
+    declaracionFuncionParametros2  shift and go to state 69
+
+state 54
+
+    (9) declaracion -> VAR CHAR COLON . declaracion2
+    (10) declaracion2 -> . SEMICOLON
+    (11) declaracion2 -> . posibleID declaracion3
+    (57) posibleID -> . ID
+    (58) posibleID -> . ID OCORCH expresion CCORCH
+    (59) posibleID -> . ID OCORCH expresion COMA expresion CCORCH
+
+    SEMICOLON       shift and go to state 72
+    ID              shift and go to state 70
+
+    declaracion2                   shift and go to state 71
+    posibleID                      shift and go to state 73
+
+state 55
+
+    (7) declaracion -> VAR INT COLON . declaracion2
+    (10) declaracion2 -> . SEMICOLON
+    (11) declaracion2 -> . posibleID declaracion3
+    (57) posibleID -> . ID
+    (58) posibleID -> . ID OCORCH expresion CCORCH
+    (59) posibleID -> . ID OCORCH expresion COMA expresion CCORCH
+
+    SEMICOLON       shift and go to state 72
+    ID              shift and go to state 70
+
+    declaracion2                   shift and go to state 74
+    posibleID                      shift and go to state 73
+
+state 56
+
+    (8) declaracion -> VAR FLOAT COLON . declaracion2
+    (10) declaracion2 -> . SEMICOLON
+    (11) declaracion2 -> . posibleID declaracion3
+    (57) posibleID -> . ID
+    (58) posibleID -> . ID OCORCH expresion CCORCH
+    (59) posibleID -> . ID OCORCH expresion COMA expresion CCORCH
+
+    SEMICOLON       shift and go to state 72
+    ID              shift and go to state 70
+
+    declaracion2                   shift and go to state 75
+    posibleID                      shift and go to state 73
+
+state 57
+
+    (35) estatutos -> empty .
+
+    CBRACKET        reduce using rule 35 (estatutos -> empty .)
+
+
+state 58
+
+    (16) declaracionFuncion -> FUNCION VOID ID OPAREN declaracionFuncionParametros CPAREN declaracionFuncionVariables OBRACKET estatutos . CBRACKET
+
+    CBRACKET        shift and go to state 76
+
+
+state 59
+
+    (37) estatutos -> estatutoRepeticionIncondicional . estatutos
+    (35) estatutos -> . empty
+    (36) estatutos -> . declaracion estatutos
+    (37) estatutos -> . estatutoRepeticionIncondicional estatutos
+    (38) estatutos -> . lectura estatutos
+    (62) empty -> .
+    (7) declaracion -> . VAR INT COLON declaracion2
+    (8) declaracion -> . VAR FLOAT COLON declaracion2
+    (9) declaracion -> . VAR CHAR COLON declaracion2
+    (61) estatutoRepeticionIncondicional -> . DESDE ID ASSIGN expresion HASTA expresion HAZ OBRACKET estatutos CBRACKET
+    (39) lectura -> . LEE OPAREN posibleID lectura2 CPAREN SEMICOLON
+
+    CBRACKET        reduce using rule 62 (empty -> .)
+    VAR             shift and go to state 34
+    DESDE           shift and go to state 60
+    LEE             shift and go to state 62
+
+    declaracion                    shift and go to state 61
+    empty                          shift and go to state 57
+    estatutos                      shift and go to state 77
+    lectura                        shift and go to state 63
+    estatutoRepeticionIncondicional shift and go to state 59
+
+state 60
+
+    (61) estatutoRepeticionIncondicional -> DESDE . ID ASSIGN expresion HASTA expresion HAZ OBRACKET estatutos CBRACKET
+
+    ID              shift and go to state 78
+
+
+state 61
+
+    (36) estatutos -> declaracion . estatutos
+    (35) estatutos -> . empty
+    (36) estatutos -> . declaracion estatutos
+    (37) estatutos -> . estatutoRepeticionIncondicional estatutos
+    (38) estatutos -> . lectura estatutos
+    (62) empty -> .
+    (7) declaracion -> . VAR INT COLON declaracion2
+    (8) declaracion -> . VAR FLOAT COLON declaracion2
+    (9) declaracion -> . VAR CHAR COLON declaracion2
+    (61) estatutoRepeticionIncondicional -> . DESDE ID ASSIGN expresion HASTA expresion HAZ OBRACKET estatutos CBRACKET
+    (39) lectura -> . LEE OPAREN posibleID lectura2 CPAREN SEMICOLON
+
+    CBRACKET        reduce using rule 62 (empty -> .)
+    VAR             shift and go to state 34
+    DESDE           shift and go to state 60
+    LEE             shift and go to state 62
+
+    declaracion                    shift and go to state 61
+    empty                          shift and go to state 57
+    estatutos                      shift and go to state 79
+    lectura                        shift and go to state 63
+    estatutoRepeticionIncondicional shift and go to state 59
+
+state 62
+
+    (39) lectura -> LEE . OPAREN posibleID lectura2 CPAREN SEMICOLON
+
+    OPAREN          shift and go to state 80
+
+
+state 63
+
+    (38) estatutos -> lectura . estatutos
+    (35) estatutos -> . empty
+    (36) estatutos -> . declaracion estatutos
+    (37) estatutos -> . estatutoRepeticionIncondicional estatutos
+    (38) estatutos -> . lectura estatutos
+    (62) empty -> .
+    (7) declaracion -> . VAR INT COLON declaracion2
+    (8) declaracion -> . VAR FLOAT COLON declaracion2
+    (9) declaracion -> . VAR CHAR COLON declaracion2
+    (61) estatutoRepeticionIncondicional -> . DESDE ID ASSIGN expresion HASTA expresion HAZ OBRACKET estatutos CBRACKET
+    (39) lectura -> . LEE OPAREN posibleID lectura2 CPAREN SEMICOLON
+
+    CBRACKET        reduce using rule 62 (empty -> .)
+    VAR             shift and go to state 34
+    DESDE           shift and go to state 60
+    LEE             shift and go to state 62
+
+    declaracion                    shift and go to state 61
+    empty                          shift and go to state 57
+    lectura                        shift and go to state 63
+    estatutos                      shift and go to state 81
+    estatutoRepeticionIncondicional shift and go to state 59
+
+state 64
+
+    (19) declaracionFuncion -> FUNCION CHAR ID OPAREN declaracionFuncionParametros CPAREN declaracionFuncionVariables OBRACKET estatutos . CBRACKET
+
+    CBRACKET        shift and go to state 82
+
+
+state 65
+
+    (17) declaracionFuncion -> FUNCION INT ID OPAREN declaracionFuncionParametros CPAREN declaracionFuncionVariables OBRACKET estatutos . CBRACKET
+
+    CBRACKET        shift and go to state 83
+
+
+state 66
+
+    (18) declaracionFuncion -> FUNCION FLOAT ID OPAREN declaracionFuncionParametros CPAREN declaracionFuncionVariables OBRACKET estatutos . CBRACKET
+
+    CBRACKET        shift and go to state 84
+
+
+state 67
+
+    (30) declaracionFuncionParametros2 -> COMA INT ID declaracionFuncionParametros2 .
+
+    CPAREN          reduce using rule 30 (declaracionFuncionParametros2 -> COMA INT ID declaracionFuncionParametros2 .)
+
+
+state 68
+
+    (32) declaracionFuncionParametros2 -> COMA CHAR ID declaracionFuncionParametros2 .
+
+    CPAREN          reduce using rule 32 (declaracionFuncionParametros2 -> COMA CHAR ID declaracionFuncionParametros2 .)
+
+
+state 69
+
+    (31) declaracionFuncionParametros2 -> COMA FLOAT ID declaracionFuncionParametros2 .
+
+    CPAREN          reduce using rule 31 (declaracionFuncionParametros2 -> COMA FLOAT ID declaracionFuncionParametros2 .)
+
+
+state 70
+
+    (57) posibleID -> ID .
+    (58) posibleID -> ID . OCORCH expresion CCORCH
+    (59) posibleID -> ID . OCORCH expresion COMA expresion CCORCH
+
+    OPMATRIZ        reduce using rule 57 (posibleID -> ID .)
+    PLUS            reduce using rule 57 (posibleID -> ID .)
+    MINUS           reduce using rule 57 (posibleID -> ID .)
+    MULTIPLY        reduce using rule 57 (posibleID -> ID .)
+    DIVIDE          reduce using rule 57 (posibleID -> ID .)
+    CPAREN          reduce using rule 57 (posibleID -> ID .)
+    LOGIC           reduce using rule 57 (posibleID -> ID .)
+    RELOP           reduce using rule 57 (posibleID -> ID .)
+    SEMICOLON       reduce using rule 57 (posibleID -> ID .)
+    COMA            reduce using rule 57 (posibleID -> ID .)
+    ASSIGN          reduce using rule 57 (posibleID -> ID .)
+    CCORCH          reduce using rule 57 (posibleID -> ID .)
+    HASTA           reduce using rule 57 (posibleID -> ID .)
+    HAZ             reduce using rule 57 (posibleID -> ID .)
+    OCORCH          shift and go to state 85
+
+
+state 71
+
+    (9) declaracion -> VAR CHAR COLON declaracion2 .
+
+    VAR             reduce using rule 9 (declaracion -> VAR CHAR COLON declaracion2 .)
+    DESDE           reduce using rule 9 (declaracion -> VAR CHAR COLON declaracion2 .)
+    LEE             reduce using rule 9 (declaracion -> VAR CHAR COLON declaracion2 .)
+    CBRACKET        reduce using rule 9 (declaracion -> VAR CHAR COLON declaracion2 .)
+    OBRACKET        reduce using rule 9 (declaracion -> VAR CHAR COLON declaracion2 .)
+
+
+state 72
+
+    (10) declaracion2 -> SEMICOLON .
+
+    OBRACKET        reduce using rule 10 (declaracion2 -> SEMICOLON .)
+    VAR             reduce using rule 10 (declaracion2 -> SEMICOLON .)
+    DESDE           reduce using rule 10 (declaracion2 -> SEMICOLON .)
+    LEE             reduce using rule 10 (declaracion2 -> SEMICOLON .)
+    CBRACKET        reduce using rule 10 (declaracion2 -> SEMICOLON .)
+
+
+state 73
+
+    (11) declaracion2 -> posibleID . declaracion3
     (12) declaracion3 -> . SEMICOLON
     (13) declaracion3 -> . COMA declaracion2
     (14) declaracion3 -> . ASSIGN expresion SEMICOLON
     (15) declaracion3 -> . ASSIGN expresion COMA declaracion2
 
-    SEMICOLON       shift and go to state 54
-    COMA            shift and go to state 52
-    ASSIGN          shift and go to state 51
+    SEMICOLON       shift and go to state 88
+    COMA            shift and go to state 89
+    ASSIGN          shift and go to state 87
 
-    declaracion3                   shift and go to state 53
+    declaracion3                   shift and go to state 86
 
-state 37
-
-    (9) declaracion -> VAR CHAR COLON declaracion2 .
-
-    VAR             reduce using rule 9 (declaracion -> VAR CHAR COLON declaracion2 .)
-    FUNCION         reduce using rule 9 (declaracion -> VAR CHAR COLON declaracion2 .)
-    PRINCIPAL       reduce using rule 9 (declaracion -> VAR CHAR COLON declaracion2 .)
-    OBRACKET        reduce using rule 9 (declaracion -> VAR CHAR COLON declaracion2 .)
-    DESDE           reduce using rule 9 (declaracion -> VAR CHAR COLON declaracion2 .)
-    CBRACKET        reduce using rule 9 (declaracion -> VAR CHAR COLON declaracion2 .)
-
-
-state 38
-
-    (10) declaracion2 -> SEMICOLON .
-
-    VAR             reduce using rule 10 (declaracion2 -> SEMICOLON .)
-    FUNCION         reduce using rule 10 (declaracion2 -> SEMICOLON .)
-    PRINCIPAL       reduce using rule 10 (declaracion2 -> SEMICOLON .)
-    DESDE           reduce using rule 10 (declaracion2 -> SEMICOLON .)
-    CBRACKET        reduce using rule 10 (declaracion2 -> SEMICOLON .)
-    OBRACKET        reduce using rule 10 (declaracion2 -> SEMICOLON .)
-
-
-state 39
-
-    (8) declaracion -> VAR FLOAT COLON declaracion2 .
-
-    VAR             reduce using rule 8 (declaracion -> VAR FLOAT COLON declaracion2 .)
-    FUNCION         reduce using rule 8 (declaracion -> VAR FLOAT COLON declaracion2 .)
-    PRINCIPAL       reduce using rule 8 (declaracion -> VAR FLOAT COLON declaracion2 .)
-    OBRACKET        reduce using rule 8 (declaracion -> VAR FLOAT COLON declaracion2 .)
-    DESDE           reduce using rule 8 (declaracion -> VAR FLOAT COLON declaracion2 .)
-    CBRACKET        reduce using rule 8 (declaracion -> VAR FLOAT COLON declaracion2 .)
-
-
-state 40
+state 74
 
     (7) declaracion -> VAR INT COLON declaracion2 .
 
     VAR             reduce using rule 7 (declaracion -> VAR INT COLON declaracion2 .)
-    FUNCION         reduce using rule 7 (declaracion -> VAR INT COLON declaracion2 .)
-    PRINCIPAL       reduce using rule 7 (declaracion -> VAR INT COLON declaracion2 .)
-    OBRACKET        reduce using rule 7 (declaracion -> VAR INT COLON declaracion2 .)
     DESDE           reduce using rule 7 (declaracion -> VAR INT COLON declaracion2 .)
+    LEE             reduce using rule 7 (declaracion -> VAR INT COLON declaracion2 .)
     CBRACKET        reduce using rule 7 (declaracion -> VAR INT COLON declaracion2 .)
-
-
-state 41
-
-    (23) estatutos -> declaracion . estatutos
-    (22) estatutos -> . empty
-    (23) estatutos -> . declaracion estatutos
-    (24) estatutos -> . estatutoRepeticionIncondicional estatutos
-    (42) empty -> .
-    (7) declaracion -> . VAR INT COLON declaracion2
-    (8) declaracion -> . VAR FLOAT COLON declaracion2
-    (9) declaracion -> . VAR CHAR COLON declaracion2
-    (41) estatutoRepeticionIncondicional -> . DESDE ID ASSIGN expresion HASTA expresion HAZ OBRACKET estatutos CBRACKET
-
-    CBRACKET        reduce using rule 42 (empty -> .)
-    FUNCION         reduce using rule 42 (empty -> .)
-    PRINCIPAL       reduce using rule 42 (empty -> .)
-    VAR             shift and go to state 12
-    DESDE           shift and go to state 44
-
-    declaracion                    shift and go to state 41
-    empty                          shift and go to state 45
-    estatutos                      shift and go to state 55
-    estatutoRepeticionIncondicional shift and go to state 42
-
-state 42
-
-    (24) estatutos -> estatutoRepeticionIncondicional . estatutos
-    (22) estatutos -> . empty
-    (23) estatutos -> . declaracion estatutos
-    (24) estatutos -> . estatutoRepeticionIncondicional estatutos
-    (42) empty -> .
-    (7) declaracion -> . VAR INT COLON declaracion2
-    (8) declaracion -> . VAR FLOAT COLON declaracion2
-    (9) declaracion -> . VAR CHAR COLON declaracion2
-    (41) estatutoRepeticionIncondicional -> . DESDE ID ASSIGN expresion HASTA expresion HAZ OBRACKET estatutos CBRACKET
-
-    CBRACKET        reduce using rule 42 (empty -> .)
-    FUNCION         reduce using rule 42 (empty -> .)
-    PRINCIPAL       reduce using rule 42 (empty -> .)
-    VAR             shift and go to state 12
-    DESDE           shift and go to state 44
-
-    declaracion                    shift and go to state 41
-    empty                          shift and go to state 45
-    estatutos                      shift and go to state 56
-    estatutoRepeticionIncondicional shift and go to state 42
-
-state 43
-
-    (6) principal -> PRINCIPAL OPAREN CPAREN OBRACKET estatutos . CBRACKET
-
-    CBRACKET        shift and go to state 57
-
-
-state 44
-
-    (41) estatutoRepeticionIncondicional -> DESDE . ID ASSIGN expresion HASTA expresion HAZ OBRACKET estatutos CBRACKET
-
-    ID              shift and go to state 58
-
-
-state 45
-
-    (22) estatutos -> empty .
-
-    CBRACKET        reduce using rule 22 (estatutos -> empty .)
-    FUNCION         reduce using rule 22 (estatutos -> empty .)
-    PRINCIPAL       reduce using rule 22 (estatutos -> empty .)
-
-
-state 46
-
-    (16) declaracionFuncion -> FUNCION VOID ID OPAREN declaracionFuncion2 . CPAREN declaracion OBRACKET estatutos
-
-    CPAREN          shift and go to state 59
-
-
-state 47
-
-    (20) declaracionFuncion2 -> ID .
-    (21) declaracionFuncion2 -> ID . COMA declaracionFuncion2
-
-    CPAREN          reduce using rule 20 (declaracionFuncion2 -> ID .)
-    COMA            shift and go to state 60
-
-
-state 48
-
-    (19) declaracionFuncion -> FUNCION CHAR ID OPAREN declaracionFuncion2 . CPAREN declaracion OBRACKET estatutos
-
-    CPAREN          shift and go to state 61
-
-
-state 49
-
-    (17) declaracionFuncion -> FUNCION INT ID OPAREN declaracionFuncion2 . CPAREN declaracion OBRACKET estatutos
-
-    CPAREN          shift and go to state 62
-
-
-state 50
-
-    (18) declaracionFuncion -> FUNCION FLOAT ID OPAREN declaracionFuncion2 . CPAREN declaracion OBRACKET estatutos
-
-    CPAREN          shift and go to state 63
-
-
-state 51
-
-    (14) declaracion3 -> ASSIGN . expresion SEMICOLON
-    (15) declaracion3 -> ASSIGN . expresion COMA declaracion2
-    (26) expresion -> . expresion LOGIC expresion
-    (27) expresion -> . expresion RELOP expresion
-    (28) expresion -> . termino1 OPMATRIZ
-    (29) expresion -> . termino
-    (36) termino1 -> . ID
-    (37) termino1 -> . ENTERO
-    (38) termino1 -> . FLOTANTE
-    (39) termino1 -> . CARACTER
-    (40) termino1 -> . OPAREN expresion CPAREN
-    (30) termino -> . termino PLUS termino
-    (31) termino -> . termino MINUS termino
-    (32) termino -> . termino MULTIPLY termino
-    (33) termino -> . termino DIVIDE termino
-    (34) termino -> . termino1 OPMATRIZ
-    (35) termino -> . termino1
-
-    ID              shift and go to state 71
-    ENTERO          shift and go to state 70
-    FLOTANTE        shift and go to state 64
-    CARACTER        shift and go to state 66
-    OPAREN          shift and go to state 67
-
-    expresion                      shift and go to state 68
-    termino                        shift and go to state 65
-    termino1                       shift and go to state 69
-
-state 52
-
-    (13) declaracion3 -> COMA . declaracion2
-    (10) declaracion2 -> . SEMICOLON
-    (11) declaracion2 -> . ID declaracion3
-
-    SEMICOLON       shift and go to state 38
-    ID              shift and go to state 36
-
-    declaracion2                   shift and go to state 72
-
-state 53
-
-    (11) declaracion2 -> ID declaracion3 .
-
-    VAR             reduce using rule 11 (declaracion2 -> ID declaracion3 .)
-    FUNCION         reduce using rule 11 (declaracion2 -> ID declaracion3 .)
-    PRINCIPAL       reduce using rule 11 (declaracion2 -> ID declaracion3 .)
-    DESDE           reduce using rule 11 (declaracion2 -> ID declaracion3 .)
-    CBRACKET        reduce using rule 11 (declaracion2 -> ID declaracion3 .)
-    OBRACKET        reduce using rule 11 (declaracion2 -> ID declaracion3 .)
-
-
-state 54
-
-    (12) declaracion3 -> SEMICOLON .
-
-    VAR             reduce using rule 12 (declaracion3 -> SEMICOLON .)
-    FUNCION         reduce using rule 12 (declaracion3 -> SEMICOLON .)
-    PRINCIPAL       reduce using rule 12 (declaracion3 -> SEMICOLON .)
-    DESDE           reduce using rule 12 (declaracion3 -> SEMICOLON .)
-    CBRACKET        reduce using rule 12 (declaracion3 -> SEMICOLON .)
-    OBRACKET        reduce using rule 12 (declaracion3 -> SEMICOLON .)
-
-
-state 55
-
-    (23) estatutos -> declaracion estatutos .
-
-    CBRACKET        reduce using rule 23 (estatutos -> declaracion estatutos .)
-    FUNCION         reduce using rule 23 (estatutos -> declaracion estatutos .)
-    PRINCIPAL       reduce using rule 23 (estatutos -> declaracion estatutos .)
-
-
-state 56
-
-    (24) estatutos -> estatutoRepeticionIncondicional estatutos .
-
-    CBRACKET        reduce using rule 24 (estatutos -> estatutoRepeticionIncondicional estatutos .)
-    FUNCION         reduce using rule 24 (estatutos -> estatutoRepeticionIncondicional estatutos .)
-    PRINCIPAL       reduce using rule 24 (estatutos -> estatutoRepeticionIncondicional estatutos .)
-
-
-state 57
-
-    (6) principal -> PRINCIPAL OPAREN CPAREN OBRACKET estatutos CBRACKET .
-
-    $end            reduce using rule 6 (principal -> PRINCIPAL OPAREN CPAREN OBRACKET estatutos CBRACKET .)
-
-
-state 58
-
-    (41) estatutoRepeticionIncondicional -> DESDE ID . ASSIGN expresion HASTA expresion HAZ OBRACKET estatutos CBRACKET
-
-    ASSIGN          shift and go to state 73
-
-
-state 59
-
-    (16) declaracionFuncion -> FUNCION VOID ID OPAREN declaracionFuncion2 CPAREN . declaracion OBRACKET estatutos
-    (7) declaracion -> . VAR INT COLON declaracion2
-    (8) declaracion -> . VAR FLOAT COLON declaracion2
-    (9) declaracion -> . VAR CHAR COLON declaracion2
-
-    VAR             shift and go to state 12
-
-    declaracion                    shift and go to state 74
-
-state 60
-
-    (21) declaracionFuncion2 -> ID COMA . declaracionFuncion2
-    (20) declaracionFuncion2 -> . ID
-    (21) declaracionFuncion2 -> . ID COMA declaracionFuncion2
-
-    ID              shift and go to state 47
-
-    declaracionFuncion2            shift and go to state 75
-
-state 61
-
-    (19) declaracionFuncion -> FUNCION CHAR ID OPAREN declaracionFuncion2 CPAREN . declaracion OBRACKET estatutos
-    (7) declaracion -> . VAR INT COLON declaracion2
-    (8) declaracion -> . VAR FLOAT COLON declaracion2
-    (9) declaracion -> . VAR CHAR COLON declaracion2
-
-    VAR             shift and go to state 12
-
-    declaracion                    shift and go to state 76
-
-state 62
-
-    (17) declaracionFuncion -> FUNCION INT ID OPAREN declaracionFuncion2 CPAREN . declaracion OBRACKET estatutos
-    (7) declaracion -> . VAR INT COLON declaracion2
-    (8) declaracion -> . VAR FLOAT COLON declaracion2
-    (9) declaracion -> . VAR CHAR COLON declaracion2
-
-    VAR             shift and go to state 12
-
-    declaracion                    shift and go to state 77
-
-state 63
-
-    (18) declaracionFuncion -> FUNCION FLOAT ID OPAREN declaracionFuncion2 CPAREN . declaracion OBRACKET estatutos
-    (7) declaracion -> . VAR INT COLON declaracion2
-    (8) declaracion -> . VAR FLOAT COLON declaracion2
-    (9) declaracion -> . VAR CHAR COLON declaracion2
-
-    VAR             shift and go to state 12
-
-    declaracion                    shift and go to state 78
-
-state 64
-
-    (38) termino1 -> FLOTANTE .
-
-    OPMATRIZ        reduce using rule 38 (termino1 -> FLOTANTE .)
-    PLUS            reduce using rule 38 (termino1 -> FLOTANTE .)
-    MINUS           reduce using rule 38 (termino1 -> FLOTANTE .)
-    MULTIPLY        reduce using rule 38 (termino1 -> FLOTANTE .)
-    DIVIDE          reduce using rule 38 (termino1 -> FLOTANTE .)
-    HAZ             reduce using rule 38 (termino1 -> FLOTANTE .)
-    LOGIC           reduce using rule 38 (termino1 -> FLOTANTE .)
-    RELOP           reduce using rule 38 (termino1 -> FLOTANTE .)
-    SEMICOLON       reduce using rule 38 (termino1 -> FLOTANTE .)
-    COMA            reduce using rule 38 (termino1 -> FLOTANTE .)
-    CPAREN          reduce using rule 38 (termino1 -> FLOTANTE .)
-    HASTA           reduce using rule 38 (termino1 -> FLOTANTE .)
-
-
-state 65
-
-    (29) expresion -> termino .
-    (30) termino -> termino . PLUS termino
-    (31) termino -> termino . MINUS termino
-    (32) termino -> termino . MULTIPLY termino
-    (33) termino -> termino . DIVIDE termino
-
-    HAZ             reduce using rule 29 (expresion -> termino .)
-    LOGIC           reduce using rule 29 (expresion -> termino .)
-    RELOP           reduce using rule 29 (expresion -> termino .)
-    SEMICOLON       reduce using rule 29 (expresion -> termino .)
-    COMA            reduce using rule 29 (expresion -> termino .)
-    CPAREN          reduce using rule 29 (expresion -> termino .)
-    HASTA           reduce using rule 29 (expresion -> termino .)
-    PLUS            shift and go to state 80
-    MINUS           shift and go to state 82
-    MULTIPLY        shift and go to state 81
-    DIVIDE          shift and go to state 79
-
-
-state 66
-
-    (39) termino1 -> CARACTER .
-
-    OPMATRIZ        reduce using rule 39 (termino1 -> CARACTER .)
-    PLUS            reduce using rule 39 (termino1 -> CARACTER .)
-    MINUS           reduce using rule 39 (termino1 -> CARACTER .)
-    MULTIPLY        reduce using rule 39 (termino1 -> CARACTER .)
-    DIVIDE          reduce using rule 39 (termino1 -> CARACTER .)
-    HAZ             reduce using rule 39 (termino1 -> CARACTER .)
-    LOGIC           reduce using rule 39 (termino1 -> CARACTER .)
-    RELOP           reduce using rule 39 (termino1 -> CARACTER .)
-    SEMICOLON       reduce using rule 39 (termino1 -> CARACTER .)
-    COMA            reduce using rule 39 (termino1 -> CARACTER .)
-    CPAREN          reduce using rule 39 (termino1 -> CARACTER .)
-    HASTA           reduce using rule 39 (termino1 -> CARACTER .)
-
-
-state 67
-
-    (40) termino1 -> OPAREN . expresion CPAREN
-    (26) expresion -> . expresion LOGIC expresion
-    (27) expresion -> . expresion RELOP expresion
-    (28) expresion -> . termino1 OPMATRIZ
-    (29) expresion -> . termino
-    (36) termino1 -> . ID
-    (37) termino1 -> . ENTERO
-    (38) termino1 -> . FLOTANTE
-    (39) termino1 -> . CARACTER
-    (40) termino1 -> . OPAREN expresion CPAREN
-    (30) termino -> . termino PLUS termino
-    (31) termino -> . termino MINUS termino
-    (32) termino -> . termino MULTIPLY termino
-    (33) termino -> . termino DIVIDE termino
-    (34) termino -> . termino1 OPMATRIZ
-    (35) termino -> . termino1
-
-    ID              shift and go to state 71
-    ENTERO          shift and go to state 70
-    FLOTANTE        shift and go to state 64
-    CARACTER        shift and go to state 66
-    OPAREN          shift and go to state 67
-
-    expresion                      shift and go to state 83
-    termino1                       shift and go to state 69
-    termino                        shift and go to state 65
-
-state 68
-
-    (14) declaracion3 -> ASSIGN expresion . SEMICOLON
-    (15) declaracion3 -> ASSIGN expresion . COMA declaracion2
-    (26) expresion -> expresion . LOGIC expresion
-    (27) expresion -> expresion . RELOP expresion
-
-    SEMICOLON       shift and go to state 87
-    COMA            shift and go to state 85
-    LOGIC           shift and go to state 84
-    RELOP           shift and go to state 86
-
-
-state 69
-
-    (28) expresion -> termino1 . OPMATRIZ
-    (34) termino -> termino1 . OPMATRIZ
-    (35) termino -> termino1 .
-
-    OPMATRIZ        shift and go to state 88
-    PLUS            reduce using rule 35 (termino -> termino1 .)
-    MINUS           reduce using rule 35 (termino -> termino1 .)
-    MULTIPLY        reduce using rule 35 (termino -> termino1 .)
-    DIVIDE          reduce using rule 35 (termino -> termino1 .)
-    LOGIC           reduce using rule 35 (termino -> termino1 .)
-    RELOP           reduce using rule 35 (termino -> termino1 .)
-    SEMICOLON       reduce using rule 35 (termino -> termino1 .)
-    COMA            reduce using rule 35 (termino -> termino1 .)
-    CPAREN          reduce using rule 35 (termino -> termino1 .)
-    HASTA           reduce using rule 35 (termino -> termino1 .)
-    HAZ             reduce using rule 35 (termino -> termino1 .)
-
-
-state 70
-
-    (37) termino1 -> ENTERO .
-
-    OPMATRIZ        reduce using rule 37 (termino1 -> ENTERO .)
-    PLUS            reduce using rule 37 (termino1 -> ENTERO .)
-    MINUS           reduce using rule 37 (termino1 -> ENTERO .)
-    MULTIPLY        reduce using rule 37 (termino1 -> ENTERO .)
-    DIVIDE          reduce using rule 37 (termino1 -> ENTERO .)
-    HAZ             reduce using rule 37 (termino1 -> ENTERO .)
-    LOGIC           reduce using rule 37 (termino1 -> ENTERO .)
-    RELOP           reduce using rule 37 (termino1 -> ENTERO .)
-    SEMICOLON       reduce using rule 37 (termino1 -> ENTERO .)
-    COMA            reduce using rule 37 (termino1 -> ENTERO .)
-    CPAREN          reduce using rule 37 (termino1 -> ENTERO .)
-    HASTA           reduce using rule 37 (termino1 -> ENTERO .)
-
-
-state 71
-
-    (36) termino1 -> ID .
-
-    OPMATRIZ        reduce using rule 36 (termino1 -> ID .)
-    PLUS            reduce using rule 36 (termino1 -> ID .)
-    MINUS           reduce using rule 36 (termino1 -> ID .)
-    MULTIPLY        reduce using rule 36 (termino1 -> ID .)
-    DIVIDE          reduce using rule 36 (termino1 -> ID .)
-    HAZ             reduce using rule 36 (termino1 -> ID .)
-    LOGIC           reduce using rule 36 (termino1 -> ID .)
-    RELOP           reduce using rule 36 (termino1 -> ID .)
-    SEMICOLON       reduce using rule 36 (termino1 -> ID .)
-    COMA            reduce using rule 36 (termino1 -> ID .)
-    CPAREN          reduce using rule 36 (termino1 -> ID .)
-    HASTA           reduce using rule 36 (termino1 -> ID .)
-
-
-state 72
-
-    (13) declaracion3 -> COMA declaracion2 .
-
-    VAR             reduce using rule 13 (declaracion3 -> COMA declaracion2 .)
-    FUNCION         reduce using rule 13 (declaracion3 -> COMA declaracion2 .)
-    PRINCIPAL       reduce using rule 13 (declaracion3 -> COMA declaracion2 .)
-    DESDE           reduce using rule 13 (declaracion3 -> COMA declaracion2 .)
-    CBRACKET        reduce using rule 13 (declaracion3 -> COMA declaracion2 .)
-    OBRACKET        reduce using rule 13 (declaracion3 -> COMA declaracion2 .)
-
-
-state 73
-
-    (41) estatutoRepeticionIncondicional -> DESDE ID ASSIGN . expresion HASTA expresion HAZ OBRACKET estatutos CBRACKET
-    (26) expresion -> . expresion LOGIC expresion
-    (27) expresion -> . expresion RELOP expresion
-    (28) expresion -> . termino1 OPMATRIZ
-    (29) expresion -> . termino
-    (36) termino1 -> . ID
-    (37) termino1 -> . ENTERO
-    (38) termino1 -> . FLOTANTE
-    (39) termino1 -> . CARACTER
-    (40) termino1 -> . OPAREN expresion CPAREN
-    (30) termino -> . termino PLUS termino
-    (31) termino -> . termino MINUS termino
-    (32) termino -> . termino MULTIPLY termino
-    (33) termino -> . termino DIVIDE termino
-    (34) termino -> . termino1 OPMATRIZ
-    (35) termino -> . termino1
-
-    ID              shift and go to state 71
-    ENTERO          shift and go to state 70
-    FLOTANTE        shift and go to state 64
-    CARACTER        shift and go to state 66
-    OPAREN          shift and go to state 67
-
-    expresion                      shift and go to state 89
-    termino                        shift and go to state 65
-    termino1                       shift and go to state 69
-
-state 74
-
-    (16) declaracionFuncion -> FUNCION VOID ID OPAREN declaracionFuncion2 CPAREN declaracion . OBRACKET estatutos
-
-    OBRACKET        shift and go to state 90
+    OBRACKET        reduce using rule 7 (declaracion -> VAR INT COLON declaracion2 .)
 
 
 state 75
 
-    (21) declaracionFuncion2 -> ID COMA declaracionFuncion2 .
+    (8) declaracion -> VAR FLOAT COLON declaracion2 .
 
-    CPAREN          reduce using rule 21 (declaracionFuncion2 -> ID COMA declaracionFuncion2 .)
+    VAR             reduce using rule 8 (declaracion -> VAR FLOAT COLON declaracion2 .)
+    DESDE           reduce using rule 8 (declaracion -> VAR FLOAT COLON declaracion2 .)
+    LEE             reduce using rule 8 (declaracion -> VAR FLOAT COLON declaracion2 .)
+    CBRACKET        reduce using rule 8 (declaracion -> VAR FLOAT COLON declaracion2 .)
+    OBRACKET        reduce using rule 8 (declaracion -> VAR FLOAT COLON declaracion2 .)
 
 
 state 76
 
-    (19) declaracionFuncion -> FUNCION CHAR ID OPAREN declaracionFuncion2 CPAREN declaracion . OBRACKET estatutos
+    (16) declaracionFuncion -> FUNCION VOID ID OPAREN declaracionFuncionParametros CPAREN declaracionFuncionVariables OBRACKET estatutos CBRACKET .
 
-    OBRACKET        shift and go to state 91
+    $end            reduce using rule 16 (declaracionFuncion -> FUNCION VOID ID OPAREN declaracionFuncionParametros CPAREN declaracionFuncionVariables OBRACKET estatutos CBRACKET .)
 
 
 state 77
 
-    (17) declaracionFuncion -> FUNCION INT ID OPAREN declaracionFuncion2 CPAREN declaracion . OBRACKET estatutos
+    (37) estatutos -> estatutoRepeticionIncondicional estatutos .
 
-    OBRACKET        shift and go to state 92
+    CBRACKET        reduce using rule 37 (estatutos -> estatutoRepeticionIncondicional estatutos .)
 
 
 state 78
 
-    (18) declaracionFuncion -> FUNCION FLOAT ID OPAREN declaracionFuncion2 CPAREN declaracion . OBRACKET estatutos
+    (61) estatutoRepeticionIncondicional -> DESDE ID . ASSIGN expresion HASTA expresion HAZ OBRACKET estatutos CBRACKET
 
-    OBRACKET        shift and go to state 93
+    ASSIGN          shift and go to state 90
 
 
 state 79
 
-    (33) termino -> termino DIVIDE . termino
-    (30) termino -> . termino PLUS termino
-    (31) termino -> . termino MINUS termino
-    (32) termino -> . termino MULTIPLY termino
-    (33) termino -> . termino DIVIDE termino
-    (34) termino -> . termino1 OPMATRIZ
-    (35) termino -> . termino1
-    (36) termino1 -> . ID
-    (37) termino1 -> . ENTERO
-    (38) termino1 -> . FLOTANTE
-    (39) termino1 -> . CARACTER
-    (40) termino1 -> . OPAREN expresion CPAREN
+    (36) estatutos -> declaracion estatutos .
 
-    ID              shift and go to state 71
-    ENTERO          shift and go to state 70
-    FLOTANTE        shift and go to state 64
-    CARACTER        shift and go to state 66
-    OPAREN          shift and go to state 67
+    CBRACKET        reduce using rule 36 (estatutos -> declaracion estatutos .)
 
-    termino1                       shift and go to state 95
-    termino                        shift and go to state 94
 
 state 80
 
-    (30) termino -> termino PLUS . termino
-    (30) termino -> . termino PLUS termino
-    (31) termino -> . termino MINUS termino
-    (32) termino -> . termino MULTIPLY termino
-    (33) termino -> . termino DIVIDE termino
-    (34) termino -> . termino1 OPMATRIZ
-    (35) termino -> . termino1
-    (36) termino1 -> . ID
-    (37) termino1 -> . ENTERO
-    (38) termino1 -> . FLOTANTE
-    (39) termino1 -> . CARACTER
-    (40) termino1 -> . OPAREN expresion CPAREN
+    (39) lectura -> LEE OPAREN . posibleID lectura2 CPAREN SEMICOLON
+    (57) posibleID -> . ID
+    (58) posibleID -> . ID OCORCH expresion CCORCH
+    (59) posibleID -> . ID OCORCH expresion COMA expresion CCORCH
 
-    ID              shift and go to state 71
-    ENTERO          shift and go to state 70
-    FLOTANTE        shift and go to state 64
-    CARACTER        shift and go to state 66
-    OPAREN          shift and go to state 67
+    ID              shift and go to state 70
 
-    termino1                       shift and go to state 95
-    termino                        shift and go to state 96
+    posibleID                      shift and go to state 91
 
 state 81
 
-    (32) termino -> termino MULTIPLY . termino
-    (30) termino -> . termino PLUS termino
-    (31) termino -> . termino MINUS termino
-    (32) termino -> . termino MULTIPLY termino
-    (33) termino -> . termino DIVIDE termino
-    (34) termino -> . termino1 OPMATRIZ
-    (35) termino -> . termino1
-    (36) termino1 -> . ID
-    (37) termino1 -> . ENTERO
-    (38) termino1 -> . FLOTANTE
-    (39) termino1 -> . CARACTER
-    (40) termino1 -> . OPAREN expresion CPAREN
+    (38) estatutos -> lectura estatutos .
 
-    ID              shift and go to state 71
-    ENTERO          shift and go to state 70
-    FLOTANTE        shift and go to state 64
-    CARACTER        shift and go to state 66
-    OPAREN          shift and go to state 67
+    CBRACKET        reduce using rule 38 (estatutos -> lectura estatutos .)
 
-    termino1                       shift and go to state 95
-    termino                        shift and go to state 97
 
 state 82
 
-    (31) termino -> termino MINUS . termino
-    (30) termino -> . termino PLUS termino
-    (31) termino -> . termino MINUS termino
-    (32) termino -> . termino MULTIPLY termino
-    (33) termino -> . termino DIVIDE termino
-    (34) termino -> . termino1 OPMATRIZ
-    (35) termino -> . termino1
-    (36) termino1 -> . ID
-    (37) termino1 -> . ENTERO
-    (38) termino1 -> . FLOTANTE
-    (39) termino1 -> . CARACTER
-    (40) termino1 -> . OPAREN expresion CPAREN
+    (19) declaracionFuncion -> FUNCION CHAR ID OPAREN declaracionFuncionParametros CPAREN declaracionFuncionVariables OBRACKET estatutos CBRACKET .
 
-    ID              shift and go to state 71
-    ENTERO          shift and go to state 70
-    FLOTANTE        shift and go to state 64
-    CARACTER        shift and go to state 66
-    OPAREN          shift and go to state 67
+    $end            reduce using rule 19 (declaracionFuncion -> FUNCION CHAR ID OPAREN declaracionFuncionParametros CPAREN declaracionFuncionVariables OBRACKET estatutos CBRACKET .)
 
-    termino1                       shift and go to state 95
-    termino                        shift and go to state 98
 
 state 83
 
-    (40) termino1 -> OPAREN expresion . CPAREN
-    (26) expresion -> expresion . LOGIC expresion
-    (27) expresion -> expresion . RELOP expresion
+    (17) declaracionFuncion -> FUNCION INT ID OPAREN declaracionFuncionParametros CPAREN declaracionFuncionVariables OBRACKET estatutos CBRACKET .
 
-    CPAREN          shift and go to state 99
-    LOGIC           shift and go to state 84
-    RELOP           shift and go to state 86
+    $end            reduce using rule 17 (declaracionFuncion -> FUNCION INT ID OPAREN declaracionFuncionParametros CPAREN declaracionFuncionVariables OBRACKET estatutos CBRACKET .)
 
 
 state 84
 
-    (26) expresion -> expresion LOGIC . expresion
-    (26) expresion -> . expresion LOGIC expresion
-    (27) expresion -> . expresion RELOP expresion
-    (28) expresion -> . termino1 OPMATRIZ
-    (29) expresion -> . termino
-    (36) termino1 -> . ID
-    (37) termino1 -> . ENTERO
-    (38) termino1 -> . FLOTANTE
-    (39) termino1 -> . CARACTER
-    (40) termino1 -> . OPAREN expresion CPAREN
-    (30) termino -> . termino PLUS termino
-    (31) termino -> . termino MINUS termino
-    (32) termino -> . termino MULTIPLY termino
-    (33) termino -> . termino DIVIDE termino
-    (34) termino -> . termino1 OPMATRIZ
-    (35) termino -> . termino1
+    (18) declaracionFuncion -> FUNCION FLOAT ID OPAREN declaracionFuncionParametros CPAREN declaracionFuncionVariables OBRACKET estatutos CBRACKET .
 
-    ID              shift and go to state 71
-    ENTERO          shift and go to state 70
-    FLOTANTE        shift and go to state 64
-    CARACTER        shift and go to state 66
-    OPAREN          shift and go to state 67
+    $end            reduce using rule 18 (declaracionFuncion -> FUNCION FLOAT ID OPAREN declaracionFuncionParametros CPAREN declaracionFuncionVariables OBRACKET estatutos CBRACKET .)
 
-    expresion                      shift and go to state 100
-    termino1                       shift and go to state 69
-    termino                        shift and go to state 65
 
 state 85
 
-    (15) declaracion3 -> ASSIGN expresion COMA . declaracion2
-    (10) declaracion2 -> . SEMICOLON
-    (11) declaracion2 -> . ID declaracion3
+    (58) posibleID -> ID OCORCH . expresion CCORCH
+    (59) posibleID -> ID OCORCH . expresion COMA expresion CCORCH
+    (43) expresion -> . expresion LOGIC expresion
+    (44) expresion -> . expresion RELOP expresion
+    (45) expresion -> . termino1 OPMATRIZ
+    (46) expresion -> . termino
+    (53) termino1 -> . posibleID
+    (54) termino1 -> . ENTERO
+    (55) termino1 -> . FLOTANTE
+    (56) termino1 -> . CARACTER
+    (60) termino1 -> . OPAREN expresion CPAREN
+    (47) termino -> . termino PLUS termino
+    (48) termino -> . termino MINUS termino
+    (49) termino -> . termino MULTIPLY termino
+    (50) termino -> . termino DIVIDE termino
+    (51) termino -> . termino1 OPMATRIZ
+    (52) termino -> . termino1
+    (57) posibleID -> . ID
+    (58) posibleID -> . ID OCORCH expresion CCORCH
+    (59) posibleID -> . ID OCORCH expresion COMA expresion CCORCH
 
-    SEMICOLON       shift and go to state 38
-    ID              shift and go to state 36
+    ENTERO          shift and go to state 98
+    FLOTANTE        shift and go to state 97
+    CARACTER        shift and go to state 93
+    OPAREN          shift and go to state 96
+    ID              shift and go to state 70
 
-    declaracion2                   shift and go to state 101
+    expresion                      shift and go to state 92
+    termino1                       shift and go to state 95
+    termino                        shift and go to state 94
+    posibleID                      shift and go to state 99
 
 state 86
 
-    (27) expresion -> expresion RELOP . expresion
-    (26) expresion -> . expresion LOGIC expresion
-    (27) expresion -> . expresion RELOP expresion
-    (28) expresion -> . termino1 OPMATRIZ
-    (29) expresion -> . termino
-    (36) termino1 -> . ID
-    (37) termino1 -> . ENTERO
-    (38) termino1 -> . FLOTANTE
-    (39) termino1 -> . CARACTER
-    (40) termino1 -> . OPAREN expresion CPAREN
-    (30) termino -> . termino PLUS termino
-    (31) termino -> . termino MINUS termino
-    (32) termino -> . termino MULTIPLY termino
-    (33) termino -> . termino DIVIDE termino
-    (34) termino -> . termino1 OPMATRIZ
-    (35) termino -> . termino1
+    (11) declaracion2 -> posibleID declaracion3 .
 
-    ID              shift and go to state 71
-    ENTERO          shift and go to state 70
-    FLOTANTE        shift and go to state 64
-    CARACTER        shift and go to state 66
-    OPAREN          shift and go to state 67
+    OBRACKET        reduce using rule 11 (declaracion2 -> posibleID declaracion3 .)
+    VAR             reduce using rule 11 (declaracion2 -> posibleID declaracion3 .)
+    DESDE           reduce using rule 11 (declaracion2 -> posibleID declaracion3 .)
+    LEE             reduce using rule 11 (declaracion2 -> posibleID declaracion3 .)
+    CBRACKET        reduce using rule 11 (declaracion2 -> posibleID declaracion3 .)
 
-    expresion                      shift and go to state 102
-    termino1                       shift and go to state 69
-    termino                        shift and go to state 65
 
 state 87
 
-    (14) declaracion3 -> ASSIGN expresion SEMICOLON .
+    (14) declaracion3 -> ASSIGN . expresion SEMICOLON
+    (15) declaracion3 -> ASSIGN . expresion COMA declaracion2
+    (43) expresion -> . expresion LOGIC expresion
+    (44) expresion -> . expresion RELOP expresion
+    (45) expresion -> . termino1 OPMATRIZ
+    (46) expresion -> . termino
+    (53) termino1 -> . posibleID
+    (54) termino1 -> . ENTERO
+    (55) termino1 -> . FLOTANTE
+    (56) termino1 -> . CARACTER
+    (60) termino1 -> . OPAREN expresion CPAREN
+    (47) termino -> . termino PLUS termino
+    (48) termino -> . termino MINUS termino
+    (49) termino -> . termino MULTIPLY termino
+    (50) termino -> . termino DIVIDE termino
+    (51) termino -> . termino1 OPMATRIZ
+    (52) termino -> . termino1
+    (57) posibleID -> . ID
+    (58) posibleID -> . ID OCORCH expresion CCORCH
+    (59) posibleID -> . ID OCORCH expresion COMA expresion CCORCH
 
-    VAR             reduce using rule 14 (declaracion3 -> ASSIGN expresion SEMICOLON .)
-    FUNCION         reduce using rule 14 (declaracion3 -> ASSIGN expresion SEMICOLON .)
-    PRINCIPAL       reduce using rule 14 (declaracion3 -> ASSIGN expresion SEMICOLON .)
-    DESDE           reduce using rule 14 (declaracion3 -> ASSIGN expresion SEMICOLON .)
-    CBRACKET        reduce using rule 14 (declaracion3 -> ASSIGN expresion SEMICOLON .)
-    OBRACKET        reduce using rule 14 (declaracion3 -> ASSIGN expresion SEMICOLON .)
+    ENTERO          shift and go to state 98
+    FLOTANTE        shift and go to state 97
+    CARACTER        shift and go to state 93
+    OPAREN          shift and go to state 96
+    ID              shift and go to state 70
 
+    expresion                      shift and go to state 100
+    termino1                       shift and go to state 95
+    termino                        shift and go to state 94
+    posibleID                      shift and go to state 99
 
 state 88
 
-    (28) expresion -> termino1 OPMATRIZ .
-    (34) termino -> termino1 OPMATRIZ .
+    (12) declaracion3 -> SEMICOLON .
 
-  ! reduce/reduce conflict for LOGIC resolved using rule 28 (expresion -> termino1 OPMATRIZ .)
-  ! reduce/reduce conflict for RELOP resolved using rule 28 (expresion -> termino1 OPMATRIZ .)
-  ! reduce/reduce conflict for SEMICOLON resolved using rule 28 (expresion -> termino1 OPMATRIZ .)
-  ! reduce/reduce conflict for COMA resolved using rule 28 (expresion -> termino1 OPMATRIZ .)
-  ! reduce/reduce conflict for CPAREN resolved using rule 28 (expresion -> termino1 OPMATRIZ .)
-  ! reduce/reduce conflict for HASTA resolved using rule 28 (expresion -> termino1 OPMATRIZ .)
-  ! reduce/reduce conflict for HAZ resolved using rule 28 (expresion -> termino1 OPMATRIZ .)
-    HAZ             reduce using rule 28 (expresion -> termino1 OPMATRIZ .)
-    LOGIC           reduce using rule 28 (expresion -> termino1 OPMATRIZ .)
-    RELOP           reduce using rule 28 (expresion -> termino1 OPMATRIZ .)
-    SEMICOLON       reduce using rule 28 (expresion -> termino1 OPMATRIZ .)
-    COMA            reduce using rule 28 (expresion -> termino1 OPMATRIZ .)
-    CPAREN          reduce using rule 28 (expresion -> termino1 OPMATRIZ .)
-    HASTA           reduce using rule 28 (expresion -> termino1 OPMATRIZ .)
-    PLUS            reduce using rule 34 (termino -> termino1 OPMATRIZ .)
-    MINUS           reduce using rule 34 (termino -> termino1 OPMATRIZ .)
-    MULTIPLY        reduce using rule 34 (termino -> termino1 OPMATRIZ .)
-    DIVIDE          reduce using rule 34 (termino -> termino1 OPMATRIZ .)
-
-  ! LOGIC           [ reduce using rule 34 (termino -> termino1 OPMATRIZ .) ]
-  ! RELOP           [ reduce using rule 34 (termino -> termino1 OPMATRIZ .) ]
-  ! SEMICOLON       [ reduce using rule 34 (termino -> termino1 OPMATRIZ .) ]
-  ! COMA            [ reduce using rule 34 (termino -> termino1 OPMATRIZ .) ]
-  ! CPAREN          [ reduce using rule 34 (termino -> termino1 OPMATRIZ .) ]
-  ! HASTA           [ reduce using rule 34 (termino -> termino1 OPMATRIZ .) ]
-  ! HAZ             [ reduce using rule 34 (termino -> termino1 OPMATRIZ .) ]
+    OBRACKET        reduce using rule 12 (declaracion3 -> SEMICOLON .)
+    VAR             reduce using rule 12 (declaracion3 -> SEMICOLON .)
+    DESDE           reduce using rule 12 (declaracion3 -> SEMICOLON .)
+    LEE             reduce using rule 12 (declaracion3 -> SEMICOLON .)
+    CBRACKET        reduce using rule 12 (declaracion3 -> SEMICOLON .)
 
 
 state 89
 
-    (41) estatutoRepeticionIncondicional -> DESDE ID ASSIGN expresion . HASTA expresion HAZ OBRACKET estatutos CBRACKET
-    (26) expresion -> expresion . LOGIC expresion
-    (27) expresion -> expresion . RELOP expresion
+    (13) declaracion3 -> COMA . declaracion2
+    (10) declaracion2 -> . SEMICOLON
+    (11) declaracion2 -> . posibleID declaracion3
+    (57) posibleID -> . ID
+    (58) posibleID -> . ID OCORCH expresion CCORCH
+    (59) posibleID -> . ID OCORCH expresion COMA expresion CCORCH
 
-    HASTA           shift and go to state 103
-    LOGIC           shift and go to state 84
-    RELOP           shift and go to state 86
+    SEMICOLON       shift and go to state 72
+    ID              shift and go to state 70
 
+    declaracion2                   shift and go to state 101
+    posibleID                      shift and go to state 73
 
 state 90
 
-    (16) declaracionFuncion -> FUNCION VOID ID OPAREN declaracionFuncion2 CPAREN declaracion OBRACKET . estatutos
-    (22) estatutos -> . empty
-    (23) estatutos -> . declaracion estatutos
-    (24) estatutos -> . estatutoRepeticionIncondicional estatutos
-    (42) empty -> .
-    (7) declaracion -> . VAR INT COLON declaracion2
-    (8) declaracion -> . VAR FLOAT COLON declaracion2
-    (9) declaracion -> . VAR CHAR COLON declaracion2
-    (41) estatutoRepeticionIncondicional -> . DESDE ID ASSIGN expresion HASTA expresion HAZ OBRACKET estatutos CBRACKET
+    (61) estatutoRepeticionIncondicional -> DESDE ID ASSIGN . expresion HASTA expresion HAZ OBRACKET estatutos CBRACKET
+    (43) expresion -> . expresion LOGIC expresion
+    (44) expresion -> . expresion RELOP expresion
+    (45) expresion -> . termino1 OPMATRIZ
+    (46) expresion -> . termino
+    (53) termino1 -> . posibleID
+    (54) termino1 -> . ENTERO
+    (55) termino1 -> . FLOTANTE
+    (56) termino1 -> . CARACTER
+    (60) termino1 -> . OPAREN expresion CPAREN
+    (47) termino -> . termino PLUS termino
+    (48) termino -> . termino MINUS termino
+    (49) termino -> . termino MULTIPLY termino
+    (50) termino -> . termino DIVIDE termino
+    (51) termino -> . termino1 OPMATRIZ
+    (52) termino -> . termino1
+    (57) posibleID -> . ID
+    (58) posibleID -> . ID OCORCH expresion CCORCH
+    (59) posibleID -> . ID OCORCH expresion COMA expresion CCORCH
 
-    FUNCION         reduce using rule 42 (empty -> .)
-    PRINCIPAL       reduce using rule 42 (empty -> .)
-    VAR             shift and go to state 12
-    DESDE           shift and go to state 44
+    ENTERO          shift and go to state 98
+    FLOTANTE        shift and go to state 97
+    CARACTER        shift and go to state 93
+    OPAREN          shift and go to state 96
+    ID              shift and go to state 70
 
-    declaracion                    shift and go to state 41
-    empty                          shift and go to state 45
-    estatutoRepeticionIncondicional shift and go to state 42
-    estatutos                      shift and go to state 104
+    termino                        shift and go to state 94
+    expresion                      shift and go to state 102
+    termino1                       shift and go to state 95
+    posibleID                      shift and go to state 99
 
 state 91
 
-    (19) declaracionFuncion -> FUNCION CHAR ID OPAREN declaracionFuncion2 CPAREN declaracion OBRACKET . estatutos
-    (22) estatutos -> . empty
-    (23) estatutos -> . declaracion estatutos
-    (24) estatutos -> . estatutoRepeticionIncondicional estatutos
-    (42) empty -> .
-    (7) declaracion -> . VAR INT COLON declaracion2
-    (8) declaracion -> . VAR FLOAT COLON declaracion2
-    (9) declaracion -> . VAR CHAR COLON declaracion2
-    (41) estatutoRepeticionIncondicional -> . DESDE ID ASSIGN expresion HASTA expresion HAZ OBRACKET estatutos CBRACKET
+    (39) lectura -> LEE OPAREN posibleID . lectura2 CPAREN SEMICOLON
+    (40) lectura2 -> . empty
+    (41) lectura2 -> . COMA posibleID lectura2
+    (62) empty -> .
 
-    FUNCION         reduce using rule 42 (empty -> .)
-    PRINCIPAL       reduce using rule 42 (empty -> .)
-    VAR             shift and go to state 12
-    DESDE           shift and go to state 44
+    COMA            shift and go to state 103
+    CPAREN          reduce using rule 62 (empty -> .)
 
-    declaracion                    shift and go to state 41
-    empty                          shift and go to state 45
-    estatutoRepeticionIncondicional shift and go to state 42
-    estatutos                      shift and go to state 105
+    lectura2                       shift and go to state 105
+    empty                          shift and go to state 104
 
 state 92
 
-    (17) declaracionFuncion -> FUNCION INT ID OPAREN declaracionFuncion2 CPAREN declaracion OBRACKET . estatutos
-    (22) estatutos -> . empty
-    (23) estatutos -> . declaracion estatutos
-    (24) estatutos -> . estatutoRepeticionIncondicional estatutos
-    (42) empty -> .
-    (7) declaracion -> . VAR INT COLON declaracion2
-    (8) declaracion -> . VAR FLOAT COLON declaracion2
-    (9) declaracion -> . VAR CHAR COLON declaracion2
-    (41) estatutoRepeticionIncondicional -> . DESDE ID ASSIGN expresion HASTA expresion HAZ OBRACKET estatutos CBRACKET
+    (58) posibleID -> ID OCORCH expresion . CCORCH
+    (59) posibleID -> ID OCORCH expresion . COMA expresion CCORCH
+    (43) expresion -> expresion . LOGIC expresion
+    (44) expresion -> expresion . RELOP expresion
 
-    FUNCION         reduce using rule 42 (empty -> .)
-    PRINCIPAL       reduce using rule 42 (empty -> .)
-    VAR             shift and go to state 12
-    DESDE           shift and go to state 44
+    CCORCH          shift and go to state 108
+    COMA            shift and go to state 107
+    LOGIC           shift and go to state 109
+    RELOP           shift and go to state 106
 
-    declaracion                    shift and go to state 41
-    empty                          shift and go to state 45
-    estatutoRepeticionIncondicional shift and go to state 42
-    estatutos                      shift and go to state 106
 
 state 93
 
-    (18) declaracionFuncion -> FUNCION FLOAT ID OPAREN declaracionFuncion2 CPAREN declaracion OBRACKET . estatutos
-    (22) estatutos -> . empty
-    (23) estatutos -> . declaracion estatutos
-    (24) estatutos -> . estatutoRepeticionIncondicional estatutos
-    (42) empty -> .
-    (7) declaracion -> . VAR INT COLON declaracion2
-    (8) declaracion -> . VAR FLOAT COLON declaracion2
-    (9) declaracion -> . VAR CHAR COLON declaracion2
-    (41) estatutoRepeticionIncondicional -> . DESDE ID ASSIGN expresion HASTA expresion HAZ OBRACKET estatutos CBRACKET
+    (56) termino1 -> CARACTER .
 
-    FUNCION         reduce using rule 42 (empty -> .)
-    PRINCIPAL       reduce using rule 42 (empty -> .)
-    VAR             shift and go to state 12
-    DESDE           shift and go to state 44
+    OPMATRIZ        reduce using rule 56 (termino1 -> CARACTER .)
+    PLUS            reduce using rule 56 (termino1 -> CARACTER .)
+    MINUS           reduce using rule 56 (termino1 -> CARACTER .)
+    MULTIPLY        reduce using rule 56 (termino1 -> CARACTER .)
+    DIVIDE          reduce using rule 56 (termino1 -> CARACTER .)
+    CCORCH          reduce using rule 56 (termino1 -> CARACTER .)
+    COMA            reduce using rule 56 (termino1 -> CARACTER .)
+    LOGIC           reduce using rule 56 (termino1 -> CARACTER .)
+    RELOP           reduce using rule 56 (termino1 -> CARACTER .)
+    SEMICOLON       reduce using rule 56 (termino1 -> CARACTER .)
+    HASTA           reduce using rule 56 (termino1 -> CARACTER .)
+    CPAREN          reduce using rule 56 (termino1 -> CARACTER .)
+    HAZ             reduce using rule 56 (termino1 -> CARACTER .)
 
-    declaracion                    shift and go to state 41
-    empty                          shift and go to state 45
-    estatutoRepeticionIncondicional shift and go to state 42
-    estatutos                      shift and go to state 107
 
 state 94
 
-    (33) termino -> termino DIVIDE termino .
-    (30) termino -> termino . PLUS termino
-    (31) termino -> termino . MINUS termino
-    (32) termino -> termino . MULTIPLY termino
-    (33) termino -> termino . DIVIDE termino
+    (46) expresion -> termino .
+    (47) termino -> termino . PLUS termino
+    (48) termino -> termino . MINUS termino
+    (49) termino -> termino . MULTIPLY termino
+    (50) termino -> termino . DIVIDE termino
 
-    PLUS            reduce using rule 33 (termino -> termino DIVIDE termino .)
-    MINUS           reduce using rule 33 (termino -> termino DIVIDE termino .)
-    MULTIPLY        reduce using rule 33 (termino -> termino DIVIDE termino .)
-    DIVIDE          reduce using rule 33 (termino -> termino DIVIDE termino .)
-    SEMICOLON       reduce using rule 33 (termino -> termino DIVIDE termino .)
-    COMA            reduce using rule 33 (termino -> termino DIVIDE termino .)
-    LOGIC           reduce using rule 33 (termino -> termino DIVIDE termino .)
-    RELOP           reduce using rule 33 (termino -> termino DIVIDE termino .)
-    CPAREN          reduce using rule 33 (termino -> termino DIVIDE termino .)
-    HASTA           reduce using rule 33 (termino -> termino DIVIDE termino .)
-    HAZ             reduce using rule 33 (termino -> termino DIVIDE termino .)
-
-  ! PLUS            [ shift and go to state 80 ]
-  ! MINUS           [ shift and go to state 82 ]
-  ! MULTIPLY        [ shift and go to state 81 ]
-  ! DIVIDE          [ shift and go to state 79 ]
+    CCORCH          reduce using rule 46 (expresion -> termino .)
+    COMA            reduce using rule 46 (expresion -> termino .)
+    LOGIC           reduce using rule 46 (expresion -> termino .)
+    RELOP           reduce using rule 46 (expresion -> termino .)
+    HASTA           reduce using rule 46 (expresion -> termino .)
+    SEMICOLON       reduce using rule 46 (expresion -> termino .)
+    HAZ             reduce using rule 46 (expresion -> termino .)
+    CPAREN          reduce using rule 46 (expresion -> termino .)
+    PLUS            shift and go to state 111
+    MINUS           shift and go to state 113
+    MULTIPLY        shift and go to state 110
+    DIVIDE          shift and go to state 112
 
 
 state 95
 
-    (34) termino -> termino1 . OPMATRIZ
-    (35) termino -> termino1 .
+    (45) expresion -> termino1 . OPMATRIZ
+    (51) termino -> termino1 . OPMATRIZ
+    (52) termino -> termino1 .
 
-    OPMATRIZ        shift and go to state 108
-    PLUS            reduce using rule 35 (termino -> termino1 .)
-    MINUS           reduce using rule 35 (termino -> termino1 .)
-    MULTIPLY        reduce using rule 35 (termino -> termino1 .)
-    DIVIDE          reduce using rule 35 (termino -> termino1 .)
-    SEMICOLON       reduce using rule 35 (termino -> termino1 .)
-    COMA            reduce using rule 35 (termino -> termino1 .)
-    LOGIC           reduce using rule 35 (termino -> termino1 .)
-    RELOP           reduce using rule 35 (termino -> termino1 .)
-    CPAREN          reduce using rule 35 (termino -> termino1 .)
-    HASTA           reduce using rule 35 (termino -> termino1 .)
-    HAZ             reduce using rule 35 (termino -> termino1 .)
+    OPMATRIZ        shift and go to state 114
+    PLUS            reduce using rule 52 (termino -> termino1 .)
+    MINUS           reduce using rule 52 (termino -> termino1 .)
+    MULTIPLY        reduce using rule 52 (termino -> termino1 .)
+    DIVIDE          reduce using rule 52 (termino -> termino1 .)
+    SEMICOLON       reduce using rule 52 (termino -> termino1 .)
+    COMA            reduce using rule 52 (termino -> termino1 .)
+    LOGIC           reduce using rule 52 (termino -> termino1 .)
+    RELOP           reduce using rule 52 (termino -> termino1 .)
+    CCORCH          reduce using rule 52 (termino -> termino1 .)
+    HAZ             reduce using rule 52 (termino -> termino1 .)
+    HASTA           reduce using rule 52 (termino -> termino1 .)
+    CPAREN          reduce using rule 52 (termino -> termino1 .)
 
 
 state 96
 
-    (30) termino -> termino PLUS termino .
-    (30) termino -> termino . PLUS termino
-    (31) termino -> termino . MINUS termino
-    (32) termino -> termino . MULTIPLY termino
-    (33) termino -> termino . DIVIDE termino
+    (60) termino1 -> OPAREN . expresion CPAREN
+    (43) expresion -> . expresion LOGIC expresion
+    (44) expresion -> . expresion RELOP expresion
+    (45) expresion -> . termino1 OPMATRIZ
+    (46) expresion -> . termino
+    (53) termino1 -> . posibleID
+    (54) termino1 -> . ENTERO
+    (55) termino1 -> . FLOTANTE
+    (56) termino1 -> . CARACTER
+    (60) termino1 -> . OPAREN expresion CPAREN
+    (47) termino -> . termino PLUS termino
+    (48) termino -> . termino MINUS termino
+    (49) termino -> . termino MULTIPLY termino
+    (50) termino -> . termino DIVIDE termino
+    (51) termino -> . termino1 OPMATRIZ
+    (52) termino -> . termino1
+    (57) posibleID -> . ID
+    (58) posibleID -> . ID OCORCH expresion CCORCH
+    (59) posibleID -> . ID OCORCH expresion COMA expresion CCORCH
 
-    PLUS            reduce using rule 30 (termino -> termino PLUS termino .)
-    MINUS           reduce using rule 30 (termino -> termino PLUS termino .)
-    SEMICOLON       reduce using rule 30 (termino -> termino PLUS termino .)
-    COMA            reduce using rule 30 (termino -> termino PLUS termino .)
-    LOGIC           reduce using rule 30 (termino -> termino PLUS termino .)
-    RELOP           reduce using rule 30 (termino -> termino PLUS termino .)
-    CPAREN          reduce using rule 30 (termino -> termino PLUS termino .)
-    HASTA           reduce using rule 30 (termino -> termino PLUS termino .)
-    HAZ             reduce using rule 30 (termino -> termino PLUS termino .)
-    MULTIPLY        shift and go to state 81
-    DIVIDE          shift and go to state 79
+    ENTERO          shift and go to state 98
+    FLOTANTE        shift and go to state 97
+    CARACTER        shift and go to state 93
+    OPAREN          shift and go to state 96
+    ID              shift and go to state 70
 
-  ! MULTIPLY        [ reduce using rule 30 (termino -> termino PLUS termino .) ]
-  ! DIVIDE          [ reduce using rule 30 (termino -> termino PLUS termino .) ]
-  ! PLUS            [ shift and go to state 80 ]
-  ! MINUS           [ shift and go to state 82 ]
-
+    expresion                      shift and go to state 115
+    termino1                       shift and go to state 95
+    termino                        shift and go to state 94
+    posibleID                      shift and go to state 99
 
 state 97
 
-    (32) termino -> termino MULTIPLY termino .
-    (30) termino -> termino . PLUS termino
-    (31) termino -> termino . MINUS termino
-    (32) termino -> termino . MULTIPLY termino
-    (33) termino -> termino . DIVIDE termino
+    (55) termino1 -> FLOTANTE .
 
-    PLUS            reduce using rule 32 (termino -> termino MULTIPLY termino .)
-    MINUS           reduce using rule 32 (termino -> termino MULTIPLY termino .)
-    MULTIPLY        reduce using rule 32 (termino -> termino MULTIPLY termino .)
-    DIVIDE          reduce using rule 32 (termino -> termino MULTIPLY termino .)
-    SEMICOLON       reduce using rule 32 (termino -> termino MULTIPLY termino .)
-    COMA            reduce using rule 32 (termino -> termino MULTIPLY termino .)
-    LOGIC           reduce using rule 32 (termino -> termino MULTIPLY termino .)
-    RELOP           reduce using rule 32 (termino -> termino MULTIPLY termino .)
-    CPAREN          reduce using rule 32 (termino -> termino MULTIPLY termino .)
-    HASTA           reduce using rule 32 (termino -> termino MULTIPLY termino .)
-    HAZ             reduce using rule 32 (termino -> termino MULTIPLY termino .)
-
-  ! PLUS            [ shift and go to state 80 ]
-  ! MINUS           [ shift and go to state 82 ]
-  ! MULTIPLY        [ shift and go to state 81 ]
-  ! DIVIDE          [ shift and go to state 79 ]
+    OPMATRIZ        reduce using rule 55 (termino1 -> FLOTANTE .)
+    PLUS            reduce using rule 55 (termino1 -> FLOTANTE .)
+    MINUS           reduce using rule 55 (termino1 -> FLOTANTE .)
+    MULTIPLY        reduce using rule 55 (termino1 -> FLOTANTE .)
+    DIVIDE          reduce using rule 55 (termino1 -> FLOTANTE .)
+    CCORCH          reduce using rule 55 (termino1 -> FLOTANTE .)
+    COMA            reduce using rule 55 (termino1 -> FLOTANTE .)
+    LOGIC           reduce using rule 55 (termino1 -> FLOTANTE .)
+    RELOP           reduce using rule 55 (termino1 -> FLOTANTE .)
+    SEMICOLON       reduce using rule 55 (termino1 -> FLOTANTE .)
+    HASTA           reduce using rule 55 (termino1 -> FLOTANTE .)
+    CPAREN          reduce using rule 55 (termino1 -> FLOTANTE .)
+    HAZ             reduce using rule 55 (termino1 -> FLOTANTE .)
 
 
 state 98
 
-    (31) termino -> termino MINUS termino .
-    (30) termino -> termino . PLUS termino
-    (31) termino -> termino . MINUS termino
-    (32) termino -> termino . MULTIPLY termino
-    (33) termino -> termino . DIVIDE termino
+    (54) termino1 -> ENTERO .
 
-    PLUS            reduce using rule 31 (termino -> termino MINUS termino .)
-    MINUS           reduce using rule 31 (termino -> termino MINUS termino .)
-    SEMICOLON       reduce using rule 31 (termino -> termino MINUS termino .)
-    COMA            reduce using rule 31 (termino -> termino MINUS termino .)
-    LOGIC           reduce using rule 31 (termino -> termino MINUS termino .)
-    RELOP           reduce using rule 31 (termino -> termino MINUS termino .)
-    CPAREN          reduce using rule 31 (termino -> termino MINUS termino .)
-    HASTA           reduce using rule 31 (termino -> termino MINUS termino .)
-    HAZ             reduce using rule 31 (termino -> termino MINUS termino .)
-    MULTIPLY        shift and go to state 81
-    DIVIDE          shift and go to state 79
-
-  ! MULTIPLY        [ reduce using rule 31 (termino -> termino MINUS termino .) ]
-  ! DIVIDE          [ reduce using rule 31 (termino -> termino MINUS termino .) ]
-  ! PLUS            [ shift and go to state 80 ]
-  ! MINUS           [ shift and go to state 82 ]
+    OPMATRIZ        reduce using rule 54 (termino1 -> ENTERO .)
+    PLUS            reduce using rule 54 (termino1 -> ENTERO .)
+    MINUS           reduce using rule 54 (termino1 -> ENTERO .)
+    MULTIPLY        reduce using rule 54 (termino1 -> ENTERO .)
+    DIVIDE          reduce using rule 54 (termino1 -> ENTERO .)
+    CCORCH          reduce using rule 54 (termino1 -> ENTERO .)
+    COMA            reduce using rule 54 (termino1 -> ENTERO .)
+    LOGIC           reduce using rule 54 (termino1 -> ENTERO .)
+    RELOP           reduce using rule 54 (termino1 -> ENTERO .)
+    SEMICOLON       reduce using rule 54 (termino1 -> ENTERO .)
+    HASTA           reduce using rule 54 (termino1 -> ENTERO .)
+    CPAREN          reduce using rule 54 (termino1 -> ENTERO .)
+    HAZ             reduce using rule 54 (termino1 -> ENTERO .)
 
 
 state 99
 
-    (40) termino1 -> OPAREN expresion CPAREN .
+    (53) termino1 -> posibleID .
 
-    OPMATRIZ        reduce using rule 40 (termino1 -> OPAREN expresion CPAREN .)
-    PLUS            reduce using rule 40 (termino1 -> OPAREN expresion CPAREN .)
-    MINUS           reduce using rule 40 (termino1 -> OPAREN expresion CPAREN .)
-    MULTIPLY        reduce using rule 40 (termino1 -> OPAREN expresion CPAREN .)
-    DIVIDE          reduce using rule 40 (termino1 -> OPAREN expresion CPAREN .)
-    HAZ             reduce using rule 40 (termino1 -> OPAREN expresion CPAREN .)
-    LOGIC           reduce using rule 40 (termino1 -> OPAREN expresion CPAREN .)
-    RELOP           reduce using rule 40 (termino1 -> OPAREN expresion CPAREN .)
-    SEMICOLON       reduce using rule 40 (termino1 -> OPAREN expresion CPAREN .)
-    COMA            reduce using rule 40 (termino1 -> OPAREN expresion CPAREN .)
-    CPAREN          reduce using rule 40 (termino1 -> OPAREN expresion CPAREN .)
-    HASTA           reduce using rule 40 (termino1 -> OPAREN expresion CPAREN .)
+    OPMATRIZ        reduce using rule 53 (termino1 -> posibleID .)
+    PLUS            reduce using rule 53 (termino1 -> posibleID .)
+    MINUS           reduce using rule 53 (termino1 -> posibleID .)
+    MULTIPLY        reduce using rule 53 (termino1 -> posibleID .)
+    DIVIDE          reduce using rule 53 (termino1 -> posibleID .)
+    CCORCH          reduce using rule 53 (termino1 -> posibleID .)
+    COMA            reduce using rule 53 (termino1 -> posibleID .)
+    LOGIC           reduce using rule 53 (termino1 -> posibleID .)
+    RELOP           reduce using rule 53 (termino1 -> posibleID .)
+    SEMICOLON       reduce using rule 53 (termino1 -> posibleID .)
+    HASTA           reduce using rule 53 (termino1 -> posibleID .)
+    CPAREN          reduce using rule 53 (termino1 -> posibleID .)
+    HAZ             reduce using rule 53 (termino1 -> posibleID .)
 
 
 state 100
 
-    (26) expresion -> expresion LOGIC expresion .
-    (26) expresion -> expresion . LOGIC expresion
-    (27) expresion -> expresion . RELOP expresion
+    (14) declaracion3 -> ASSIGN expresion . SEMICOLON
+    (15) declaracion3 -> ASSIGN expresion . COMA declaracion2
+    (43) expresion -> expresion . LOGIC expresion
+    (44) expresion -> expresion . RELOP expresion
 
-  ! shift/reduce conflict for LOGIC resolved as shift
-  ! shift/reduce conflict for RELOP resolved as shift
-    HAZ             reduce using rule 26 (expresion -> expresion LOGIC expresion .)
-    SEMICOLON       reduce using rule 26 (expresion -> expresion LOGIC expresion .)
-    COMA            reduce using rule 26 (expresion -> expresion LOGIC expresion .)
-    CPAREN          reduce using rule 26 (expresion -> expresion LOGIC expresion .)
-    HASTA           reduce using rule 26 (expresion -> expresion LOGIC expresion .)
-    LOGIC           shift and go to state 84
-    RELOP           shift and go to state 86
-
-  ! LOGIC           [ reduce using rule 26 (expresion -> expresion LOGIC expresion .) ]
-  ! RELOP           [ reduce using rule 26 (expresion -> expresion LOGIC expresion .) ]
+    SEMICOLON       shift and go to state 117
+    COMA            shift and go to state 116
+    LOGIC           shift and go to state 109
+    RELOP           shift and go to state 106
 
 
 state 101
 
-    (15) declaracion3 -> ASSIGN expresion COMA declaracion2 .
+    (13) declaracion3 -> COMA declaracion2 .
 
-    VAR             reduce using rule 15 (declaracion3 -> ASSIGN expresion COMA declaracion2 .)
-    FUNCION         reduce using rule 15 (declaracion3 -> ASSIGN expresion COMA declaracion2 .)
-    PRINCIPAL       reduce using rule 15 (declaracion3 -> ASSIGN expresion COMA declaracion2 .)
-    DESDE           reduce using rule 15 (declaracion3 -> ASSIGN expresion COMA declaracion2 .)
-    CBRACKET        reduce using rule 15 (declaracion3 -> ASSIGN expresion COMA declaracion2 .)
-    OBRACKET        reduce using rule 15 (declaracion3 -> ASSIGN expresion COMA declaracion2 .)
+    OBRACKET        reduce using rule 13 (declaracion3 -> COMA declaracion2 .)
+    VAR             reduce using rule 13 (declaracion3 -> COMA declaracion2 .)
+    DESDE           reduce using rule 13 (declaracion3 -> COMA declaracion2 .)
+    LEE             reduce using rule 13 (declaracion3 -> COMA declaracion2 .)
+    CBRACKET        reduce using rule 13 (declaracion3 -> COMA declaracion2 .)
 
 
 state 102
 
-    (27) expresion -> expresion RELOP expresion .
-    (26) expresion -> expresion . LOGIC expresion
-    (27) expresion -> expresion . RELOP expresion
+    (61) estatutoRepeticionIncondicional -> DESDE ID ASSIGN expresion . HASTA expresion HAZ OBRACKET estatutos CBRACKET
+    (43) expresion -> expresion . LOGIC expresion
+    (44) expresion -> expresion . RELOP expresion
 
-  ! shift/reduce conflict for LOGIC resolved as shift
-  ! shift/reduce conflict for RELOP resolved as shift
-    HAZ             reduce using rule 27 (expresion -> expresion RELOP expresion .)
-    SEMICOLON       reduce using rule 27 (expresion -> expresion RELOP expresion .)
-    COMA            reduce using rule 27 (expresion -> expresion RELOP expresion .)
-    CPAREN          reduce using rule 27 (expresion -> expresion RELOP expresion .)
-    HASTA           reduce using rule 27 (expresion -> expresion RELOP expresion .)
-    LOGIC           shift and go to state 84
-    RELOP           shift and go to state 86
-
-  ! LOGIC           [ reduce using rule 27 (expresion -> expresion RELOP expresion .) ]
-  ! RELOP           [ reduce using rule 27 (expresion -> expresion RELOP expresion .) ]
+    HASTA           shift and go to state 118
+    LOGIC           shift and go to state 109
+    RELOP           shift and go to state 106
 
 
 state 103
 
-    (41) estatutoRepeticionIncondicional -> DESDE ID ASSIGN expresion HASTA . expresion HAZ OBRACKET estatutos CBRACKET
-    (26) expresion -> . expresion LOGIC expresion
-    (27) expresion -> . expresion RELOP expresion
-    (28) expresion -> . termino1 OPMATRIZ
-    (29) expresion -> . termino
-    (36) termino1 -> . ID
-    (37) termino1 -> . ENTERO
-    (38) termino1 -> . FLOTANTE
-    (39) termino1 -> . CARACTER
-    (40) termino1 -> . OPAREN expresion CPAREN
-    (30) termino -> . termino PLUS termino
-    (31) termino -> . termino MINUS termino
-    (32) termino -> . termino MULTIPLY termino
-    (33) termino -> . termino DIVIDE termino
-    (34) termino -> . termino1 OPMATRIZ
-    (35) termino -> . termino1
+    (41) lectura2 -> COMA . posibleID lectura2
+    (57) posibleID -> . ID
+    (58) posibleID -> . ID OCORCH expresion CCORCH
+    (59) posibleID -> . ID OCORCH expresion COMA expresion CCORCH
 
-    ID              shift and go to state 71
-    ENTERO          shift and go to state 70
-    FLOTANTE        shift and go to state 64
-    CARACTER        shift and go to state 66
-    OPAREN          shift and go to state 67
+    ID              shift and go to state 70
 
-    expresion                      shift and go to state 109
-    termino                        shift and go to state 65
-    termino1                       shift and go to state 69
+    posibleID                      shift and go to state 119
 
 state 104
 
-    (16) declaracionFuncion -> FUNCION VOID ID OPAREN declaracionFuncion2 CPAREN declaracion OBRACKET estatutos .
+    (40) lectura2 -> empty .
 
-    FUNCION         reduce using rule 16 (declaracionFuncion -> FUNCION VOID ID OPAREN declaracionFuncion2 CPAREN declaracion OBRACKET estatutos .)
-    PRINCIPAL       reduce using rule 16 (declaracionFuncion -> FUNCION VOID ID OPAREN declaracionFuncion2 CPAREN declaracion OBRACKET estatutos .)
+    CPAREN          reduce using rule 40 (lectura2 -> empty .)
 
 
 state 105
 
-    (19) declaracionFuncion -> FUNCION CHAR ID OPAREN declaracionFuncion2 CPAREN declaracion OBRACKET estatutos .
+    (39) lectura -> LEE OPAREN posibleID lectura2 . CPAREN SEMICOLON
 
-    FUNCION         reduce using rule 19 (declaracionFuncion -> FUNCION CHAR ID OPAREN declaracionFuncion2 CPAREN declaracion OBRACKET estatutos .)
-    PRINCIPAL       reduce using rule 19 (declaracionFuncion -> FUNCION CHAR ID OPAREN declaracionFuncion2 CPAREN declaracion OBRACKET estatutos .)
+    CPAREN          shift and go to state 120
 
 
 state 106
 
-    (17) declaracionFuncion -> FUNCION INT ID OPAREN declaracionFuncion2 CPAREN declaracion OBRACKET estatutos .
+    (44) expresion -> expresion RELOP . expresion
+    (43) expresion -> . expresion LOGIC expresion
+    (44) expresion -> . expresion RELOP expresion
+    (45) expresion -> . termino1 OPMATRIZ
+    (46) expresion -> . termino
+    (53) termino1 -> . posibleID
+    (54) termino1 -> . ENTERO
+    (55) termino1 -> . FLOTANTE
+    (56) termino1 -> . CARACTER
+    (60) termino1 -> . OPAREN expresion CPAREN
+    (47) termino -> . termino PLUS termino
+    (48) termino -> . termino MINUS termino
+    (49) termino -> . termino MULTIPLY termino
+    (50) termino -> . termino DIVIDE termino
+    (51) termino -> . termino1 OPMATRIZ
+    (52) termino -> . termino1
+    (57) posibleID -> . ID
+    (58) posibleID -> . ID OCORCH expresion CCORCH
+    (59) posibleID -> . ID OCORCH expresion COMA expresion CCORCH
 
-    FUNCION         reduce using rule 17 (declaracionFuncion -> FUNCION INT ID OPAREN declaracionFuncion2 CPAREN declaracion OBRACKET estatutos .)
-    PRINCIPAL       reduce using rule 17 (declaracionFuncion -> FUNCION INT ID OPAREN declaracionFuncion2 CPAREN declaracion OBRACKET estatutos .)
+    ENTERO          shift and go to state 98
+    FLOTANTE        shift and go to state 97
+    CARACTER        shift and go to state 93
+    OPAREN          shift and go to state 96
+    ID              shift and go to state 70
 
+    expresion                      shift and go to state 121
+    termino1                       shift and go to state 95
+    termino                        shift and go to state 94
+    posibleID                      shift and go to state 99
 
 state 107
 
-    (18) declaracionFuncion -> FUNCION FLOAT ID OPAREN declaracionFuncion2 CPAREN declaracion OBRACKET estatutos .
+    (59) posibleID -> ID OCORCH expresion COMA . expresion CCORCH
+    (43) expresion -> . expresion LOGIC expresion
+    (44) expresion -> . expresion RELOP expresion
+    (45) expresion -> . termino1 OPMATRIZ
+    (46) expresion -> . termino
+    (53) termino1 -> . posibleID
+    (54) termino1 -> . ENTERO
+    (55) termino1 -> . FLOTANTE
+    (56) termino1 -> . CARACTER
+    (60) termino1 -> . OPAREN expresion CPAREN
+    (47) termino -> . termino PLUS termino
+    (48) termino -> . termino MINUS termino
+    (49) termino -> . termino MULTIPLY termino
+    (50) termino -> . termino DIVIDE termino
+    (51) termino -> . termino1 OPMATRIZ
+    (52) termino -> . termino1
+    (57) posibleID -> . ID
+    (58) posibleID -> . ID OCORCH expresion CCORCH
+    (59) posibleID -> . ID OCORCH expresion COMA expresion CCORCH
 
-    FUNCION         reduce using rule 18 (declaracionFuncion -> FUNCION FLOAT ID OPAREN declaracionFuncion2 CPAREN declaracion OBRACKET estatutos .)
-    PRINCIPAL       reduce using rule 18 (declaracionFuncion -> FUNCION FLOAT ID OPAREN declaracionFuncion2 CPAREN declaracion OBRACKET estatutos .)
+    ENTERO          shift and go to state 98
+    FLOTANTE        shift and go to state 97
+    CARACTER        shift and go to state 93
+    OPAREN          shift and go to state 96
+    ID              shift and go to state 70
 
+    expresion                      shift and go to state 122
+    termino1                       shift and go to state 95
+    termino                        shift and go to state 94
+    posibleID                      shift and go to state 99
 
 state 108
 
-    (34) termino -> termino1 OPMATRIZ .
+    (58) posibleID -> ID OCORCH expresion CCORCH .
 
-    PLUS            reduce using rule 34 (termino -> termino1 OPMATRIZ .)
-    MINUS           reduce using rule 34 (termino -> termino1 OPMATRIZ .)
-    MULTIPLY        reduce using rule 34 (termino -> termino1 OPMATRIZ .)
-    DIVIDE          reduce using rule 34 (termino -> termino1 OPMATRIZ .)
-    SEMICOLON       reduce using rule 34 (termino -> termino1 OPMATRIZ .)
-    COMA            reduce using rule 34 (termino -> termino1 OPMATRIZ .)
-    LOGIC           reduce using rule 34 (termino -> termino1 OPMATRIZ .)
-    RELOP           reduce using rule 34 (termino -> termino1 OPMATRIZ .)
-    CPAREN          reduce using rule 34 (termino -> termino1 OPMATRIZ .)
-    HASTA           reduce using rule 34 (termino -> termino1 OPMATRIZ .)
-    HAZ             reduce using rule 34 (termino -> termino1 OPMATRIZ .)
+    OPMATRIZ        reduce using rule 58 (posibleID -> ID OCORCH expresion CCORCH .)
+    PLUS            reduce using rule 58 (posibleID -> ID OCORCH expresion CCORCH .)
+    MINUS           reduce using rule 58 (posibleID -> ID OCORCH expresion CCORCH .)
+    MULTIPLY        reduce using rule 58 (posibleID -> ID OCORCH expresion CCORCH .)
+    DIVIDE          reduce using rule 58 (posibleID -> ID OCORCH expresion CCORCH .)
+    CPAREN          reduce using rule 58 (posibleID -> ID OCORCH expresion CCORCH .)
+    LOGIC           reduce using rule 58 (posibleID -> ID OCORCH expresion CCORCH .)
+    RELOP           reduce using rule 58 (posibleID -> ID OCORCH expresion CCORCH .)
+    SEMICOLON       reduce using rule 58 (posibleID -> ID OCORCH expresion CCORCH .)
+    COMA            reduce using rule 58 (posibleID -> ID OCORCH expresion CCORCH .)
+    ASSIGN          reduce using rule 58 (posibleID -> ID OCORCH expresion CCORCH .)
+    CCORCH          reduce using rule 58 (posibleID -> ID OCORCH expresion CCORCH .)
+    HASTA           reduce using rule 58 (posibleID -> ID OCORCH expresion CCORCH .)
+    HAZ             reduce using rule 58 (posibleID -> ID OCORCH expresion CCORCH .)
 
 
 state 109
 
-    (41) estatutoRepeticionIncondicional -> DESDE ID ASSIGN expresion HASTA expresion . HAZ OBRACKET estatutos CBRACKET
-    (26) expresion -> expresion . LOGIC expresion
-    (27) expresion -> expresion . RELOP expresion
+    (43) expresion -> expresion LOGIC . expresion
+    (43) expresion -> . expresion LOGIC expresion
+    (44) expresion -> . expresion RELOP expresion
+    (45) expresion -> . termino1 OPMATRIZ
+    (46) expresion -> . termino
+    (53) termino1 -> . posibleID
+    (54) termino1 -> . ENTERO
+    (55) termino1 -> . FLOTANTE
+    (56) termino1 -> . CARACTER
+    (60) termino1 -> . OPAREN expresion CPAREN
+    (47) termino -> . termino PLUS termino
+    (48) termino -> . termino MINUS termino
+    (49) termino -> . termino MULTIPLY termino
+    (50) termino -> . termino DIVIDE termino
+    (51) termino -> . termino1 OPMATRIZ
+    (52) termino -> . termino1
+    (57) posibleID -> . ID
+    (58) posibleID -> . ID OCORCH expresion CCORCH
+    (59) posibleID -> . ID OCORCH expresion COMA expresion CCORCH
 
-    HAZ             shift and go to state 110
-    LOGIC           shift and go to state 84
-    RELOP           shift and go to state 86
+    ENTERO          shift and go to state 98
+    FLOTANTE        shift and go to state 97
+    CARACTER        shift and go to state 93
+    OPAREN          shift and go to state 96
+    ID              shift and go to state 70
 
+    expresion                      shift and go to state 123
+    termino1                       shift and go to state 95
+    termino                        shift and go to state 94
+    posibleID                      shift and go to state 99
 
 state 110
 
-    (41) estatutoRepeticionIncondicional -> DESDE ID ASSIGN expresion HASTA expresion HAZ . OBRACKET estatutos CBRACKET
+    (49) termino -> termino MULTIPLY . termino
+    (47) termino -> . termino PLUS termino
+    (48) termino -> . termino MINUS termino
+    (49) termino -> . termino MULTIPLY termino
+    (50) termino -> . termino DIVIDE termino
+    (51) termino -> . termino1 OPMATRIZ
+    (52) termino -> . termino1
+    (53) termino1 -> . posibleID
+    (54) termino1 -> . ENTERO
+    (55) termino1 -> . FLOTANTE
+    (56) termino1 -> . CARACTER
+    (60) termino1 -> . OPAREN expresion CPAREN
+    (57) posibleID -> . ID
+    (58) posibleID -> . ID OCORCH expresion CCORCH
+    (59) posibleID -> . ID OCORCH expresion COMA expresion CCORCH
 
-    OBRACKET        shift and go to state 111
+    ENTERO          shift and go to state 98
+    FLOTANTE        shift and go to state 97
+    CARACTER        shift and go to state 93
+    OPAREN          shift and go to state 96
+    ID              shift and go to state 70
 
+    termino1                       shift and go to state 125
+    termino                        shift and go to state 124
+    posibleID                      shift and go to state 99
 
 state 111
 
-    (41) estatutoRepeticionIncondicional -> DESDE ID ASSIGN expresion HASTA expresion HAZ OBRACKET . estatutos CBRACKET
-    (22) estatutos -> . empty
-    (23) estatutos -> . declaracion estatutos
-    (24) estatutos -> . estatutoRepeticionIncondicional estatutos
-    (42) empty -> .
-    (7) declaracion -> . VAR INT COLON declaracion2
-    (8) declaracion -> . VAR FLOAT COLON declaracion2
-    (9) declaracion -> . VAR CHAR COLON declaracion2
-    (41) estatutoRepeticionIncondicional -> . DESDE ID ASSIGN expresion HASTA expresion HAZ OBRACKET estatutos CBRACKET
+    (47) termino -> termino PLUS . termino
+    (47) termino -> . termino PLUS termino
+    (48) termino -> . termino MINUS termino
+    (49) termino -> . termino MULTIPLY termino
+    (50) termino -> . termino DIVIDE termino
+    (51) termino -> . termino1 OPMATRIZ
+    (52) termino -> . termino1
+    (53) termino1 -> . posibleID
+    (54) termino1 -> . ENTERO
+    (55) termino1 -> . FLOTANTE
+    (56) termino1 -> . CARACTER
+    (60) termino1 -> . OPAREN expresion CPAREN
+    (57) posibleID -> . ID
+    (58) posibleID -> . ID OCORCH expresion CCORCH
+    (59) posibleID -> . ID OCORCH expresion COMA expresion CCORCH
 
-    CBRACKET        reduce using rule 42 (empty -> .)
-    VAR             shift and go to state 12
-    DESDE           shift and go to state 44
+    ENTERO          shift and go to state 98
+    FLOTANTE        shift and go to state 97
+    CARACTER        shift and go to state 93
+    OPAREN          shift and go to state 96
+    ID              shift and go to state 70
 
-    declaracion                    shift and go to state 41
-    empty                          shift and go to state 45
-    estatutoRepeticionIncondicional shift and go to state 42
-    estatutos                      shift and go to state 112
+    termino1                       shift and go to state 125
+    termino                        shift and go to state 126
+    posibleID                      shift and go to state 99
 
 state 112
 
-    (41) estatutoRepeticionIncondicional -> DESDE ID ASSIGN expresion HASTA expresion HAZ OBRACKET estatutos . CBRACKET
+    (50) termino -> termino DIVIDE . termino
+    (47) termino -> . termino PLUS termino
+    (48) termino -> . termino MINUS termino
+    (49) termino -> . termino MULTIPLY termino
+    (50) termino -> . termino DIVIDE termino
+    (51) termino -> . termino1 OPMATRIZ
+    (52) termino -> . termino1
+    (53) termino1 -> . posibleID
+    (54) termino1 -> . ENTERO
+    (55) termino1 -> . FLOTANTE
+    (56) termino1 -> . CARACTER
+    (60) termino1 -> . OPAREN expresion CPAREN
+    (57) posibleID -> . ID
+    (58) posibleID -> . ID OCORCH expresion CCORCH
+    (59) posibleID -> . ID OCORCH expresion COMA expresion CCORCH
 
-    CBRACKET        shift and go to state 113
+    ENTERO          shift and go to state 98
+    FLOTANTE        shift and go to state 97
+    CARACTER        shift and go to state 93
+    OPAREN          shift and go to state 96
+    ID              shift and go to state 70
 
+    termino1                       shift and go to state 125
+    termino                        shift and go to state 127
+    posibleID                      shift and go to state 99
 
 state 113
 
-    (41) estatutoRepeticionIncondicional -> DESDE ID ASSIGN expresion HASTA expresion HAZ OBRACKET estatutos CBRACKET .
+    (48) termino -> termino MINUS . termino
+    (47) termino -> . termino PLUS termino
+    (48) termino -> . termino MINUS termino
+    (49) termino -> . termino MULTIPLY termino
+    (50) termino -> . termino DIVIDE termino
+    (51) termino -> . termino1 OPMATRIZ
+    (52) termino -> . termino1
+    (53) termino1 -> . posibleID
+    (54) termino1 -> . ENTERO
+    (55) termino1 -> . FLOTANTE
+    (56) termino1 -> . CARACTER
+    (60) termino1 -> . OPAREN expresion CPAREN
+    (57) posibleID -> . ID
+    (58) posibleID -> . ID OCORCH expresion CCORCH
+    (59) posibleID -> . ID OCORCH expresion COMA expresion CCORCH
 
-    VAR             reduce using rule 41 (estatutoRepeticionIncondicional -> DESDE ID ASSIGN expresion HASTA expresion HAZ OBRACKET estatutos CBRACKET .)
-    DESDE           reduce using rule 41 (estatutoRepeticionIncondicional -> DESDE ID ASSIGN expresion HASTA expresion HAZ OBRACKET estatutos CBRACKET .)
-    CBRACKET        reduce using rule 41 (estatutoRepeticionIncondicional -> DESDE ID ASSIGN expresion HASTA expresion HAZ OBRACKET estatutos CBRACKET .)
-    FUNCION         reduce using rule 41 (estatutoRepeticionIncondicional -> DESDE ID ASSIGN expresion HASTA expresion HAZ OBRACKET estatutos CBRACKET .)
-    PRINCIPAL       reduce using rule 41 (estatutoRepeticionIncondicional -> DESDE ID ASSIGN expresion HASTA expresion HAZ OBRACKET estatutos CBRACKET .)
+    ENTERO          shift and go to state 98
+    FLOTANTE        shift and go to state 97
+    CARACTER        shift and go to state 93
+    OPAREN          shift and go to state 96
+    ID              shift and go to state 70
+
+    termino1                       shift and go to state 125
+    termino                        shift and go to state 128
+    posibleID                      shift and go to state 99
+
+state 114
+
+    (45) expresion -> termino1 OPMATRIZ .
+    (51) termino -> termino1 OPMATRIZ .
+
+  ! reduce/reduce conflict for SEMICOLON resolved using rule 45 (expresion -> termino1 OPMATRIZ .)
+  ! reduce/reduce conflict for COMA resolved using rule 45 (expresion -> termino1 OPMATRIZ .)
+  ! reduce/reduce conflict for LOGIC resolved using rule 45 (expresion -> termino1 OPMATRIZ .)
+  ! reduce/reduce conflict for RELOP resolved using rule 45 (expresion -> termino1 OPMATRIZ .)
+  ! reduce/reduce conflict for CCORCH resolved using rule 45 (expresion -> termino1 OPMATRIZ .)
+  ! reduce/reduce conflict for HAZ resolved using rule 45 (expresion -> termino1 OPMATRIZ .)
+  ! reduce/reduce conflict for HASTA resolved using rule 45 (expresion -> termino1 OPMATRIZ .)
+  ! reduce/reduce conflict for CPAREN resolved using rule 45 (expresion -> termino1 OPMATRIZ .)
+    CCORCH          reduce using rule 45 (expresion -> termino1 OPMATRIZ .)
+    COMA            reduce using rule 45 (expresion -> termino1 OPMATRIZ .)
+    LOGIC           reduce using rule 45 (expresion -> termino1 OPMATRIZ .)
+    RELOP           reduce using rule 45 (expresion -> termino1 OPMATRIZ .)
+    HASTA           reduce using rule 45 (expresion -> termino1 OPMATRIZ .)
+    SEMICOLON       reduce using rule 45 (expresion -> termino1 OPMATRIZ .)
+    HAZ             reduce using rule 45 (expresion -> termino1 OPMATRIZ .)
+    CPAREN          reduce using rule 45 (expresion -> termino1 OPMATRIZ .)
+    PLUS            reduce using rule 51 (termino -> termino1 OPMATRIZ .)
+    MINUS           reduce using rule 51 (termino -> termino1 OPMATRIZ .)
+    MULTIPLY        reduce using rule 51 (termino -> termino1 OPMATRIZ .)
+    DIVIDE          reduce using rule 51 (termino -> termino1 OPMATRIZ .)
+
+  ! SEMICOLON       [ reduce using rule 51 (termino -> termino1 OPMATRIZ .) ]
+  ! COMA            [ reduce using rule 51 (termino -> termino1 OPMATRIZ .) ]
+  ! LOGIC           [ reduce using rule 51 (termino -> termino1 OPMATRIZ .) ]
+  ! RELOP           [ reduce using rule 51 (termino -> termino1 OPMATRIZ .) ]
+  ! CCORCH          [ reduce using rule 51 (termino -> termino1 OPMATRIZ .) ]
+  ! HAZ             [ reduce using rule 51 (termino -> termino1 OPMATRIZ .) ]
+  ! HASTA           [ reduce using rule 51 (termino -> termino1 OPMATRIZ .) ]
+  ! CPAREN          [ reduce using rule 51 (termino -> termino1 OPMATRIZ .) ]
+
+
+state 115
+
+    (60) termino1 -> OPAREN expresion . CPAREN
+    (43) expresion -> expresion . LOGIC expresion
+    (44) expresion -> expresion . RELOP expresion
+
+    CPAREN          shift and go to state 129
+    LOGIC           shift and go to state 109
+    RELOP           shift and go to state 106
+
+
+state 116
+
+    (15) declaracion3 -> ASSIGN expresion COMA . declaracion2
+    (10) declaracion2 -> . SEMICOLON
+    (11) declaracion2 -> . posibleID declaracion3
+    (57) posibleID -> . ID
+    (58) posibleID -> . ID OCORCH expresion CCORCH
+    (59) posibleID -> . ID OCORCH expresion COMA expresion CCORCH
+
+    SEMICOLON       shift and go to state 72
+    ID              shift and go to state 70
+
+    declaracion2                   shift and go to state 130
+    posibleID                      shift and go to state 73
+
+state 117
+
+    (14) declaracion3 -> ASSIGN expresion SEMICOLON .
+
+    OBRACKET        reduce using rule 14 (declaracion3 -> ASSIGN expresion SEMICOLON .)
+    VAR             reduce using rule 14 (declaracion3 -> ASSIGN expresion SEMICOLON .)
+    DESDE           reduce using rule 14 (declaracion3 -> ASSIGN expresion SEMICOLON .)
+    LEE             reduce using rule 14 (declaracion3 -> ASSIGN expresion SEMICOLON .)
+    CBRACKET        reduce using rule 14 (declaracion3 -> ASSIGN expresion SEMICOLON .)
+
+
+state 118
+
+    (61) estatutoRepeticionIncondicional -> DESDE ID ASSIGN expresion HASTA . expresion HAZ OBRACKET estatutos CBRACKET
+    (43) expresion -> . expresion LOGIC expresion
+    (44) expresion -> . expresion RELOP expresion
+    (45) expresion -> . termino1 OPMATRIZ
+    (46) expresion -> . termino
+    (53) termino1 -> . posibleID
+    (54) termino1 -> . ENTERO
+    (55) termino1 -> . FLOTANTE
+    (56) termino1 -> . CARACTER
+    (60) termino1 -> . OPAREN expresion CPAREN
+    (47) termino -> . termino PLUS termino
+    (48) termino -> . termino MINUS termino
+    (49) termino -> . termino MULTIPLY termino
+    (50) termino -> . termino DIVIDE termino
+    (51) termino -> . termino1 OPMATRIZ
+    (52) termino -> . termino1
+    (57) posibleID -> . ID
+    (58) posibleID -> . ID OCORCH expresion CCORCH
+    (59) posibleID -> . ID OCORCH expresion COMA expresion CCORCH
+
+    ENTERO          shift and go to state 98
+    FLOTANTE        shift and go to state 97
+    CARACTER        shift and go to state 93
+    OPAREN          shift and go to state 96
+    ID              shift and go to state 70
+
+    termino                        shift and go to state 94
+    expresion                      shift and go to state 131
+    termino1                       shift and go to state 95
+    posibleID                      shift and go to state 99
+
+state 119
+
+    (41) lectura2 -> COMA posibleID . lectura2
+    (40) lectura2 -> . empty
+    (41) lectura2 -> . COMA posibleID lectura2
+    (62) empty -> .
+
+    COMA            shift and go to state 103
+    CPAREN          reduce using rule 62 (empty -> .)
+
+    lectura2                       shift and go to state 132
+    empty                          shift and go to state 104
+
+state 120
+
+    (39) lectura -> LEE OPAREN posibleID lectura2 CPAREN . SEMICOLON
+
+    SEMICOLON       shift and go to state 133
+
+
+state 121
+
+    (44) expresion -> expresion RELOP expresion .
+    (43) expresion -> expresion . LOGIC expresion
+    (44) expresion -> expresion . RELOP expresion
+
+  ! shift/reduce conflict for LOGIC resolved as shift
+  ! shift/reduce conflict for RELOP resolved as shift
+    CCORCH          reduce using rule 44 (expresion -> expresion RELOP expresion .)
+    COMA            reduce using rule 44 (expresion -> expresion RELOP expresion .)
+    HASTA           reduce using rule 44 (expresion -> expresion RELOP expresion .)
+    SEMICOLON       reduce using rule 44 (expresion -> expresion RELOP expresion .)
+    HAZ             reduce using rule 44 (expresion -> expresion RELOP expresion .)
+    CPAREN          reduce using rule 44 (expresion -> expresion RELOP expresion .)
+    LOGIC           shift and go to state 109
+    RELOP           shift and go to state 106
+
+  ! LOGIC           [ reduce using rule 44 (expresion -> expresion RELOP expresion .) ]
+  ! RELOP           [ reduce using rule 44 (expresion -> expresion RELOP expresion .) ]
+
+
+state 122
+
+    (59) posibleID -> ID OCORCH expresion COMA expresion . CCORCH
+    (43) expresion -> expresion . LOGIC expresion
+    (44) expresion -> expresion . RELOP expresion
+
+    CCORCH          shift and go to state 134
+    LOGIC           shift and go to state 109
+    RELOP           shift and go to state 106
+
+
+state 123
+
+    (43) expresion -> expresion LOGIC expresion .
+    (43) expresion -> expresion . LOGIC expresion
+    (44) expresion -> expresion . RELOP expresion
+
+  ! shift/reduce conflict for LOGIC resolved as shift
+  ! shift/reduce conflict for RELOP resolved as shift
+    CCORCH          reduce using rule 43 (expresion -> expresion LOGIC expresion .)
+    COMA            reduce using rule 43 (expresion -> expresion LOGIC expresion .)
+    HASTA           reduce using rule 43 (expresion -> expresion LOGIC expresion .)
+    SEMICOLON       reduce using rule 43 (expresion -> expresion LOGIC expresion .)
+    HAZ             reduce using rule 43 (expresion -> expresion LOGIC expresion .)
+    CPAREN          reduce using rule 43 (expresion -> expresion LOGIC expresion .)
+    LOGIC           shift and go to state 109
+    RELOP           shift and go to state 106
+
+  ! LOGIC           [ reduce using rule 43 (expresion -> expresion LOGIC expresion .) ]
+  ! RELOP           [ reduce using rule 43 (expresion -> expresion LOGIC expresion .) ]
+
+
+state 124
+
+    (49) termino -> termino MULTIPLY termino .
+    (47) termino -> termino . PLUS termino
+    (48) termino -> termino . MINUS termino
+    (49) termino -> termino . MULTIPLY termino
+    (50) termino -> termino . DIVIDE termino
+
+    PLUS            reduce using rule 49 (termino -> termino MULTIPLY termino .)
+    MINUS           reduce using rule 49 (termino -> termino MULTIPLY termino .)
+    MULTIPLY        reduce using rule 49 (termino -> termino MULTIPLY termino .)
+    DIVIDE          reduce using rule 49 (termino -> termino MULTIPLY termino .)
+    SEMICOLON       reduce using rule 49 (termino -> termino MULTIPLY termino .)
+    COMA            reduce using rule 49 (termino -> termino MULTIPLY termino .)
+    LOGIC           reduce using rule 49 (termino -> termino MULTIPLY termino .)
+    RELOP           reduce using rule 49 (termino -> termino MULTIPLY termino .)
+    CCORCH          reduce using rule 49 (termino -> termino MULTIPLY termino .)
+    HASTA           reduce using rule 49 (termino -> termino MULTIPLY termino .)
+    CPAREN          reduce using rule 49 (termino -> termino MULTIPLY termino .)
+    HAZ             reduce using rule 49 (termino -> termino MULTIPLY termino .)
+
+  ! PLUS            [ shift and go to state 111 ]
+  ! MINUS           [ shift and go to state 113 ]
+  ! MULTIPLY        [ shift and go to state 110 ]
+  ! DIVIDE          [ shift and go to state 112 ]
+
+
+state 125
+
+    (51) termino -> termino1 . OPMATRIZ
+    (52) termino -> termino1 .
+
+    OPMATRIZ        shift and go to state 135
+    PLUS            reduce using rule 52 (termino -> termino1 .)
+    MINUS           reduce using rule 52 (termino -> termino1 .)
+    MULTIPLY        reduce using rule 52 (termino -> termino1 .)
+    DIVIDE          reduce using rule 52 (termino -> termino1 .)
+    CCORCH          reduce using rule 52 (termino -> termino1 .)
+    COMA            reduce using rule 52 (termino -> termino1 .)
+    LOGIC           reduce using rule 52 (termino -> termino1 .)
+    RELOP           reduce using rule 52 (termino -> termino1 .)
+    SEMICOLON       reduce using rule 52 (termino -> termino1 .)
+    HASTA           reduce using rule 52 (termino -> termino1 .)
+    CPAREN          reduce using rule 52 (termino -> termino1 .)
+    HAZ             reduce using rule 52 (termino -> termino1 .)
+
+
+state 126
+
+    (47) termino -> termino PLUS termino .
+    (47) termino -> termino . PLUS termino
+    (48) termino -> termino . MINUS termino
+    (49) termino -> termino . MULTIPLY termino
+    (50) termino -> termino . DIVIDE termino
+
+    PLUS            reduce using rule 47 (termino -> termino PLUS termino .)
+    MINUS           reduce using rule 47 (termino -> termino PLUS termino .)
+    SEMICOLON       reduce using rule 47 (termino -> termino PLUS termino .)
+    COMA            reduce using rule 47 (termino -> termino PLUS termino .)
+    LOGIC           reduce using rule 47 (termino -> termino PLUS termino .)
+    RELOP           reduce using rule 47 (termino -> termino PLUS termino .)
+    CCORCH          reduce using rule 47 (termino -> termino PLUS termino .)
+    HASTA           reduce using rule 47 (termino -> termino PLUS termino .)
+    CPAREN          reduce using rule 47 (termino -> termino PLUS termino .)
+    HAZ             reduce using rule 47 (termino -> termino PLUS termino .)
+    MULTIPLY        shift and go to state 110
+    DIVIDE          shift and go to state 112
+
+  ! MULTIPLY        [ reduce using rule 47 (termino -> termino PLUS termino .) ]
+  ! DIVIDE          [ reduce using rule 47 (termino -> termino PLUS termino .) ]
+  ! PLUS            [ shift and go to state 111 ]
+  ! MINUS           [ shift and go to state 113 ]
+
+
+state 127
+
+    (50) termino -> termino DIVIDE termino .
+    (47) termino -> termino . PLUS termino
+    (48) termino -> termino . MINUS termino
+    (49) termino -> termino . MULTIPLY termino
+    (50) termino -> termino . DIVIDE termino
+
+    PLUS            reduce using rule 50 (termino -> termino DIVIDE termino .)
+    MINUS           reduce using rule 50 (termino -> termino DIVIDE termino .)
+    MULTIPLY        reduce using rule 50 (termino -> termino DIVIDE termino .)
+    DIVIDE          reduce using rule 50 (termino -> termino DIVIDE termino .)
+    SEMICOLON       reduce using rule 50 (termino -> termino DIVIDE termino .)
+    COMA            reduce using rule 50 (termino -> termino DIVIDE termino .)
+    LOGIC           reduce using rule 50 (termino -> termino DIVIDE termino .)
+    RELOP           reduce using rule 50 (termino -> termino DIVIDE termino .)
+    CCORCH          reduce using rule 50 (termino -> termino DIVIDE termino .)
+    HASTA           reduce using rule 50 (termino -> termino DIVIDE termino .)
+    CPAREN          reduce using rule 50 (termino -> termino DIVIDE termino .)
+    HAZ             reduce using rule 50 (termino -> termino DIVIDE termino .)
+
+  ! PLUS            [ shift and go to state 111 ]
+  ! MINUS           [ shift and go to state 113 ]
+  ! MULTIPLY        [ shift and go to state 110 ]
+  ! DIVIDE          [ shift and go to state 112 ]
+
+
+state 128
+
+    (48) termino -> termino MINUS termino .
+    (47) termino -> termino . PLUS termino
+    (48) termino -> termino . MINUS termino
+    (49) termino -> termino . MULTIPLY termino
+    (50) termino -> termino . DIVIDE termino
+
+    PLUS            reduce using rule 48 (termino -> termino MINUS termino .)
+    MINUS           reduce using rule 48 (termino -> termino MINUS termino .)
+    SEMICOLON       reduce using rule 48 (termino -> termino MINUS termino .)
+    COMA            reduce using rule 48 (termino -> termino MINUS termino .)
+    LOGIC           reduce using rule 48 (termino -> termino MINUS termino .)
+    RELOP           reduce using rule 48 (termino -> termino MINUS termino .)
+    CCORCH          reduce using rule 48 (termino -> termino MINUS termino .)
+    HASTA           reduce using rule 48 (termino -> termino MINUS termino .)
+    CPAREN          reduce using rule 48 (termino -> termino MINUS termino .)
+    HAZ             reduce using rule 48 (termino -> termino MINUS termino .)
+    MULTIPLY        shift and go to state 110
+    DIVIDE          shift and go to state 112
+
+  ! MULTIPLY        [ reduce using rule 48 (termino -> termino MINUS termino .) ]
+  ! DIVIDE          [ reduce using rule 48 (termino -> termino MINUS termino .) ]
+  ! PLUS            [ shift and go to state 111 ]
+  ! MINUS           [ shift and go to state 113 ]
+
+
+state 129
+
+    (60) termino1 -> OPAREN expresion CPAREN .
+
+    OPMATRIZ        reduce using rule 60 (termino1 -> OPAREN expresion CPAREN .)
+    PLUS            reduce using rule 60 (termino1 -> OPAREN expresion CPAREN .)
+    MINUS           reduce using rule 60 (termino1 -> OPAREN expresion CPAREN .)
+    MULTIPLY        reduce using rule 60 (termino1 -> OPAREN expresion CPAREN .)
+    DIVIDE          reduce using rule 60 (termino1 -> OPAREN expresion CPAREN .)
+    CCORCH          reduce using rule 60 (termino1 -> OPAREN expresion CPAREN .)
+    COMA            reduce using rule 60 (termino1 -> OPAREN expresion CPAREN .)
+    LOGIC           reduce using rule 60 (termino1 -> OPAREN expresion CPAREN .)
+    RELOP           reduce using rule 60 (termino1 -> OPAREN expresion CPAREN .)
+    SEMICOLON       reduce using rule 60 (termino1 -> OPAREN expresion CPAREN .)
+    HASTA           reduce using rule 60 (termino1 -> OPAREN expresion CPAREN .)
+    CPAREN          reduce using rule 60 (termino1 -> OPAREN expresion CPAREN .)
+    HAZ             reduce using rule 60 (termino1 -> OPAREN expresion CPAREN .)
+
+
+state 130
+
+    (15) declaracion3 -> ASSIGN expresion COMA declaracion2 .
+
+    OBRACKET        reduce using rule 15 (declaracion3 -> ASSIGN expresion COMA declaracion2 .)
+    VAR             reduce using rule 15 (declaracion3 -> ASSIGN expresion COMA declaracion2 .)
+    DESDE           reduce using rule 15 (declaracion3 -> ASSIGN expresion COMA declaracion2 .)
+    LEE             reduce using rule 15 (declaracion3 -> ASSIGN expresion COMA declaracion2 .)
+    CBRACKET        reduce using rule 15 (declaracion3 -> ASSIGN expresion COMA declaracion2 .)
+
+
+state 131
+
+    (61) estatutoRepeticionIncondicional -> DESDE ID ASSIGN expresion HASTA expresion . HAZ OBRACKET estatutos CBRACKET
+    (43) expresion -> expresion . LOGIC expresion
+    (44) expresion -> expresion . RELOP expresion
+
+    HAZ             shift and go to state 136
+    LOGIC           shift and go to state 109
+    RELOP           shift and go to state 106
+
+
+state 132
+
+    (41) lectura2 -> COMA posibleID lectura2 .
+
+    CPAREN          reduce using rule 41 (lectura2 -> COMA posibleID lectura2 .)
+
+
+state 133
+
+    (39) lectura -> LEE OPAREN posibleID lectura2 CPAREN SEMICOLON .
+
+    VAR             reduce using rule 39 (lectura -> LEE OPAREN posibleID lectura2 CPAREN SEMICOLON .)
+    DESDE           reduce using rule 39 (lectura -> LEE OPAREN posibleID lectura2 CPAREN SEMICOLON .)
+    LEE             reduce using rule 39 (lectura -> LEE OPAREN posibleID lectura2 CPAREN SEMICOLON .)
+    CBRACKET        reduce using rule 39 (lectura -> LEE OPAREN posibleID lectura2 CPAREN SEMICOLON .)
+
+
+state 134
+
+    (59) posibleID -> ID OCORCH expresion COMA expresion CCORCH .
+
+    OPMATRIZ        reduce using rule 59 (posibleID -> ID OCORCH expresion COMA expresion CCORCH .)
+    PLUS            reduce using rule 59 (posibleID -> ID OCORCH expresion COMA expresion CCORCH .)
+    MINUS           reduce using rule 59 (posibleID -> ID OCORCH expresion COMA expresion CCORCH .)
+    MULTIPLY        reduce using rule 59 (posibleID -> ID OCORCH expresion COMA expresion CCORCH .)
+    DIVIDE          reduce using rule 59 (posibleID -> ID OCORCH expresion COMA expresion CCORCH .)
+    CPAREN          reduce using rule 59 (posibleID -> ID OCORCH expresion COMA expresion CCORCH .)
+    LOGIC           reduce using rule 59 (posibleID -> ID OCORCH expresion COMA expresion CCORCH .)
+    RELOP           reduce using rule 59 (posibleID -> ID OCORCH expresion COMA expresion CCORCH .)
+    SEMICOLON       reduce using rule 59 (posibleID -> ID OCORCH expresion COMA expresion CCORCH .)
+    COMA            reduce using rule 59 (posibleID -> ID OCORCH expresion COMA expresion CCORCH .)
+    ASSIGN          reduce using rule 59 (posibleID -> ID OCORCH expresion COMA expresion CCORCH .)
+    CCORCH          reduce using rule 59 (posibleID -> ID OCORCH expresion COMA expresion CCORCH .)
+    HASTA           reduce using rule 59 (posibleID -> ID OCORCH expresion COMA expresion CCORCH .)
+    HAZ             reduce using rule 59 (posibleID -> ID OCORCH expresion COMA expresion CCORCH .)
+
+
+state 135
+
+    (51) termino -> termino1 OPMATRIZ .
+
+    PLUS            reduce using rule 51 (termino -> termino1 OPMATRIZ .)
+    MINUS           reduce using rule 51 (termino -> termino1 OPMATRIZ .)
+    MULTIPLY        reduce using rule 51 (termino -> termino1 OPMATRIZ .)
+    DIVIDE          reduce using rule 51 (termino -> termino1 OPMATRIZ .)
+    CCORCH          reduce using rule 51 (termino -> termino1 OPMATRIZ .)
+    COMA            reduce using rule 51 (termino -> termino1 OPMATRIZ .)
+    LOGIC           reduce using rule 51 (termino -> termino1 OPMATRIZ .)
+    RELOP           reduce using rule 51 (termino -> termino1 OPMATRIZ .)
+    SEMICOLON       reduce using rule 51 (termino -> termino1 OPMATRIZ .)
+    HASTA           reduce using rule 51 (termino -> termino1 OPMATRIZ .)
+    CPAREN          reduce using rule 51 (termino -> termino1 OPMATRIZ .)
+    HAZ             reduce using rule 51 (termino -> termino1 OPMATRIZ .)
+
+
+state 136
+
+    (61) estatutoRepeticionIncondicional -> DESDE ID ASSIGN expresion HASTA expresion HAZ . OBRACKET estatutos CBRACKET
+
+    OBRACKET        shift and go to state 137
+
+
+state 137
+
+    (61) estatutoRepeticionIncondicional -> DESDE ID ASSIGN expresion HASTA expresion HAZ OBRACKET . estatutos CBRACKET
+    (35) estatutos -> . empty
+    (36) estatutos -> . declaracion estatutos
+    (37) estatutos -> . estatutoRepeticionIncondicional estatutos
+    (38) estatutos -> . lectura estatutos
+    (62) empty -> .
+    (7) declaracion -> . VAR INT COLON declaracion2
+    (8) declaracion -> . VAR FLOAT COLON declaracion2
+    (9) declaracion -> . VAR CHAR COLON declaracion2
+    (61) estatutoRepeticionIncondicional -> . DESDE ID ASSIGN expresion HASTA expresion HAZ OBRACKET estatutos CBRACKET
+    (39) lectura -> . LEE OPAREN posibleID lectura2 CPAREN SEMICOLON
+
+    CBRACKET        reduce using rule 62 (empty -> .)
+    VAR             shift and go to state 34
+    DESDE           shift and go to state 60
+    LEE             shift and go to state 62
+
+    declaracion                    shift and go to state 61
+    empty                          shift and go to state 57
+    lectura                        shift and go to state 63
+    estatutos                      shift and go to state 138
+    estatutoRepeticionIncondicional shift and go to state 59
+
+state 138
+
+    (61) estatutoRepeticionIncondicional -> DESDE ID ASSIGN expresion HASTA expresion HAZ OBRACKET estatutos . CBRACKET
+
+    CBRACKET        shift and go to state 139
+
+
+state 139
+
+    (61) estatutoRepeticionIncondicional -> DESDE ID ASSIGN expresion HASTA expresion HAZ OBRACKET estatutos CBRACKET .
+
+    VAR             reduce using rule 61 (estatutoRepeticionIncondicional -> DESDE ID ASSIGN expresion HASTA expresion HAZ OBRACKET estatutos CBRACKET .)
+    DESDE           reduce using rule 61 (estatutoRepeticionIncondicional -> DESDE ID ASSIGN expresion HASTA expresion HAZ OBRACKET estatutos CBRACKET .)
+    LEE             reduce using rule 61 (estatutoRepeticionIncondicional -> DESDE ID ASSIGN expresion HASTA expresion HAZ OBRACKET estatutos CBRACKET .)
+    CBRACKET        reduce using rule 61 (estatutoRepeticionIncondicional -> DESDE ID ASSIGN expresion HASTA expresion HAZ OBRACKET estatutos CBRACKET .)
 
 WARNING: 
 WARNING: Conflicts:
 WARNING: 
-WARNING: shift/reduce conflict for LOGIC in state 100 resolved as shift
-WARNING: shift/reduce conflict for RELOP in state 100 resolved as shift
-WARNING: shift/reduce conflict for LOGIC in state 102 resolved as shift
-WARNING: shift/reduce conflict for RELOP in state 102 resolved as shift
-WARNING: reduce/reduce conflict in state 88 resolved using rule (expresion -> termino1 OPMATRIZ)
-WARNING: rejected rule (termino -> termino1 OPMATRIZ) in state 88
+WARNING: shift/reduce conflict for LOGIC in state 121 resolved as shift
+WARNING: shift/reduce conflict for RELOP in state 121 resolved as shift
+WARNING: shift/reduce conflict for LOGIC in state 123 resolved as shift
+WARNING: shift/reduce conflict for RELOP in state 123 resolved as shift
+WARNING: reduce/reduce conflict in state 114 resolved using rule (expresion -> termino1 OPMATRIZ)
+WARNING: rejected rule (termino -> termino1 OPMATRIZ) in state 114
