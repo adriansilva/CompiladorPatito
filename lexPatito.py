@@ -27,9 +27,9 @@ tokens = [
     'VAR',
     'LEE',
     'ESCRIBE',
+    'SINO',
     'SI',
     'ENTONCES',
-    'SINO',
     'MIENTRAS',
     'HAZ',
     'DESDE',
@@ -238,6 +238,11 @@ def t_ESCRIBE(t):
     t.type = 'ESCRIBE'
     return t
 
+def t_SINO(t):
+    r'SINO'
+    t.type = 'SINO'
+    return t
+
 def t_SI(t):
     r'SI'
     t.type = 'SI'
@@ -246,11 +251,6 @@ def t_SI(t):
 def t_ENTONCES(t):
     r'ENTONCES'
     t.type = 'ENTONCES'
-    return t
-
-def t_SINO(t):
-    r'SINO'
-    t.type = 'SINO'
     return t
 
 def t_MIENTRAS(t):

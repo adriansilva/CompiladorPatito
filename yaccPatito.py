@@ -157,8 +157,52 @@ def p_estatutos_2(p):
     estatutos : declaracion estatutos
               | estatutoRepeticionIncondicional estatutos
               | lectura estatutos
+              | llamadaFuncion estatutos
+              | asignacion estatutos
+              | escritura estatutos
+              | decision estatutos
     '''
-    p[0] = None
+    p[0] = "llamando estatutos"
+
+def p_escritura(p):
+    '''
+    escritura : ESCRIBE OPAREN escritura2 CPAREN SEMICOLON
+    '''
+
+def p_escritura_2(p): ## TODO: FALTA Anadir <"> para poder hacer escritura
+    '''
+    escritura2 : empty
+    '''    
+
+def p_decision(p):
+    '''
+    decision : SI OPAREN expresion CPAREN ENTONCES OBRACKET estatutos CBRACKET decision2
+    '''
+    p[0] = "tomando decision"
+
+def p_decision_2(p):
+    '''
+    decision2 : SINO OBRACKET estatutos CBRACKET
+              | empty
+    '''
+
+def p_llamadaFuncion(p):
+    '''
+    llamadaFuncion : ID OPAREN primerParametro extraParametros CPAREN SEMICOLON
+    '''
+    p[0] = "llamando funcion"
+
+def p_primerParametro(p):
+    '''
+    primerParametro : expresion
+                    | empty
+    '''
+
+def p_extraParametros(p):
+    '''
+    extraParametros : COMA expresion extraParametros
+                    | empty
+    '''
 
 def p_lectura(p):
     '''
@@ -175,7 +219,7 @@ def p_lectura2_3(p):
     lectura2 : COMA posibleID lectura2
     '''
 
-def p_asignacion_4(p):
+def p_asignacion(p):
     '''
     asignacion : ID ASSIGN expresion SEMICOLON
     '''
@@ -298,7 +342,7 @@ def p_empty(p):
     empty :
     '''
 
-parser = yacc.yacc(start='declaracionFuncion')
+parser = yacc.yacc(start='decision')
 
 while True:
     try:
