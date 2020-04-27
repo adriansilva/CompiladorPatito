@@ -62,7 +62,9 @@ tokens = [
     'SEMICOLON',
     'OPMATRIZ',
     'COLON',
-    'COMA'
+    'COMA',
+    'QUOT',
+    'STRING'
 ]
 
 """
@@ -173,6 +175,16 @@ def t_CPAREN(t):
     t.type = 'CPAREN'
     return t
 
+def t_STRING(t):
+    r'\"((?!\").)*\"'
+    t.type = 'STRING'
+    return t
+
+def t_QUOT(t):
+    r'\"'
+    t.type = 'QUOT'
+    return t
+
 def t_FLOTANTE(t):
     r'\d+\.\d+'
     t.value = float(t.value)
@@ -279,7 +291,7 @@ def t_ID(t):
     return t
 
 def t_CARACTER(t):
-    r'[\w\W]'
+    r'(?!\").'
     t.type = 'CARACTER'
     return t
 
@@ -289,12 +301,11 @@ def t_error(t):
 
 lexer = lex.lex()
 
-'''
-lexer.input('VAR INT:')
+
+lexer.input('"ABC"')
 
 while True:
     tok = lexer.token()
     if not tok:
         break
     print(tok)
-'''

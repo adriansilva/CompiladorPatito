@@ -169,10 +169,27 @@ def p_escritura(p):
     escritura : ESCRIBE OPAREN escritura2 CPAREN SEMICOLON
     '''
 
-def p_escritura_2(p): ## TODO: FALTA Anadir <"> para poder hacer escritura
+def p_escritura2_1(p):
     '''
     escritura2 : empty
-    '''    
+    '''
+
+def p_escritura2_2(p):
+    '''
+    escritura2 : ID escritura3
+               | STRING escritura3
+    '''
+
+def p_escritura3_1(p):
+    '''
+    escritura3 : empty
+    '''
+
+def p_escritura3_3(p):
+    '''
+    escritura3 : COMA ID escritura3
+               | COMA STRING escritura3
+    '''
 
 def p_decision(p):
     '''
@@ -342,7 +359,7 @@ def p_empty(p):
     empty :
     '''
 
-parser = yacc.yacc(start='decision')
+parser = yacc.yacc(start='escritura')
 
 while True:
     try:
