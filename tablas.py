@@ -1,32 +1,30 @@
-"""
-class TablaFuncion:
-    self.nombre = None
-    self.tipo = None
-    self.tablaVariable = None
+class Funcion:
+    tipo = None
+    tablaVariable = {}
 
-    def __init__(self, nombre, tipo):
-        self.nombre = nombre
+    def __init__(self, tipo):
         self.tipo = tipo
 
+class Variable:
+    tipo = None
+    dirAlmacenamiento = None
 
-
-class TablaVariable:
-    self.nombre = None
-    self.tipo = None
-    self.dirAlmacenamiento = None
-
-    def __init__(self, nombre, tipo, dirAlmacenamiento):
-        self.nombre = nombre
+    def __init__(self, tipo, dirAlmacenamiento):
         self.tipo = tipo
         self.dirAlmacenamiento = dirAlmacenamiento
-"""
-import pandas as pd
 
 class ManejadorDeTablas:
-    base_dataframe_variables = [['Nombre','Valor']]
-    df_variables = pd.DataFrame(base_dataframe_variables)
-    base_dataframe_funciones = [['Nombre','Tabla de Variables'],['PROGRAMA',df_variables]]
-    self.tablaFunciones = pd.DataFrame(base_dataframe_funciones)
-    def __init__(self):
-        self.nombre = nombre
-        self.tipo = tipo
+    tablaFunciones = {}
+
+    def addFuncion(self, nombreFuncion, tipoFuncion):
+        f = Funcion(tipoFuncion)
+        self.tablaFunciones[nombreFuncion] = f
+        print(self.tablaFunciones)
+
+    def addVariable(self, nombreFuncion, nombreVariable, tipoVariable, dirAlmacenamiento):
+        v = Variable(tipoVariable, dirAlmacenamiento)
+        self.tablaFunciones[nombreFuncion].tablaVariable[nombreVariable] = v
+        print(self.tablaFunciones[nombreFuncion].tablaVariable)
+
+    def contieneID(self, nombreFuncion, nombreVariable):
+        return nombreVariable in self.tablaFunciones[nombreFuncion].tablaVariable

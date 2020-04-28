@@ -13,8 +13,13 @@ nombre de la regla u omite este campo.
 """
 import ply.yacc as yacc
 import sys
+import tablas
 
 from lexPatito import tokens
+
+mt = tablas.ManejadorDeTablas()
+
+funcionActual = 'PROGRAMA'
 
 precedence = (
     ('left','PLUS','MINUS'),
@@ -27,6 +32,8 @@ def p_programa(p):
     programa : PROGRAMA ID SEMICOLON programa2
     '''
     p[0] = p[1]
+    global funcionActual
+    funcionActual = 'PROGRAMA'
 
 def p_programa2(p):
     '''
@@ -323,7 +330,7 @@ def p_termino1_1(p):
 
 def p_posibleID_1(p):
     '''
-    posibleID : ID
+    posibleID : ID np_ID
     '''
     p[0] = p[1]
 
@@ -335,9 +342,10 @@ def p_posibleID_4(p):
 
 def p_posibleID_6(p):
     '''
-    posibleID : ID OCORCH expresion COMA expresion CCORCH
+    posibleID : ID np_ID OCORCH expresion COMA expresion CCORCH
     '''
     p[0] = (p[1],'[',p[3],',',p[5],']')
+
 
 def p_termino1_3(p):
     '''
@@ -354,12 +362,23 @@ def p_estatutoRepeticionIncondicional(p):
 def p_error(p):
     print("Something's wrong baby :(")
 
+def p_np_ID(p):
+    '''
+    np_ID :
+    '''
+    mt.addFuncion('PROGRAMA','VOID')
+    if(not mt.contieneID(funcionActual,p[-1])):
+        mt.addVariable(funcionActual,p[-1],'INT',900)
+        print("No existe la variable.")
+    else:
+        print("All good baby!")
+
 def p_empty(p):
     '''
     empty :
     '''
 
-parser = yacc.yacc(start='escritura')
+parser = yacc.yacc(start='posibleID')
 
 while True:
     try:
@@ -367,5 +386,6 @@ while True:
     except EOFError:
         break
     if not s: continue
+
     result = parser.parse(s)
     print(result)
