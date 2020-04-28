@@ -157,12 +157,14 @@ def p_declaracionFuncionVariables(p):
 def p_estatutos_1(p):
     '''
     estatutos : empty
+              | return
     '''
 
 def p_estatutos_2(p):
     '''
     estatutos : declaracion estatutos
               | estatutoRepeticionIncondicional estatutos
+              | estatutoRepeticionCondicional estatutos
               | lectura estatutos
               | llamadaFuncion estatutos
               | asignacion estatutos
@@ -359,6 +361,12 @@ def p_estatutoRepeticionIncondicional(p):
     estatutoRepeticionIncondicional : DESDE ID ASSIGN expresion HASTA expresion HAZ OBRACKET estatutos CBRACKET
     '''
 
+def p_estatutoRepeticionCondicional(p):
+    '''
+    estatutoRepeticionCondicional : MIENTRAS OPAREN expresion CPAREN HAZ OBRACKET estatutos CBRACKET
+    '''
+    print("Que hay de nuevo viejo")
+
 def p_error(p):
     print("Something's wrong baby :(")
 
@@ -366,6 +374,7 @@ def p_np_ID(p):
     '''
     np_ID :
     '''
+
     mt.addFuncion('PROGRAMA','VOID')
     if(not mt.contieneID(funcionActual,p[-1])):
         mt.addVariable(funcionActual,p[-1],'INT',900)
@@ -373,12 +382,13 @@ def p_np_ID(p):
     else:
         print("All good baby!")
 
+
 def p_empty(p):
     '''
     empty :
     '''
 
-parser = yacc.yacc(start='posibleID')
+parser = yacc.yacc(start='estatutoRepeticionCondicional')
 
 while True:
     try:
