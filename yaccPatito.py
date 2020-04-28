@@ -367,6 +367,11 @@ def p_estatutoRepeticionCondicional(p):
     '''
     print("Que hay de nuevo viejo")
 
+def p_return(p):
+    '''
+    return : REGRESA expresion SEMICOLON
+    '''
+
 def p_error(p):
     print("Something's wrong baby :(")
 

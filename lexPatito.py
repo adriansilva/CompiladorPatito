@@ -45,7 +45,6 @@ tokens = [
     'NEWLINE',
     'COMENTARIO',
     'IGNORE',
-    'NUMBER',
     'PLUS',
     'MINUS',
     'MULTIPLY',
