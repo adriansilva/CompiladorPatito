@@ -13,9 +13,6 @@ Si puedes dale una repasada a todo lo que codié del YACC y fijate si puedes arr
 el bug. Nuevamente el bug es que las variables P tienen valores en [0] y [1] como None.
 """
 
-
-
-
 import ply.lex as lex
 import sys
 
@@ -301,7 +298,10 @@ def t_error(t):
 lexer = lex.lex()
 
 
-lexer.input('"ABC"')
+lexer.input('''
+A=B;
+C=D;
+''')
 
 while True:
     tok = lexer.token()

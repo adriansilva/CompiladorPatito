@@ -34,6 +34,8 @@ def p_programa(p):
     p[0] = p[1]
     global funcionActual
     funcionActual = 'PROGRAMA'
+    # agregar np_agregarFuncion
+
 
 def p_programa2(p):
     '''
@@ -55,6 +57,7 @@ def p_principal(p):
     principal : PRINCIPAL OPAREN CPAREN OBRACKET estatutos CBRACKET
     '''
     p[0] = p[1]
+    # agregar np_agregarFuncion
 
 def p_declaracion(p):
     '''
@@ -63,13 +66,17 @@ def p_declaracion(p):
                 | VAR CHAR COLON declaracion2
     '''
     p[0] = p[1]
+    # agregar np_tipoDeVariable
+    #
+    # def np_tipoDeVariable(p):
+    # np_tipoDeVariable :
+    # global tipoDeVariable = p[-1]
 
 def p_declaracion2_1(p):
     '''
     declaracion2 : SEMICOLON
     '''
     p[0] = p[1]
-
 def p_declaracion2_2(p):
     '''
     declaracion2 : posibleID declaracion3
@@ -108,19 +115,13 @@ def p_declaracionFuncion(p):
                        | FUNCION CHAR ID OPAREN declaracionFuncionParametros CPAREN declaracionFuncionVariables OBRACKET estatutos CBRACKET
     '''
     p[0] = "Successful Function Declaration"
-
+    # agregar np_tipoDeFuncion (es necesario?)
+    # agregar np_agregarFuncion
+    # agregar np_ borrar variables locales
 
 def p_declaracionFuncionParametros_1(p): #define argumentos
     '''
     declaracionFuncionParametros : empty
-    '''
-    p[0] = None
-
-def p_declaracionFuncionParametros_2(p): #define argumentos
-    '''
-    declaracionFuncionParametros : INT ID
-                                 | FLOAT ID
-                                 | CHAR ID
     '''
     p[0] = None
 
@@ -131,12 +132,11 @@ def p_declaracionFuncionParametros_3(p): #define argumentos
                                  | CHAR ID declaracionFuncionParametros2
     '''
     p[0] = None
+    #  agregar np_ID
 
-def p_declaracionFuncionParametros2_3(p): #define argumentos
+def p_declaracionFuncionParametros2_1(p): #define argumentos
     '''
-    declaracionFuncionParametros2 : COMA INT ID
-                                  | COMA FLOAT ID
-                                  | COMA CHAR ID
+    declaracionFuncionParametros2 : empty
     '''
     p[0] = None
 
@@ -147,6 +147,7 @@ def p_declaracionFuncionParametros2_4(p): #define argumentos
                                   | COMA CHAR ID declaracionFuncionParametros2
     '''
     p[0] = None
+    # agregar np_ID
 
 def p_declaracionFuncionVariables(p):
     '''
@@ -185,9 +186,10 @@ def p_escritura2_1(p):
 
 def p_escritura2_2(p):
     '''
-    escritura2 : ID escritura3
+    escritura2 : posibleID escritura3
                | STRING escritura3
     '''
+    # agregar np_agregarVariableConstante
 
 def p_escritura3_1(p):
     '''
@@ -196,15 +198,17 @@ def p_escritura3_1(p):
 
 def p_escritura3_3(p):
     '''
-    escritura3 : COMA ID escritura3
+    escritura3 : COMA posibleID escritura3
                | COMA STRING escritura3
     '''
+    # agregar np_agregarVariableConstante
 
 def p_decision(p):
     '''
     decision : SI OPAREN expresion CPAREN ENTONCES OBRACKET estatutos CBRACKET decision2
     '''
     p[0] = "tomando decision"
+    # agregar np_resultadoExpresion (es necesario?)
 
 def p_decision_2(p):
     '''
@@ -217,18 +221,24 @@ def p_llamadaFuncion(p):
     llamadaFuncion : ID OPAREN primerParametro extraParametros CPAREN SEMICOLON
     '''
     p[0] = "llamando funcion"
+# checar si ID existe en tabla funciones con np veda
+# considerar agregar la posibilidad de pasar segmentos de matrices o arreglos
 
 def p_primerParametro(p):
     '''
     primerParametro : expresion
                     | empty
     '''
+# revisar si ver tipo de expresion es cuadruplo o no
+# considerar agregar variable global (arreeglo) para tipos de parametros de funcion
 
 def p_extraParametros(p):
     '''
     extraParametros : COMA expresion extraParametros
                     | empty
     '''
+# revisar si ver tipo de expresion es cuadruplo o no
+# considerar agregar variable global (arreeglo) para tipos de parametros de funcion
 
 def p_lectura(p):
     '''
@@ -247,8 +257,9 @@ def p_lectura2_3(p):
 
 def p_asignacion(p):
     '''
-    asignacion : ID ASSIGN expresion SEMICOLON
+    asignacion : posibleID ASSIGN expresion SEMICOLON
     '''
+# checar si el np para ver si el resultado de la derecha es del mismo tipo que de la izq es cuadruplo o no
 
 def p_expresion_3(p):
     '''
@@ -329,6 +340,7 @@ def p_termino1_1(p):
              | CARACTER
     '''
     p[0] = p[1]
+    # agregar np_agregarVariableConstante
 
 def p_posibleID_1(p):
     '''
@@ -341,13 +353,14 @@ def p_posibleID_4(p):
     posibleID : ID OCORCH expresion CCORCH
     '''
     p[0] = (p[1],'[',p[3],']')
+    # agregar np_ID
 
 def p_posibleID_6(p):
     '''
     posibleID : ID np_ID OCORCH expresion COMA expresion CCORCH
     '''
     p[0] = (p[1],'[',p[3],',',p[5],']')
-
+    # agregar np_ID
 
 def p_termino1_3(p):
     '''
@@ -360,6 +373,7 @@ def p_estatutoRepeticionIncondicional(p):
     '''
     estatutoRepeticionIncondicional : DESDE ID ASSIGN expresion HASTA expresion HAZ OBRACKET estatutos CBRACKET
     '''
+    # agregar np_ID
 
 def p_estatutoRepeticionCondicional(p):
     '''
@@ -386,15 +400,34 @@ def p_np_ID(p):
         print("No existe la variable.")
     else:
         print("All good baby!")
-
-
+# Necesitamos dos tipos de np_ID: 1. Necesita accesar a variable global tipo.
+#                                 2. No necesita accesar a variable global tipo
+# Necesitamos dos tipos de np_funcion: 1. Necesita accesar a variable global tipoFuncion
+#                                      2. Puede accesar a la p para conseguir información
 def p_empty(p):
     '''
     empty :
     '''
 
-parser = yacc.yacc(start='estatutoRepeticionCondicional')
+parser = yacc.yacc(start='declaracionFuncion')
 
+
+s=''
+
+while True:
+    try:
+        s += input('')
+    except EOFError:
+        break
+    if not s: continue
+    if s[len(s)-1] == '°':
+        break
+
+print(s)
+result = parser.parse(s[0:-1])
+print(result)
+
+'''
 while True:
     try:
         s = input('')
@@ -404,3 +437,4 @@ while True:
 
     result = parser.parse(s)
     print(result)
+'''
