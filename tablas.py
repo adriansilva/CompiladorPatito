@@ -21,6 +21,10 @@ class ManejadorDeTablas:
         self.tablaFunciones[nombreFuncion] = f
         #print(self.tablaFunciones)
 
+    def deleteFuncion(self, nombreFuncion):
+        self.tablaFunciones[nombreFuncion] = None
+        #print(self.tablaFunciones)
+
     def addVariable(self, nombreFuncion, nombreVariable, tipoVariable, dirAlmacenamiento):
         v = Variable(tipoVariable, dirAlmacenamiento)
         self.tablaFunciones[nombreFuncion].tablaVariable[nombreVariable] = v

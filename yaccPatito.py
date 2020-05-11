@@ -20,6 +20,7 @@ from lexPatito import tokens
 mt = tablas.ManejadorDeTablas()
 
 funcionActual = 'PROGRAMA'
+mt.addFuncion(funcionActual,'VOID')
 
 precedence = (
     ('left','PLUS','MINUS'),
@@ -109,12 +110,13 @@ def p_declaracion3_4(p):
 
 def p_declaracionFuncion(p):
     '''
-    declaracionFuncion : FUNCION VOID ID OPAREN declaracionFuncionParametros CPAREN declaracionFuncionVariables OBRACKET estatutos CBRACKET
-                       | FUNCION INT ID OPAREN declaracionFuncionParametros CPAREN declaracionFuncionVariables OBRACKET estatutos CBRACKET
-                       | FUNCION FLOAT ID OPAREN declaracionFuncionParametros CPAREN declaracionFuncionVariables OBRACKET estatutos CBRACKET
-                       | FUNCION CHAR ID OPAREN declaracionFuncionParametros CPAREN declaracionFuncionVariables OBRACKET estatutos CBRACKET
+    declaracionFuncion : FUNCION VOID ID npdeclfunc OPAREN declaracionFuncionParametros CPAREN declaracionFuncionVariables OBRACKET estatutos CBRACKET
+                       | FUNCION INT ID npdeclfunc OPAREN declaracionFuncionParametros CPAREN declaracionFuncionVariables OBRACKET estatutos CBRACKET
+                       | FUNCION FLOAT ID npdeclfunc OPAREN declaracionFuncionParametros CPAREN declaracionFuncionVariables OBRACKET estatutos CBRACKET
+                       | FUNCION CHAR ID npdeclfunc OPAREN declaracionFuncionParametros CPAREN declaracionFuncionVariables OBRACKET estatutos CBRACKET
     '''
     p[0] = "Successful Function Declaration"
+    mt.deleteFuncion(p[3])
     # agregar np_tipoDeFuncion (es necesario?)
     # agregar np_agregarFuncion
     # agregar np_ borrar variables locales
@@ -154,6 +156,13 @@ def p_declaracionFuncionVariables(p):
     declaracionFuncionVariables : empty
                                 | declaracion
     '''
+
+def p_npdeclfunc(p):
+    '''
+    npdeclfunc:
+    '''
+    funcionActual = p[-1]
+    mt.addFuncion(p[-1], p[-2])
 
 def p_estatutos_1(p):
     '''
@@ -394,16 +403,20 @@ def p_np_ID(p):
     np_ID :
     '''
 
-    mt.addFuncion('PROGRAMA','VOID')
-    if(not mt.contieneID(funcionActual,p[-1])):
-        mt.addVariable(funcionActual,p[-1],'INT',900)
-        print("No existe la variable.")
-    else:
-        print("All good baby!")
+    #ejemplo de codigo:
+    #if(not mt.contieneID(funcionActual,p[-1])):
+    #    mt.addVariable(funcionActual,p[-1],'INT',900)
+    #    print("No existe la variable.")
+    #else:
+    #    print("All good baby!")
+
+    
 # Necesitamos dos tipos de np_ID: 1. Necesita accesar a variable global tipo.
 #                                 2. No necesita accesar a variable global tipo
 # Necesitamos dos tipos de np_funcion: 1. Necesita accesar a variable global tipoFuncion
 #                                      2. Puede accesar a la p para conseguir información
+
+
 def p_empty(p):
     '''
     empty :
