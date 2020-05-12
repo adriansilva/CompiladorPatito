@@ -176,12 +176,16 @@ def p_estatutos_2(p):
               | estatutoRepeticionIncondicional estatutos
               | estatutoRepeticionCondicional estatutos
               | lectura estatutos
-              | llamadaFuncion estatutos
               | asignacion estatutos
               | escritura estatutos
               | decision estatutos
     '''
     p[0] = "llamando estatutos"
+
+def p_estatutos_3(p):
+    '''
+    estatutos : llamadaFuncion SEMICOLON estatutos
+    '''
 
 def p_escritura(p):
     '''
@@ -207,7 +211,7 @@ def p_escritura3_1(p):
 
 def p_escritura3_3(p):
     '''
-    escritura3 : COMA posibleID escritura3
+    escritura3 : COMA expresion escritura3
                | COMA STRING escritura3
     '''
     # agregar np_agregarVariableConstante
@@ -227,7 +231,7 @@ def p_decision_2(p):
 
 def p_llamadaFuncion(p):
     '''
-    llamadaFuncion : ID OPAREN primerParametro extraParametros CPAREN SEMICOLON
+    llamadaFuncion : ID OPAREN primerParametro extraParametros CPAREN 
     '''
     p[0] = "llamando funcion"
 # checar si ID existe en tabla funciones con np veda
@@ -346,7 +350,7 @@ def p_termino1_1(p):
     termino1 : posibleID
              | ENTERO
              | FLOTANTE
-             | CARACTER
+             | llamadaFuncion
     '''
     p[0] = p[1]
     # agregar np_agregarVariableConstante
@@ -377,6 +381,7 @@ def p_posibleID_6(p):
 def p_termino1_3(p):
     '''
     termino1 : OPAREN expresion CPAREN
+             | QUOT CARACTER QUOT
     '''
     p[0] = (p[1],p[2],p[3])
 
@@ -420,7 +425,7 @@ def p_empty(p):
     empty :
     '''
 
-parser = yacc.yacc(start='')
+parser = yacc.yacc(start='expresion')
 
 
 s=''
