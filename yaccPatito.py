@@ -18,8 +18,9 @@ import tablas
 from lexPatito import tokens
 
 mt = tablas.ManejadorDeTablas()
-
+tipoVariable = None
 funcionActual = 'PROGRAMA'
+
 mt.addFuncion(funcionActual,'VOID')
 
 precedence = (
@@ -33,9 +34,6 @@ def p_programa(p):
     programa : PROGRAMA ID SEMICOLON programa2
     '''
     p[0] = p[1]
-    global funcionActual
-    funcionActual = 'PROGRAMA'
-    # agregar np_agregarFuncion
 
 
 def p_programa2(p):
@@ -55,16 +53,19 @@ def p_programa3(p):
 
 def p_principal(p):
     '''
-    principal : PRINCIPAL OPAREN CPAREN OBRACKET estatutos CBRACKET
+    principal : PRINCIPAL npdeclfunc OPAREN CPAREN OBRACKET estatutos CBRACKET
     '''
     p[0] = p[1]
+    mt.deleteFuncion(funcionActual)
+    funcionActual = "PROGRAMA"
+    mt.deleteFuncion(funcionActual)
     # agregar np_agregarFuncion
 
 def p_declaracion(p):
     '''
-    declaracion : VAR INT COLON declaracion2
-                | VAR FLOAT COLON declaracion2
-                | VAR CHAR COLON declaracion2
+    declaracion : VAR INT defineTipo COLON declaracion2
+                | VAR FLOAT defineTipo COLON declaracion2
+                | VAR CHAR defineTipo COLON declaracion2
     '''
     p[0] = p[1]
     # agregar np_tipoDeVariable
@@ -73,40 +74,29 @@ def p_declaracion(p):
     # np_tipoDeVariable :
     # global tipoDeVariable = p[-1]
 
-def p_declaracion2_1(p):
+def p_defineTipo(p):
     '''
-    declaracion2 : SEMICOLON
+    defineTipo : 
     '''
-    p[0] = p[1]
-def p_declaracion2_2(p):
+    tipoVariable = p[-1]
+
+
+def p_declaracion2(p):
     '''
     declaracion2 : posibleID declaracion3
     '''
+    mt.addVariable(funcionActual, p[1], tipoVariable, 5000) #direccion esta hardcodeada por ahora
     p[0] = p[1]
 
 def p_declaracion3_1(p):
     '''
     declaracion3 : SEMICOLON
+                 | COMA declaracion2
+                 | ASSIGN expresion SEMICOLON
+                 | ASSIGN expresion COMA declaracion2
     '''
     p[0] = p[1]
 
-def p_declaracion3_2(p):
-    '''
-    declaracion3 : COMA declaracion2
-    '''
-    p[0] = p[1]
-
-def p_declaracion3_3(p):
-    '''
-    declaracion3 : ASSIGN expresion SEMICOLON
-    '''
-    p[0] = p[1]
-
-def p_declaracion3_4(p):
-    '''
-    declaracion3 : ASSIGN expresion COMA declaracion2
-    '''
-    p[0] = p[1]
 
 def p_declaracionFuncion(p):
     '''
@@ -117,6 +107,8 @@ def p_declaracionFuncion(p):
     '''
     p[0] = "Successful Function Declaration"
     mt.deleteFuncion(p[3])
+    funcionActual = "PROGRAMA"
+
     # agregar np_tipoDeFuncion (es necesario?)
     # agregar np_agregarFuncion
     # agregar np_ borrar variables locales
@@ -133,8 +125,10 @@ def p_declaracionFuncionParametros_3(p): #define argumentos
                                  | FLOAT ID declaracionFuncionParametros2
                                  | CHAR ID declaracionFuncionParametros2
     '''
+
+    mt.addVariable(funcionActual, p[2], p[1], 5000) #direccion esta hardcodeada por ahora
+
     p[0] = None
-    #  agregar np_ID
 
 def p_declaracionFuncionParametros2_1(p): #define argumentos
     '''
@@ -148,8 +142,11 @@ def p_declaracionFuncionParametros2_4(p): #define argumentos
                                   | COMA FLOAT ID declaracionFuncionParametros2
                                   | COMA CHAR ID declaracionFuncionParametros2
     '''
+
+    mt.addVariable(funcionActual, p[3], p[2], 5000) #direccion esta hardcodeada por ahora
+
     p[0] = None
-    # agregar np_ID
+
 
 def p_declaracionFuncionVariables(p):
     '''
@@ -159,7 +156,7 @@ def p_declaracionFuncionVariables(p):
 
 def p_npdeclfunc(p):
     '''
-    npdeclfunc:
+    npdeclfunc :
     '''
     funcionActual = p[-1]
     mt.addFuncion(p[-1], p[-2])
@@ -353,22 +350,25 @@ def p_termino1_1(p):
 
 def p_posibleID_1(p):
     '''
-    posibleID : ID np_ID
+    posibleID : ID
     '''
     p[0] = p[1]
+    # agregar npID
 
 def p_posibleID_4(p):
     '''
     posibleID : ID OCORCH expresion CCORCH
     '''
-    p[0] = (p[1],'[',p[3],']')
+    p[0] = p[1]
+    #p[0] = (p[1],'[',p[3],']')
     # agregar np_ID
 
 def p_posibleID_6(p):
     '''
-    posibleID : ID np_ID OCORCH expresion COMA expresion CCORCH
+    posibleID : ID OCORCH expresion COMA expresion CCORCH
     '''
-    p[0] = (p[1],'[',p[3],',',p[5],']')
+    p[0] = p[1]
+    #p[0] = (p[1],'[',p[3],',',p[5],']')
     # agregar np_ID
 
 def p_termino1_3(p):
@@ -403,14 +403,9 @@ def p_np_ID(p):
     np_ID :
     '''
 
-    #ejemplo de codigo:
-    #if(not mt.contieneID(funcionActual,p[-1])):
-    #    mt.addVariable(funcionActual,p[-1],'INT',900)
-    #    print("No existe la variable.")
-    #else:
-    #    print("All good baby!")
+    #mt.addVariable(funcionActual, p[-1], tipoVariable, 5000) #hardcodeado address por ahora
 
-    
+
 # Necesitamos dos tipos de np_ID: 1. Necesita accesar a variable global tipo.
 #                                 2. No necesita accesar a variable global tipo
 # Necesitamos dos tipos de np_funcion: 1. Necesita accesar a variable global tipoFuncion

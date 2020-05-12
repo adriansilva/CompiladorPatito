@@ -27,6 +27,11 @@ class ManejadorDeTablas:
 
     def addVariable(self, nombreFuncion, nombreVariable, tipoVariable, dirAlmacenamiento):
         v = Variable(tipoVariable, dirAlmacenamiento)
+        
+        if (nombreVariable) in tipoVariable:
+            print("Error, variable ya fue declarada")
+            exit(-1)
+
         self.tablaFunciones[nombreFuncion].tablaVariable[nombreVariable] = v
         #print(self.tablaFunciones[nombreFuncion].tablaVariable)
 
