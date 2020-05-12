@@ -55,10 +55,11 @@ def p_principal(p):
     '''
     principal : PRINCIPAL npdeclfunc OPAREN CPAREN OBRACKET estatutos CBRACKET
     '''
+    global funcionActual
     p[0] = p[1]
-    mt.deleteFuncion(funcionActual)
+    #mt.deleteFuncion(funcionActual)
     funcionActual = "PROGRAMA"
-    mt.deleteFuncion(funcionActual)
+    #mt.deleteFuncion(funcionActual)
     # agregar np_agregarFuncion
 
 def p_declaracion(p):
@@ -105,8 +106,9 @@ def p_declaracionFuncion(p):
                        | FUNCION FLOAT ID npdeclfunc OPAREN declaracionFuncionParametros CPAREN declaracionFuncionVariables OBRACKET estatutos CBRACKET
                        | FUNCION CHAR ID npdeclfunc OPAREN declaracionFuncionParametros CPAREN declaracionFuncionVariables OBRACKET estatutos CBRACKET
     '''
+    global funcionActual
     p[0] = "Successful Function Declaration"
-    mt.deleteFuncion(p[3])
+    #mt.deleteFuncion(p[3])
     funcionActual = "PROGRAMA"
 
     # agregar np_tipoDeFuncion (es necesario?)
@@ -125,7 +127,7 @@ def p_declaracionFuncionParametros_3(p): #define argumentos
                                  | FLOAT ID declaracionFuncionParametros2
                                  | CHAR ID declaracionFuncionParametros2
     '''
-
+    
     mt.addVariable(funcionActual, p[2], p[1], 5000) #direccion esta hardcodeada por ahora
 
     p[0] = None
@@ -158,6 +160,7 @@ def p_npdeclfunc(p):
     '''
     npdeclfunc :
     '''
+    global funcionActual
     funcionActual = p[-1]
     mt.addFuncion(p[-1], p[-2])
 
@@ -417,7 +420,7 @@ def p_empty(p):
     empty :
     '''
 
-parser = yacc.yacc(start='declaracionFuncion')
+parser = yacc.yacc(start='')
 
 
 s=''

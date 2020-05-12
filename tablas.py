@@ -1,9 +1,10 @@
 class Funcion:
     tipo = None
-    tablaVariable = {}
+    tablaVariable = None
 
     def __init__(self, tipo):
         self.tipo = tipo
+        self.tablaVariable = {}
 
 class Variable:
     tipo = None
@@ -18,6 +19,11 @@ class ManejadorDeTablas:
 
     def addFuncion(self, nombreFuncion, tipoFuncion):
         f = Funcion(tipoFuncion)
+
+        if nombreFuncion in self.tablaFunciones:
+            print("Error, la funcion", nombreFuncion, "ya fue declarada\n")
+            exit(-1)
+
         self.tablaFunciones[nombreFuncion] = f
         #print(self.tablaFunciones)
 
@@ -28,8 +34,9 @@ class ManejadorDeTablas:
     def addVariable(self, nombreFuncion, nombreVariable, tipoVariable, dirAlmacenamiento):
         v = Variable(tipoVariable, dirAlmacenamiento)
         
-        if (nombreVariable) in tipoVariable:
-            print("Error, variable ya fue declarada")
+        #print("agregando variable", nombreVariable, "a", nombreFuncion)
+        if nombreVariable in self.tablaFunciones[nombreFuncion].tablaVariable:
+            print("Error, variable ya fue declarada\n", nombreVariable, nombreFuncion)
             exit(-1)
 
         self.tablaFunciones[nombreFuncion].tablaVariable[nombreVariable] = v
