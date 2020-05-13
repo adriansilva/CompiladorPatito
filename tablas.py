@@ -1,10 +1,12 @@
 class Funcion:
     tipo = None
     tablaVariable = None
+    parametros = None
 
     def __init__(self, tipo):
         self.tipo = tipo
         self.tablaVariable = {}
+        self.parametros = ""
 
 class Variable:
     tipo = None
@@ -35,13 +37,23 @@ class ManejadorDeTablas:
         self.tablaFunciones[nombreFuncion] = None
         #print(self.tablaFunciones)
 
-    def addVariable(self, nombreFuncion, nombreVariable, tipoVariable, dirAlmacenamiento):
+    def addVariable(self, nombreFuncion, nombreVariable, tipoVariable, dirAlmacenamiento, esParametro):
         v = Variable(tipoVariable, dirAlmacenamiento)
 
         #print("agregando variable", nombreVariable, "a", nombreFuncion)
         if nombreVariable in self.tablaFunciones[nombreFuncion].tablaVariable:
             print("Error, variable ya fue declarada\n", nombreVariable, nombreFuncion)
             exit(-1)
+
+        if esParametro:
+            if tipoVariable == INT:
+                self.tablaFunciones[nombreFuncion] += "i"
+            if tipoVariable == FLOAT:
+                self.tablaFunciones[nombreFuncion] += "f"
+            if tipoVariable == CHAR:
+                self.tablaFunciones[nombreFuncion] += "c"
+            if tipoVariable == BOOL:
+                self.tablaFunciones[nombreFuncion] += "b"
 
         self.tablaFunciones[nombreFuncion].tablaVariable[nombreVariable] = v
         #print(self.tablaFunciones[nombreFuncion].tablaVariable)
