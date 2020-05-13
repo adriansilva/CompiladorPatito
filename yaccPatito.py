@@ -86,7 +86,7 @@ def p_declaracion2(p):
     '''
     declaracion2 : posibleID declaracion3
     '''
-    mt.addVariable(funcionActual, p[1], tipoVariable, 5000) #direccion esta hardcodeada por ahora
+    mt.addVariable(funcionActual, p[1], tipoVariable, 5000, False) #direccion esta hardcodeada por ahora
     p[0] = p[1]
 
 def p_declaracion3_1(p):
@@ -128,7 +128,7 @@ def p_declaracionFuncionParametros_3(p): #define argumentos
                                  | CHAR ID declaracionFuncionParametros2
     '''
 
-    mt.addVariable(funcionActual, p[2], p[1], 5000) #direccion esta hardcodeada por ahora
+    mt.addVariable(funcionActual, p[2], p[1], 5000, True) #direccion esta hardcodeada por ahora
 
     p[0] = None
 
@@ -368,7 +368,7 @@ def p_posibleID_4(p):
     '''
     posibleID : ID OCORCH expresion CCORCH
     '''
-    
+
     if not mt.contieneID(funcionActual,p[1]):
         print("El ID:",p[1],"no existe.")
         exit(-1)
