@@ -77,7 +77,7 @@ def p_declaracion(p):
 
 def p_defineTipo(p):
     '''
-    defineTipo : 
+    defineTipo :
     '''
     tipoVariable = p[-1]
 
@@ -127,7 +127,7 @@ def p_declaracionFuncionParametros_3(p): #define argumentos
                                  | FLOAT ID declaracionFuncionParametros2
                                  | CHAR ID declaracionFuncionParametros2
     '''
-    
+
     mt.addVariable(funcionActual, p[2], p[1], 5000) #direccion esta hardcodeada por ahora
 
     p[0] = None
@@ -231,9 +231,11 @@ def p_decision_2(p):
 
 def p_llamadaFuncion(p):
     '''
-    llamadaFuncion : ID OPAREN primerParametro extraParametros CPAREN 
+    llamadaFuncion : ID OPAREN primerParametro extraParametros CPAREN
     '''
-    p[0] = "llamando funcion"
+    if not mt.existeFuncion(p[1]):
+        print("No existe la funcion:",p[1])
+        exit(-1)
 # checar si ID existe en tabla funciones con np veda
 # considerar agregar la posibilidad de pasar segmentos de matrices o arreglos
 
@@ -366,6 +368,11 @@ def p_posibleID_4(p):
     '''
     posibleID : ID OCORCH expresion CCORCH
     '''
+    
+    if not mt.contieneID(funcionActual,p[1]):
+        print("El ID:",p[1],"no existe.")
+        exit(-1)
+
     p[0] = p[1]
     #p[0] = (p[1],'[',p[3],']')
     # agregar np_ID
@@ -425,7 +432,7 @@ def p_empty(p):
     empty :
     '''
 
-parser = yacc.yacc(start='expresion')
+parser = yacc.yacc(start='posibleID')
 
 
 s=''
