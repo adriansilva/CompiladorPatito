@@ -296,15 +296,16 @@ def t_error(t):
     t.lexer.skip(1)
 
 lexer = lex.lex()
+'''
 
-
-lexer.input('''
+lexer.input(
 A=B;
 C=D;
-''')
+)
 
 while True:
     tok = lexer.token()
     if not tok:
         break
     print(tok)
+'''

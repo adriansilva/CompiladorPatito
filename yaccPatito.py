@@ -432,9 +432,12 @@ def p_empty(p):
     empty :
     '''
 
-parser = yacc.yacc(start='posibleID')
+parser = yacc.yacc(start='')
 
-
+f = open("testInput.txt", "r")
+result = parser.parse(f.read())
+print(result)
+'''
 s=''
 
 while True:
@@ -442,15 +445,16 @@ while True:
         s += input('')
     except EOFError:
         break
+    s+="\n"
     if not s: continue
-    if s[len(s)-1] == '°':
+    if s[len(s)-2] == '°':
         break
 
 print(s)
-result = parser.parse(s[0:-1])
+result = parser.parse(s[0:-2])
 print(result)
 
-'''
+
 while True:
     try:
         s = input('')
