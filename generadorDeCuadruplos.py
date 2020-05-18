@@ -66,6 +66,7 @@ class generadorDeCuadruplos:
         #Actualizas GOTOF del top de pila de migajas con línea actual
 
     def elseStatement():
+        #Se saca el resultado de A==B+C de las pilas
         operando = pilaOperandos.pop()
         pilaTipos.pop()
         pilaDimensiones.pop()
@@ -100,12 +101,14 @@ class generadorDeCuadruplos:
 
     def whileStatementInicia():
         operando = pilaOperandos.pop()
+        pilaTipos.pop()
+        pilaDimensiones.pop()
 
         if pilaTipos.pop() == 'BOOL' and pilaDimensiones.pop() == 0:
             pilaMigajas.append(len(outputCuadruplos))
             outputCuadruplos.append(('GOTOF',operando,None,None))
         else:
-            print("La expresion del if en el cuadruplo:", len(outputCuadruplos), "no tiene resultado boleano o es un valor único.")
+            print("La expresion del while en el cuadruplo:", len(outputCuadruplos), "no tiene resultado boleano o es un valor único.")
             exit(-1)
 
         #Agregas a pila de migajas línea actual (tamaño de outputCuadruplos)
@@ -120,6 +123,7 @@ class generadorDeCuadruplos:
         #Actualizas GOTOF que está en el top de las migajas con línea actual (tamaño de outputCuadruplos)
 
     def forStatementExpresion():
+        pilaSaltos.append(len(outputCuadruplos))
         #Guardar linea actual en pila de saltos
         #Te aseguras que el tipo de la expresion sea entero
         '''
@@ -135,9 +139,33 @@ class generadorDeCuadruplos:
         '''
 
     def forStatementInicia():
+        operando = pilaOperandos.pop()
+        pilaTipos.pop()
+        pilaDimensiones.pop()
+
+        if pilaTipos.pop() == 'INT' and pilaDimensiones.pop() == 0:
+            #Si la 'X' es mayor a tu expresion, ya terminaste el for. Es necesario convertir a boleano para usar el GOTOV
+            outputCuadruplos.append(('>',pilaOperandos[-1],operando,'Temporal_'+str(contadorTemporales)))
+
+            #Se necesita crear aquí la nueva variable temporal para que se utilice
+
+            pilaMigajas.append(len(outputCuadruplos))
+            outputCuadruplos.append(('GOTOV','Temporal_'+str(contadorTemporales),None,None))
+        else:
+            print("La expresion del for en el cuadruplo:", len(outputCuadruplos), "no tiene resultado entero o es un valor único.")
+            exit(-1)
         #Agregas a pila de migajas línea actual (tamaño de outputCuadruplos)
         #Generas cuadruplo GOTOF
 
     def forStatementTermina():
+        #Se saca la 'X' de las pilas
+        pilaOperandos.pop()
+        pilaTipos.pop()
+        pilaDimensiones.pop()
+
+        outputCuadruplos.append(('GOTO',None,None,pilaSaltos.pop()))
+
+        indiceCuadruploAModificar = pilaMigajas.pop()
+        outputCuadruplos[indiceCuadruploAModificar][3] = len(outputCuadruplos)
         #Generas cuadruplo GOTO hacia top de pila de pilaSaltos
         #Actualizar top de pila de migajas con línea actual
