@@ -71,3 +71,15 @@ class ManejadorDeTablas:
 
     def existeFuncion(self, nombreFuncion):
         return nombreFuncion in self.tablaFunciones
+    
+    def getTipoVariable(self, func, var):
+        return self.tablaFunciones[func].tablaVariable[var].tipo
+
+    def getDimensionesVariable(self, func, var):
+        if self.tablaFunciones[func].tablaVariable[var].dimY != 0:
+            return 2
+        
+        if self.tablaFunciones[func].tablaVariable[var].dimX != 0:
+            return 1
+        
+        return 0 #si no hay valores de la dimension X y Y, entonces no es arreglo ni matriz
