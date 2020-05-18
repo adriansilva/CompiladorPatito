@@ -15,17 +15,82 @@ class generadorDeCuadruplos:
         self.pilaDimensiones = []
         self.outputCuadruplos = []
 
-    def operador(self, o):
+    # TODO: FALTA agregar el tipo del temporal y sus dimensiones a las pilas respectivas
+    # TODO: FALTA hacer check que las operaciones entre variables sean validas
+    def operador(self, o): 
+
         if o in ['*','/']:
+
+             while self.pilaOperadores and self.pilaOperadores[-1] in ['*','/']: #mientras haya operadores de mayor o igual jerarquia, ejecutarlos.
+                self.outputCuadruplos.append((self.pilaOperadores[-1], self.pilaOperandos[-2], self.pilaOperandos[-1], 'Temporal_'+str(contadorTemporales)))
+                self.pilaOperadores.pop() #remueve operador 1
+                self.pilaOperandos.pop() #remueve operando 1
+                self.pilaOperandos.pop() #remueve operando 2
+                self.pilaOperandos.append('Temporal_'+str(contadorTemporales))
+                contadorTemporales = contadorTemporales + 1
+
             self.pilaOperadores.append(o)
+
         if o in ['+','-']:
+
+            while self.pilaOperadores and self.pilaOperadores[-1] in ['*','/', '+','-']: #mientras haya operadores de mayor o igual jerarquia, ejecutarlos.
+                self.outputCuadruplos.append((self.pilaOperadores[-1], self.pilaOperandos[-2], self.pilaOperandos[-1], 'Temporal_'+str(contadorTemporales)))
+                self.pilaOperadores.pop() #remueve operador 1
+                self.pilaOperandos.pop() #remueve operando 1
+                self.pilaOperandos.pop() #remueve operando 2
+                self.pilaOperandos.append('Temporal_'+str(contadorTemporales))
+                contadorTemporales = contadorTemporales + 1
+
             self.pilaOperadores.append(o)
-        if o in ['&&', '||']:
-            self.pilaOperadores.append(o)
+
         if o in ['<=','>=','<>','>','<','==']:
+
+            while self.pilaOperadores and self.pilaOperadores[-1] in ['*','/', '+','-', '<=','>=','<>','>','<','==']: #mientras haya operadores de mayor o igual jerarquia, ejecutarlos.
+                self.outputCuadruplos.append((self.pilaOperadores[-1], self.pilaOperandos[-2], self.pilaOperandos[-1], 'Temporal_'+str(contadorTemporales)))
+                self.pilaOperadores.pop() #remueve operador 1
+                self.pilaOperandos.pop() #remueve operando 1
+                self.pilaOperandos.pop() #remueve operando 2
+                self.pilaOperandos.append('Temporal_'+str(contadorTemporales))
+                contadorTemporales = contadorTemporales + 1
+            
             self.pilaOperadores.append(o)
+
+        if o in ['&&', '||']:
+            
+            while self.pilaOperadores and self.pilaOperadores[-1] in ['*','/', '+','-', '<=','>=','<>','>','<','==', '&&', '||']: #mientras haya operadores de mayor o igual jerarquia, ejecutarlos.
+                self.outputCuadruplos.append((self.pilaOperadores[-1], self.pilaOperandos[-2], self.pilaOperandos[-1], 'Temporal_'+str(contadorTemporales)))
+                self.pilaOperadores.pop() #remueve operador 1
+                self.pilaOperandos.pop() #remueve operando 1
+                self.pilaOperandos.pop() #remueve operando 2
+                self.pilaOperandos.append('Temporal_'+str(contadorTemporales))
+                contadorTemporales = contadorTemporales + 1
+
+            self.pilaOperadores.append(o)
+
+
         if o == '=':
+            
             self.pilaOperadores.append(o)
+            
+
+        if o == 'end':
+
+            while self.pilaOperadores:
+                
+                if self.pilaOperadores[-1] == '=': # si es = entonces asigna el valor mas reciente en la pila de operandos a la variable siguiente de la pila de operandos, no se borra este sigueinte valor por si hay otra asignacion e.j. a = b = 1 - 2; 
+                    self.outputCuadruplos.append((self.pilaOperadores[-1], self.pilaOperandos[-1], None, self.pilaOperandos[-2]))
+                    self.pilaOperadores.pop() #remueve operador 1
+                    self.pilaOperandos.pop() #remueve operando 1
+                else:
+                    self.outputCuadruplos.append((self.pilaOperadores[-1], self.pilaOperandos[-2], self.pilaOperandos[-1], 'Temporal_'+str(contadorTemporales)))
+                    self.pilaOperadores.pop() #remueve operador 1
+                    self.pilaOperandos.pop() #remueve operando 1
+                    self.pilaOperandos.pop() #remueve operando 2
+                    self.pilaOperandos.append('Temporal_'+str(contadorTemporales))
+                    contadorTemporales = contadorTemporales + 1
+            
+            if self.pilaOperandos: # vaciar la pila de operandos si queda un valor residual. Sirve para el caso de: a = b = 2 * 3;
+                self.pilaOperandos = []
 
         #Para cada operador, implementar lógica de pops y push
 
@@ -60,13 +125,14 @@ class generadorDeCuadruplos:
         }
         1. + B C T1
         2. == A T1 T2
-        3. GOTOF T2  7
+        3. GOTOF T2 8
         4. ...
         5. ...
         6. ...
-        7. GOTOV T2 9
+        7. GOTO   10
         8. ...
-        9. Termina else
+        9. Ultima instruccion del else
+        10. sigue codigo normal
         '''
 
     def terminaIfStatement(self):
