@@ -37,8 +37,8 @@ class ManejadorDeTablas:
         self.tablaFunciones[nombreFuncion] = None
         #print(self.tablaFunciones)
 
-    def addVariable(self, nombreFuncion, nombreVariable, tipoVariable, dirAlmacenamiento, esParametro):
-        v = Variable(tipoVariable, dirAlmacenamiento)
+    def addVariable(self, nombreFuncion, nombreVariable, tipoVariable, esParametro):
+        v = Variable(tipoVariable, 5000)
 
         #print("agregando variable", nombreVariable, "a", nombreFuncion)
         if nombreVariable in self.tablaFunciones[nombreFuncion].tablaVariable:
@@ -46,14 +46,14 @@ class ManejadorDeTablas:
             exit(-1)
 
         if esParametro:
-            if tipoVariable == INT:
-                self.tablaFunciones[nombreFuncion] += "i"
-            if tipoVariable == FLOAT:
-                self.tablaFunciones[nombreFuncion] += "f"
-            if tipoVariable == CHAR:
-                self.tablaFunciones[nombreFuncion] += "c"
-            if tipoVariable == BOOL:
-                self.tablaFunciones[nombreFuncion] += "b"
+            if tipoVariable == 'INT':
+                self.tablaFunciones[nombreFuncion].parametros += "i"
+            if tipoVariable == 'FLOAT':
+                self.tablaFunciones[nombreFuncion].parametros += "f"
+            if tipoVariable == 'CHAR':
+                self.tablaFunciones[nombreFuncion].parametros += "c"
+            if tipoVariable == 'BOOL':
+                self.tablaFunciones[nombreFuncion].parametros += "b"
 
         self.tablaFunciones[nombreFuncion].tablaVariable[nombreVariable] = v
         #print(self.tablaFunciones[nombreFuncion].tablaVariable)

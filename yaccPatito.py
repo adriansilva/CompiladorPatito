@@ -79,14 +79,15 @@ def p_defineTipo(p):
     '''
     defineTipo :
     '''
+    global tipoVariable
     tipoVariable = p[-1]
 
 
 def p_declaracion2(p):
     '''
-    declaracion2 : posibleID declaracion3
+    declaracion2 : posibleID np_addVariable declaracion3
     '''
-    mt.addVariable(funcionActual, p[1], tipoVariable, 5000, False) #direccion esta hardcodeada por ahora
+
     p[0] = p[1]
 
 def p_declaracion3_1(p):
@@ -123,12 +124,10 @@ def p_declaracionFuncionParametros_1(p): #define argumentos
 
 def p_declaracionFuncionParametros_3(p): #define argumentos
     '''
-    declaracionFuncionParametros : INT ID declaracionFuncionParametros2
-                                 | FLOAT ID declaracionFuncionParametros2
-                                 | CHAR ID declaracionFuncionParametros2
+    declaracionFuncionParametros : INT ID np_addVariableParametro declaracionFuncionParametros2
+                                 | FLOAT ID np_addVariableParametro declaracionFuncionParametros2
+                                 | CHAR ID np_addVariableParametro declaracionFuncionParametros2
     '''
-
-    mt.addVariable(funcionActual, p[2], p[1], 5000, True) #direccion esta hardcodeada por ahora
 
     p[0] = None
 
@@ -140,12 +139,10 @@ def p_declaracionFuncionParametros2_1(p): #define argumentos
 
 def p_declaracionFuncionParametros2_4(p): #define argumentos
     '''
-    declaracionFuncionParametros2 : COMA INT ID declaracionFuncionParametros2
-                                  | COMA FLOAT ID declaracionFuncionParametros2
-                                  | COMA CHAR ID declaracionFuncionParametros2
+    declaracionFuncionParametros2 : COMA INT ID np_addVariableParametro declaracionFuncionParametros2
+                                  | COMA FLOAT ID np_addVariableParametro declaracionFuncionParametros2
+                                  | COMA CHAR ID np_addVariableParametro declaracionFuncionParametros2
     '''
-
-    mt.addVariable(funcionActual, p[3], p[2], 5000) #direccion esta hardcodeada por ahora
 
     p[0] = None
 
@@ -349,7 +346,7 @@ def p_termino_1(p):
 
 def p_termino1_1(p):
     '''
-    termino1 : posibleID
+    termino1 : posibleID np_ID
              | ENTERO
              | FLOTANTE
              | llamadaFuncion
@@ -368,10 +365,6 @@ def p_posibleID_4(p):
     '''
     posibleID : ID OCORCH expresion CCORCH
     '''
-
-    if not mt.contieneID(funcionActual,p[1]):
-        print("El ID:",p[1],"no existe.")
-        exit(-1)
 
     p[0] = p[1]
     #p[0] = (p[1],'[',p[3],']')
@@ -395,7 +388,7 @@ def p_termino1_3(p):
 
 def p_estatutoRepeticionIncondicional(p):
     '''
-    estatutoRepeticionIncondicional : DESDE ID ASSIGN expresion HASTA expresion HAZ OBRACKET estatutos CBRACKET
+    estatutoRepeticionIncondicional : DESDE ID np_ID HASTA expresion HAZ OBRACKET estatutos CBRACKET
     '''
     # agregar np_ID
 
@@ -417,9 +410,22 @@ def p_np_ID(p):
     '''
     np_ID :
     '''
+    if not mt.contieneID(funcionActual,p[-1]):
+        print("El ID:",p[-1],"no existe en la funcion:", funcionActual)
+        exit(-1)
 
-    #mt.addVariable(funcionActual, p[-1], tipoVariable, 5000) #hardcodeado address por ahora
+def p_np_addVariableParametro(p):
+    '''
+    np_addVariableParametro :
+    '''
 
+    mt.addVariable(funcionActual, p[-1], p[-2], True) #direccion esta hardcodeada por ahora
+
+def p_np_addVariable(p):
+    '''
+    np_addVariable :
+    '''
+    mt.addVariable(funcionActual, p[-1], tipoVariable, False) #direccion esta hardcodeada por ahora
 
 # Necesitamos dos tipos de np_ID: 1. Necesita accesar a variable global tipo.
 #                                 2. No necesita accesar a variable global tipo
@@ -436,6 +442,7 @@ parser = yacc.yacc(start='')
 
 f = open("testInput.txt", "r")
 result = parser.parse(f.read())
+
 print(result)
 '''
 s=''

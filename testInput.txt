@@ -1,5 +1,12 @@
 PROGRAMA p;
+VAR INT: a, b[a], c[a,b];
+VAR FLOAT: d, e, f;
+
+FUNCION VOID f(INT a, CHAR j)
+VAR INT: h;
+{
+
+}
 
 PRINCIPAL(){
-
 }
