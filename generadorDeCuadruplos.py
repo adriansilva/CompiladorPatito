@@ -82,6 +82,7 @@ class generadorDeCuadruplos:
         #Actualizas GOTOV del top de pila de migajas con línea actual
 
     def whileStatementExpresion():
+        pilaSaltos.append(len(outputCuadruplos))
         #Guardar linea actual en pila de saltos
         '''
         MIENTRAS(A<=B+C)HAZ{
@@ -98,10 +99,23 @@ class generadorDeCuadruplos:
         '''
 
     def whileStatementInicia():
+        operando = pilaOperandos.pop()
+
+        if pilaTipos.pop() == 'BOOL' and pilaDimensiones.pop() == 0:
+            pilaMigajas.append(len(outputCuadruplos))
+            outputCuadruplos.append(('GOTOF',operando,None,None))
+        else:
+            print("La expresion del if en el cuadruplo:", len(outputCuadruplos), "no tiene resultado boleano o es un valor único.")
+            exit(-1)
+
         #Agregas a pila de migajas línea actual (tamaño de outputCuadruplos)
         #Generas cuadruplo GOTOF
 
     def whileStatementTermina():
+        outputCuadruplos.append(('GOTO',None,None,pilaSaltos.pop()))
+
+        indiceCuadruploAModificar = pilaMigajas.pop()
+        outputCuadruplos[indiceCuadruploAModificar][3] = len(outputCuadruplos)
         #Generas cuadruplo GOTO a top pila de saltos
         #Actualizas GOTOF que está en el top de las migajas con línea actual (tamaño de outputCuadruplos)
 
