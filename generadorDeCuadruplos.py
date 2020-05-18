@@ -29,6 +29,14 @@ class generadorDeCuadruplos:
         #Añadir a pila de dimensiones
 
     def ifStatement():
+        operando = pilaOperandos[-1]
+
+        if pilaTipos[-1] == 'BOOL' and pilaDimensiones[-1] == 0:
+            pilaMigajas.append(len(outputCuadruplos))
+            outputCuadruplos.append(('GOTOF',operando,None,None))
+        else:
+            print("La expresion del if en el cuadruplo:", len(outputCuadruplos), "no tiene resultado boleano o es un valor único.")
+            exit(-1)
         #Haces pop a pila de operandos
         #Te aseguras que el tipo sea
         #Meter línea actual a pila de migajas
@@ -51,14 +59,26 @@ class generadorDeCuadruplos:
         8. ...
         9. Termina else
         '''
+
+    def terminaIfStatement():
+        indiceCuadruploAModificar = pilaMigajas.pop()
+        outputCuadruplos[indiceCuadruploAModificar][3] = len(outputCuadruplos)
+        #Actualizas GOTOF del top de pila de migajas con línea actual
+
     def elseStatement():
+        operando = pilaOperandos.pop()
+        pilaTipos.pop()
+        pilaDimensiones.pop()
+
+        pilaMigajas.append(len(outputCuadruplos))
+        outputCuadruplos.append(('GOTOV',operando,None,None))
         #Meter línea actual a pila de migajas
         #Generas cuadruplo GOTOV
 
-    def terminaIfStatement():
-        #Actualizas GOTOF del top de pila de migajas con línea actual
 
     def terminaElseStatement():
+        indiceCuadruploAModificar = pilaMigajas.pop()
+        outputCuadruplos[indiceCuadruploAModificar][3] = len(outputCuadruplos)
         #Actualizas GOTOV del top de pila de migajas con línea actual
 
     def whileStatementExpresion():
