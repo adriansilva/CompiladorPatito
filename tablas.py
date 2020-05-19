@@ -10,15 +10,13 @@ class Funcion:
 
 class Variable:
     tipo = None
-    dimX = None
-    dimY = None
+    dimension = None
     dirAlmacenamiento = None
 
     def __init__(self, tipo, dirAlmacenamiento):
         self.tipo = tipo
         self.dirAlmacenamiento = dirAlmacenamiento
-        self.dimX = 0
-        self.dimY = 0
+        self.dimension = 0
 
 class ManejadorDeTablas:
     tablaFunciones = {}
@@ -58,12 +56,8 @@ class ManejadorDeTablas:
         self.tablaFunciones[nombreFuncion].tablaVariable[nombreVariable] = v
         #print(self.tablaFunciones[nombreFuncion].tablaVariable)
 
-    def actualizarDimensiones(self, nombreFuncion, nombreVariable, dimX):
-        self.tablaFunciones[nombreFuncion].tablaVariable[nombreVariable].dimX = dimX
-
-    def actualizarDimensiones(self, nombreFuncion, nombreVariable, dimX, dimY):
-        self.tablaFunciones[nombreFuncion].tablaVariable[nombreVariable].dimX = dimX
-        self.tablaFunciones[nombreFuncion].tablaVariable[nombreVariable].dimY = dimY
+    def actualizarDimensiones(self, nombreFuncion, nombreVariable, dimension):
+        self.tablaFunciones[nombreFuncion].tablaVariable[nombreVariable].dimension = dimension
 
     def contieneID(self, nombreFuncion, nombreVariable):
         return (nombreVariable in self.tablaFunciones[nombreFuncion].tablaVariable and
@@ -71,15 +65,9 @@ class ManejadorDeTablas:
 
     def existeFuncion(self, nombreFuncion):
         return nombreFuncion in self.tablaFunciones
-    
+
     def getTipoVariable(self, func, var):
         return self.tablaFunciones[func].tablaVariable[var].tipo
 
-    def getDimensionesVariable(self, func, var):
-        if self.tablaFunciones[func].tablaVariable[var].dimY != 0:
-            return 2
-        
-        if self.tablaFunciones[func].tablaVariable[var].dimX != 0:
-            return 1
-        
-        return 0 #si no hay valores de la dimension X y Y, entonces no es arreglo ni matriz
+    def getDimensionVariable(self, func, var):
+        return self.tablaFunciones[func].tablaVariable[var].dimension

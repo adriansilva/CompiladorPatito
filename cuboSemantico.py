@@ -124,5 +124,9 @@ def typeToInt(tipo):
 def cubo(tipo1, tipo2, operacion, dimension1, dimension2):
     tipoResultante = cuboTipos[typeToInt(operacion)][typeToInt(tipo1)][typeToInt(tipo2)]
     dimensionResultante = cuboDimensiones[typeToInt(operacion) if (operacion != '<>' and operacion != '==') else 6][dimension1][dimension2]
+    if dimensionResultante == -1:
+        print("Esta operación aritmética no es válida por discrepancias de dimensiones.")
+        exit(-1)
     print("tipo:",tipoResultante, " // dimension:",dimensionResultante)
+    return (tipoResultante,dimensionResultante)
     # if dimensiones == (0): regresas un

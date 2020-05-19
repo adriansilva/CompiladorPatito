@@ -1,3 +1,5 @@
+import cuboSemantico as cs
+
 class generadorDeCuadruplos:
     pilaSaltos = None
     pilaMigajas = None #Pila que almacena dirección de GOTOs pendientes
@@ -34,14 +36,21 @@ class generadorDeCuadruplos:
         if o in ['*','/']:
              while self.pilaOperadores and self.pilaOperadores[-1] in ['*','/']: #mientras haya operadores de mayor o igual jerarquia, ejecutarlos.
                 self.outputCuadruplos.append((self.pilaOperadores[-1], self.pilaOperandos[-2], self.pilaOperandos[-1], 'Temporal_'+str(contadorTemporales)))
+                resultado = cs.cubo(self.pilaTipos[-2],self.pilaTipos[-1],self.pilaOperadores[-1],self.pilaDimensiones[-2],self.pilaDimensiones[-1])
                 self.pilaOperadores.pop() #remueve operador 1
                 self.pilaOperandos.pop() #remueve operando 1
                 self.pilaOperandos.pop() #remueve operando 2
+                self.pilaTipos.pop() #remueve operando 2
+                self.pilaTipos.pop() #remueve operando 2
+                self.pilaDimensiones.pop()
+                self.pilaDimensiones.pop()
+
                 self.pilaOperandos.append('Temporal_'+str(contadorTemporales))
+                self.pilaTipos.append(resultado[0])
+                self.pilaDimensiones.append(resultado[1])
                 contadorTemporales = contadorTemporales + 1
 
             self.pilaOperadores.append(o)
-
         if o in ['+','-']:
 
             while self.pilaOperadores and self.pilaOperadores[-1] in ['*','/', '+','-']: #mientras haya operadores de mayor o igual jerarquia, ejecutarlos.

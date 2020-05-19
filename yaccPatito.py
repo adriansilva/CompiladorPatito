@@ -14,12 +14,15 @@ nombre de la regla u omite este campo.
 import ply.yacc as yacc
 import sys
 import tablas
+import generadorDeCuadruplos
 
 from lexPatito import tokens
 
+gc = generadorDeCuadruplos.generadorDeCuadruplos()
 mt = tablas.ManejadorDeTablas()
 tipoVariable = None
 funcionActual = 'PROGRAMA'
+currentDimension = 0
 
 mt.addFuncion(funcionActual,'VOID')
 
@@ -85,7 +88,7 @@ def p_defineTipo(p):
 
 def p_declaracion2(p):
     '''
-    declaracion2 : posibleID np_addVariable declaracion3
+    declaracion2 : posibleID np_addVariable np_actualizarDimensiones declaracion3
     '''
 
     p[0] = p[1]
@@ -124,9 +127,9 @@ def p_declaracionFuncionParametros_1(p): #define argumentos
 
 def p_declaracionFuncionParametros_3(p): #define argumentos
     '''
-    declaracionFuncionParametros : INT ID np_addVariableParametro declaracionFuncionParametros2
-                                 | FLOAT ID np_addVariableParametro declaracionFuncionParametros2
-                                 | CHAR ID np_addVariableParametro declaracionFuncionParametros2
+    declaracionFuncionParametros : INT ID np_addVariableParametro np_actualizarDimensiones declaracionFuncionParametros2
+                                 | FLOAT ID np_addVariableParametro np_actualizarDimensiones declaracionFuncionParametros2
+                                 | CHAR ID np_addVariableParametro np_actualizarDimensiones declaracionFuncionParametros2
     '''
 
     p[0] = None
@@ -139,9 +142,9 @@ def p_declaracionFuncionParametros2_1(p): #define argumentos
 
 def p_declaracionFuncionParametros2_4(p): #define argumentos
     '''
-    declaracionFuncionParametros2 : COMA INT ID np_addVariableParametro declaracionFuncionParametros2
-                                  | COMA FLOAT ID np_addVariableParametro declaracionFuncionParametros2
-                                  | COMA CHAR ID np_addVariableParametro declaracionFuncionParametros2
+    declaracionFuncionParametros2 : COMA INT ID np_addVariableParametro np_actualizarDimensiones declaracionFuncionParametros2
+                                  | COMA FLOAT ID np_addVariableParametro np_actualizarDimensiones declaracionFuncionParametros2
+                                  | COMA CHAR ID np_addVariableParametro np_actualizarDimensiones declaracionFuncionParametros2
     '''
 
     p[0] = None
@@ -215,16 +218,34 @@ def p_escritura3_3(p):
 
 def p_decision(p):
     '''
-    decision : SI OPAREN expresion CPAREN ENTONCES OBRACKET estatutos CBRACKET decision2
+    decision : SI OPAREN expresion np_iniciaIf CPAREN ENTONCES OBRACKET estatutos CBRACKET SINO OBRACKET np_iniciaElse estatutos np_terminaElse CBRACKET
+             | SI OPAREN expresion np_iniciaIf CPAREN ENTONCES OBRACKET estatutos CBRACKET np_terminaIf
     '''
     p[0] = "tomando decision"
-    # agregar np_resultadoExpresion (es necesario?)
 
-def p_decision_2(p):
+def p_np_iniciaIf(p):
     '''
-    decision2 : SINO OBRACKET estatutos CBRACKET
-              | empty
+    np_iniciaIf :
     '''
+    gc.ifStatement()
+
+def p_np_terminaIf(p):
+    '''
+    np_terminaIf :
+    '''
+    gc.terminaIfStatement()
+
+def p_np_iniciaElse(p):
+    '''
+    np_iniciaElse :
+    '''
+    gc.elseStatement()
+
+def p_np_terminaElse(p):
+    '''
+    np_terminaElse :
+    '''
+    gc.terminaElseStatement()
 
 def p_llamadaFuncion(p):
     '''
@@ -275,16 +296,10 @@ def p_asignacion(p):
 
 def p_expresion_3(p):
     '''
-    expresion : expresion LOGIC expresion
-              | expresion RELOP expresion
+    expresion : expresion LOGIC np_insertarOperador expresion
+              | expresion RELOP np_insertarOperador expresion
     '''
     p[0] = (p[2],p[1],p[3])
-
-def p_expresion_2(p):
-    '''
-    expresion : termino1 OPMATRIZ
-    '''
-    p[0] = (p[1],p[2])
 
 def p_expresion_1(p):
     '''
@@ -304,10 +319,10 @@ def p_expresion_1(p):
 
 def p_termino_3(p):
     '''
-    termino : termino PLUS termino
-            | termino MINUS termino
-            | termino MULTIPLY termino
-            | termino DIVIDE termino
+    termino : termino PLUS np_insertarOperador termino
+            | termino MINUS np_insertarOperador termino
+            | termino MULTIPLY np_insertarOperador termino
+            | termino DIVIDE np_insertarOperador termino
     '''
     #Este código se va a usar cuando ya tengamos tabla de variables
     """
@@ -332,9 +347,16 @@ def p_termino_3(p):
             p[0] = p[1] / p[3]
     """
     p[0] = (p[2],p[1],p[3])
+
+def p_np_insertarOperador(p):
+    '''
+    np_insertarOperador :
+    '''
+    gc.operador(p[-1])
+
 def p_termino_2(p):
     '''
-    termino : termino1 OPMATRIZ
+    termino : termino1 OPMATRIZ np_insertarOperador
     '''
     p[0] = (p[1],p[2])
 
@@ -346,9 +368,9 @@ def p_termino_1(p):
 
 def p_termino1_1(p):
     '''
-    termino1 : posibleID np_ID
-             | ENTERO
-             | FLOTANTE
+    termino1 : posibleID
+             | ENTERO np_contieneID_Constante_Entero
+             | FLOTANTE np_contieneID_Constante_Flotante
              | llamadaFuncion
     '''
     p[0] = p[1]
@@ -356,31 +378,36 @@ def p_termino1_1(p):
 
 def p_posibleID_1(p):
     '''
-    posibleID : ID
+    posibleID : ID np_contieneID
     '''
     p[0] = p[1]
+    global currentDimension
+    currentDimension = 0
     # agregar npID
 
 def p_posibleID_4(p):
     '''
-    posibleID : ID OCORCH expresion CCORCH
+    posibleID : ID np_contieneID OCORCH expresion CCORCH
     '''
-
     p[0] = p[1]
+    global currentDimension
+    currentDimension = 1
     #p[0] = (p[1],'[',p[3],']')
-    # agregar np_ID
+    # agregar np_contieneID
 
 def p_posibleID_6(p):
     '''
-    posibleID : ID OCORCH expresion COMA expresion CCORCH
+    posibleID : ID np_contieneID OCORCH expresion COMA expresion CCORCH
     '''
     p[0] = p[1]
+    global currentDimension
+    currentDimension = 2
     #p[0] = (p[1],'[',p[3],',',p[5],']')
-    # agregar np_ID
+    # agregar np_contieneID
 
 def p_termino1_3(p):
     '''
-    termino1 : OPAREN expresion CPAREN
+    termino1 : OPAREN np_insertarOperador expresion CPAREN np_insertarOperador
              | QUOT CARACTER QUOT
     '''
     p[0] = (p[1],p[2],p[3])
@@ -388,9 +415,9 @@ def p_termino1_3(p):
 
 def p_estatutoRepeticionIncondicional(p):
     '''
-    estatutoRepeticionIncondicional : DESDE ID np_ID HASTA expresion HAZ OBRACKET estatutos CBRACKET
+    estatutoRepeticionIncondicional : DESDE ID np_contieneID HASTA expresion HAZ OBRACKET estatutos CBRACKET
     '''
-    # agregar np_ID
+    # agregar np_contieneID
 
 def p_estatutoRepeticionCondicional(p):
     '''
@@ -406,13 +433,27 @@ def p_return(p):
 def p_error(p):
     print("Something's wrong baby :(")
 
-def p_np_ID(p):
+def p_np_contieneID(p):
     '''
-    np_ID :
+    np_contieneID :
     '''
     if not mt.contieneID(funcionActual,p[-1]):
         print("El ID:",p[-1],"no existe en la funcion:", funcionActual)
         exit(-1)
+
+def p_np_contieneID_Constante_Entero(p):
+    '''
+    np_contieneID_Constante_Entero :
+    '''
+    if not mt.contieneID('PROGRAMA','c_'+str(p[-1])):
+        mt.addVariable('PROGRAMA','c_'+str(p[-1]),'C_INT',False)
+
+def p_np_contieneID_Constante_Flotante(p):
+    '''
+    np_contieneID_Constante_Flotante :
+    '''
+    if not mt.contieneID('PROGRAMA','c_'+str(p[-1])):
+        mt.addVariable('PROGRAMA','c_'+str(p[-1]),'C_FLOAT',False)
 
 def p_np_addVariableParametro(p):
     '''
@@ -427,11 +468,16 @@ def p_np_addVariable(p):
     '''
     mt.addVariable(funcionActual, p[-1], tipoVariable, False) #direccion esta hardcodeada por ahora
 
-# Necesitamos dos tipos de np_ID: 1. Necesita accesar a variable global tipo.
+# Necesitamos dos tipos de np_contieneID: 1. Necesita accesar a variable global tipo.
 #                                 2. No necesita accesar a variable global tipo
 # Necesitamos dos tipos de np_funcion: 1. Necesita accesar a variable global tipoFuncion
 #                                      2. Puede accesar a la p para conseguir información
 
+def p_np_actualizarDimensiones(p):
+    '''
+    np_actualizarDimensiones :
+    '''
+    mt.actualizarDimensiones(funcionActual,p[-2],currentDimension)
 
 def p_empty(p):
     '''
