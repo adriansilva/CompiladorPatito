@@ -165,9 +165,10 @@ class generadorDeCuadruplos:
         print("Pila operadores:",self.pilaOperadores)
         print("Pila operandos: ",self.pilaOperandos)
         print("Pila tipos: ",self.pilaTipos)
-        print(len(self.outputCuadruplos))
+        print()
         for i in self.outputCuadruplos:
             print(i)
+        print()
 
     def operando(self, o, tipo, dimensiones):
         #Añadir a pila de operandos

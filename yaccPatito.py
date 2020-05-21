@@ -89,20 +89,31 @@ def p_np_defineTipo(p):
 
 def p_declaracion2(p):
     '''
-    declaracion2 : posibleIDDeclaracion np_addVariable np_actualizarDimensiones declaracion3
+    declaracion2 : np_agregarFondo posibleIDDeclaracion np_addVariable np_actualizarDimensiones declaracion3
     '''
 
     p[0] = p[1]
 
 def p_declaracion3_1(p):
     '''
-    declaracion3 : SEMICOLON
-                 | COMA declaracion2
-                 | ASSIGN expresion SEMICOLON
-                 | ASSIGN expresion COMA declaracion2
+    declaracion3 : np_quitarFondo SEMICOLON
+                 | np_quitarFondo COMA declaracion2
+                 | ASSIGN np_insertarOperador expresion np_quitarFondo SEMICOLON
+                 | ASSIGN np_insertarOperador expresion np_quitarFondo COMA declaracion2
     '''
     p[0] = p[1]
 
+def p_np_agregarFondo(p):
+    '''
+    np_agregarFondo :
+    '''
+    gc.operador('(')
+
+def p_np_quitarFondo(p):
+    '''
+    np_quitarFondo :
+    '''
+    gc.operador(')')
 
 def p_declaracionFuncion(p):
     '''
