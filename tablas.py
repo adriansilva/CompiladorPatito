@@ -24,6 +24,8 @@ class ManejadorDeTablas:
     def addFuncion(self, nombreFuncion, tipoFuncion):
         f = Funcion(tipoFuncion)
 
+        print("Añadiendo funcion:",nombreFuncion,"de tipo",tipoFuncion)
+
         if nombreFuncion in self.tablaFunciones:
             print("Error, la funcion", nombreFuncion, "ya fue declarada\n")
             exit(-1)
@@ -38,7 +40,7 @@ class ManejadorDeTablas:
     def addVariable(self, nombreFuncion, nombreVariable, tipoVariable, esParametro):
         v = Variable(tipoVariable, 5000)
 
-        #print("agregando variable", nombreVariable, "a", nombreFuncion)
+        print("agregando variable", nombreVariable, "a", nombreFuncion)
         if nombreVariable in self.tablaFunciones[nombreFuncion].tablaVariable:
             print("Error, variable ya fue declarada\n", nombreVariable, nombreFuncion)
             exit(-1)
@@ -60,14 +62,20 @@ class ManejadorDeTablas:
         self.tablaFunciones[nombreFuncion].tablaVariable[nombreVariable].dimension = dimension
 
     def contieneID(self, nombreFuncion, nombreVariable):
-        return (nombreVariable in self.tablaFunciones[nombreFuncion].tablaVariable and
+        return (nombreVariable in self.tablaFunciones[nombreFuncion].tablaVariable or
                 nombreVariable in self.tablaFunciones["PROGRAMA"].tablaVariable)
 
     def existeFuncion(self, nombreFuncion):
         return nombreFuncion in self.tablaFunciones
 
     def getTipoVariable(self, func, var):
-        return self.tablaFunciones[func].tablaVariable[var].tipo
+        if var in self.tablaFunciones[func].tablaVariable:
+            return self.tablaFunciones[func].tablaVariable[var].tipo
+        else:
+            return self.tablaFunciones['PROGRAMA'].tablaVariable[var].tipo
 
     def getDimensionVariable(self, func, var):
-        return self.tablaFunciones[func].tablaVariable[var].dimension
+        if var in self.tablaFunciones[func].tablaVariable:
+            return self.tablaFunciones[func].tablaVariable[var].dimension
+        else:
+            return self.tablaFunciones['PROGRAMA'].tablaVariable[var].dimension

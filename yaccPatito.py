@@ -37,14 +37,14 @@ def p_programa(p):
     programa : PROGRAMA ID SEMICOLON programa2
     '''
     p[0] = p[1]
-
+    print(p[1],p[2])
 
 def p_programa2(p):
     '''
     programa2 : declaracion programa2
               | programa3
     '''
-    print(p[1])
+    print("Ya declaro variables.")
     p[0] = p[1]
 
 def p_programa3(p):
@@ -53,23 +53,24 @@ def p_programa3(p):
               | principal
     '''
     p[0] = p[1]
+    print("Ya declaro funciones.")
 
 def p_principal(p):
     '''
-    principal : PRINCIPAL npdeclfunc OPAREN CPAREN OBRACKET estatutos CBRACKET
+    principal : PRINCIPAL OPAREN CPAREN OBRACKET estatutos CBRACKET np_printCuadruplos
     '''
     global funcionActual
     p[0] = p[1]
     #mt.deleteFuncion(funcionActual)
-    funcionActual = "PROGRAMA"
+    funcionActual = "PRINCIPAL"
     #mt.deleteFuncion(funcionActual)
     # agregar np_agregarFuncion
 
 def p_declaracion(p):
     '''
-    declaracion : VAR INT defineTipo COLON declaracion2
-                | VAR FLOAT defineTipo COLON declaracion2
-                | VAR CHAR defineTipo COLON declaracion2
+    declaracion : VAR INT np_defineTipo COLON declaracion2
+                | VAR FLOAT np_defineTipo COLON declaracion2
+                | VAR CHAR np_defineTipo COLON declaracion2
     '''
     p[0] = p[1]
     # agregar np_tipoDeVariable
@@ -78,9 +79,9 @@ def p_declaracion(p):
     # np_tipoDeVariable :
     # global tipoDeVariable = p[-1]
 
-def p_defineTipo(p):
+def p_np_defineTipo(p):
     '''
-    defineTipo :
+    np_defineTipo :
     '''
     global tipoVariable
     tipoVariable = p[-1]
@@ -88,7 +89,7 @@ def p_defineTipo(p):
 
 def p_declaracion2(p):
     '''
-    declaracion2 : posibleID np_addVariable np_actualizarDimensiones declaracion3
+    declaracion2 : posibleIDDeclaracion np_addVariable np_actualizarDimensiones declaracion3
     '''
 
     p[0] = p[1]
@@ -290,7 +291,7 @@ def p_lectura2_3(p):
 
 def p_asignacion(p):
     '''
-    asignacion : posibleID ASSIGN expresion SEMICOLON
+    asignacion : posibleID ASSIGN np_insertarOperador expresion SEMICOLON
     '''
 # checar si el np para ver si el resultado de la derecha es del mismo tipo que de la izq es cuadruplo o no
 
@@ -378,7 +379,7 @@ def p_termino1_1(p):
 
 def p_posibleID_1(p):
     '''
-    posibleID : ID np_contieneID
+    posibleID : ID np_contieneID np_enviarACuadruplos
     '''
     p[0] = p[1]
     global currentDimension
@@ -387,7 +388,7 @@ def p_posibleID_1(p):
 
 def p_posibleID_4(p):
     '''
-    posibleID : ID np_contieneID OCORCH expresion CCORCH
+    posibleID : ID np_contieneID np_enviarACuadruplos OCORCH expresion CCORCH
     '''
     p[0] = p[1]
     global currentDimension
@@ -397,7 +398,42 @@ def p_posibleID_4(p):
 
 def p_posibleID_6(p):
     '''
-    posibleID : ID np_contieneID OCORCH expresion COMA expresion CCORCH
+    posibleID : ID np_contieneID np_enviarACuadruplos OCORCH expresion COMA expresion CCORCH
+    '''
+    p[0] = p[1]
+    global currentDimension
+    currentDimension = 2
+    #p[0] = (p[1],'[',p[3],',',p[5],']')
+    # agregar np_contieneID
+
+def p_np_enviarACuadruplos(p):
+    '''
+    np_enviarACuadruplos :
+    '''
+    gc.operando(p[-2],mt.getTipoVariable(funcionActual,p[-2]),mt.getDimensionVariable(funcionActual,p[-2]))
+
+def p_posibleIDDeclaracion_1(p):
+    '''
+    posibleIDDeclaracion : ID
+    '''
+    p[0] = p[1]
+    global currentDimension
+    currentDimension = 0
+    # agregar npID
+
+def p_posibleIDDeclaracion_4(p):
+    '''
+    posibleIDDeclaracion : ID OCORCH expresion CCORCH
+    '''
+    p[0] = p[1]
+    global currentDimension
+    currentDimension = 1
+    #p[0] = (p[1],'[',p[3],']')
+    # agregar np_contieneID
+
+def p_posibleIDDeclaracion_6(p):
+    '''
+    posibleIDDeclaracion : ID OCORCH expresion COMA expresion CCORCH
     '''
     p[0] = p[1]
     global currentDimension
@@ -478,6 +514,12 @@ def p_np_actualizarDimensiones(p):
     np_actualizarDimensiones :
     '''
     mt.actualizarDimensiones(funcionActual,p[-2],currentDimension)
+
+def p_np_printCuadruplos(p):
+    '''
+    np_printCuadruplos :
+    '''
+    gc.printCuadruplos()
 
 def p_empty(p):
     '''

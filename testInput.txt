@@ -1,11 +1,11 @@
 PROGRAMA p;
 VAR INT: a, b[a], c[a,b];
-VAR FLOAT: d, e, f;
+VAR FLOAT: d, e;
 
 FUNCION VOID f(INT a, CHAR j)
 VAR INT: h;
 {
-
+  h = b*a+c
 }
 
 PRINCIPAL(){

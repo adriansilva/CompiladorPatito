@@ -115,18 +115,31 @@ def typeToInt(tipo):
         'UNDEF': 5,
     }
     regresa = switcher.get(tipo, "Caracter inválido.")
-    if type(regresa) is int:
-         return regresa
+    if isinstance(regresa,int):
+        print(tipo)
+        print(type(regresa))
+        return regresa
     else:
-        print(regresa)
+        print(tipo)
         exit(-1)
 
+def intToType(entero):
+    switcher = {
+        0:    'INT',
+        1:    'FLOAT',
+        2:    'CHAR',
+        3:    'BOOL',
+    }
+    regresa = switcher.get(entero, "Caracter inválido.")
+    return regresa
+
 def cubo(tipo1, tipo2, operacion, dimension1, dimension2):
+    print(tipo1, tipo2)
     tipoResultante = cuboTipos[typeToInt(operacion)][typeToInt(tipo1)][typeToInt(tipo2)]
     dimensionResultante = cuboDimensiones[typeToInt(operacion) if (operacion != '<>' and operacion != '==') else 6][dimension1][dimension2]
     if dimensionResultante == -1:
         print("Esta operación aritmética no es válida por discrepancias de dimensiones.")
         exit(-1)
     print("tipo:",tipoResultante, " // dimension:",dimensionResultante)
-    return (tipoResultante,dimensionResultante)
+    return (intToType(tipoResultante),dimensionResultante)
     # if dimensiones == (0): regresas un
