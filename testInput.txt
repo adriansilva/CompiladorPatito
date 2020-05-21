@@ -5,7 +5,7 @@ VAR FLOAT: d, e;
 FUNCION VOID f(INT a, CHAR j)
 VAR INT: h;
 {
-  h = b*a+c
+  h = b*a+c;
 }
 
 PRINCIPAL(){
