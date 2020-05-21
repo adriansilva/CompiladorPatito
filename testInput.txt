@@ -1,12 +1,18 @@
 PROGRAMA p;
-VAR INT: a, b[a], c[a,b];
-VAR FLOAT: d, e;
+VAR INT: a, b, c;
+VAR INT: d, e;
 
-FUNCION VOID f(INT a, CHAR j)
-VAR INT: h;
+FUNCION INT f(INT a, CHAR j)
+VAR INT: h = d*e;
 {
-  h = b*a+c;
+  SI(a<b) ENTONCES {
+      a = b*(c+d);
+  }
+  SINO{
+      b = d+c;
+  }
 }
 
 PRINCIPAL(){
+
 }

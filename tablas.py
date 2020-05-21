@@ -41,6 +41,7 @@ class ManejadorDeTablas:
         v = Variable(tipoVariable, 5000)
 
         print("agregando variable", nombreVariable, "a", nombreFuncion)
+        print()
         if nombreVariable in self.tablaFunciones[nombreFuncion].tablaVariable:
             print("Error, variable ya fue declarada\n", nombreVariable, nombreFuncion)
             exit(-1)
@@ -62,6 +63,7 @@ class ManejadorDeTablas:
         self.tablaFunciones[nombreFuncion].tablaVariable[nombreVariable].dimension = dimension
 
     def contieneID(self, nombreFuncion, nombreVariable):
+        print("Si existe el id",nombreVariable,"en la función",nombreFuncion)
         return (nombreVariable in self.tablaFunciones[nombreFuncion].tablaVariable or
                 nombreVariable in self.tablaFunciones["PROGRAMA"].tablaVariable)
 

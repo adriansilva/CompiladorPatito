@@ -47,6 +47,13 @@ cuboTipos =   [[#INT  FLOAT  CHAR  BOOL
                [3,     3,    -1,    3], #FLOAT
                [-1,   -1,     3,   -1], #CHAR
                [3,     3,    -1,    3], #BOOL
+               ],
+
+               [#INT  FLOAT  CHAR  BOOL
+               [0,    -1,    -1,   -1], #INT       TYPE: '='
+               [-1,    1,    -1,   -1], #FLOAT
+               [-1,   -1,     2,   -1], #CHAR
+               [-1,   -1,    -1,    3], #BOOL
                ]
              ]
 
@@ -87,11 +94,10 @@ cuboDimensiones = [[ #ValorÚnico  Arreglo  Matriz
                    ],
 
                    [ #ValorÚnico  Arreglo  Matriz
-                         [0,        -1,      -1], #ValorÚnico       TYPE: '==', '<>'
+                         [0,        -1,      -1], #ValorÚnico       TYPE: '==', '<>', '='
                          [-1,        1,      -1], #Arreglo
                          [-1,       -1,       2]  #Matriz
                    ]
-
                   ]
 
 def typeToInt(tipo):
@@ -135,8 +141,8 @@ def intToType(entero):
 
 def cubo(tipo1, tipo2, operacion, dimension1, dimension2):
     print(tipo1, tipo2)
-    tipoResultante = cuboTipos[typeToInt(operacion)][typeToInt(tipo1)][typeToInt(tipo2)]
-    dimensionResultante = cuboDimensiones[typeToInt(operacion) if (operacion != '<>' and operacion != '==') else 6][dimension1][dimension2]
+    tipoResultante = cuboTipos[typeToInt(operacion) if (operacion != '=') else 6][typeToInt(tipo1)][typeToInt(tipo2)]
+    dimensionResultante = cuboDimensiones[typeToInt(operacion) if (operacion != '<>' and operacion != '==' and operacion != '=') else 6][dimension1][dimension2]
     if dimensionResultante == -1:
         print("Esta operación aritmética no es válida por discrepancias de dimensiones.")
         exit(-1)
