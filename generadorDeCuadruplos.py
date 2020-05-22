@@ -383,6 +383,9 @@ class generadorDeCuadruplos:
     def goSUB(self,func):
         self.outputCuadruplos.append(list(('GOSUB',None,None,func)))
 
+    def endProgram(self):
+        self.outputCuadruplos.append(list(('END',None, None,None)))
+
     def printCuadruplos(self):
         f = open('outputCuadruplos.txt','w')
 

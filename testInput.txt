@@ -1,6 +1,6 @@
 PROGRAMA p;
 VAR INT: a, b, c;
-VAR INT: d, e;
+VAR INT: d, e, i;
 VAR CHAR: o;
 
 FUNCION INT f(INT a, CHAR j)
@@ -10,8 +10,17 @@ VAR INT: h = d*e;
   b = c*a;
   REGRESA b+c;
   }
-
 }
-PRINCIPAL(){x
+
+FUNCION INT g(INT a, CHAR j)
+VAR INT: h = d*e;
+{
+  SI(a<b)ENTONCES{
+  b = c*a;
+  REGRESA b+c;
+  }
+}
+
+PRINCIPAL(){
   f(a,i);
 }

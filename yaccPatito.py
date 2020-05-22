@@ -48,13 +48,14 @@ def p_programa2(p):
 
 def p_programa3(p):
     '''
-    programa3 : declaracionFuncion principal
+    programa3 : declaracionFuncion programa3
+              | principal
     '''
     print("Ya declaro funciones.")
 
 def p_principal(p):
     '''
-    principal : PRINCIPAL OPAREN CPAREN OBRACKET estatutos CBRACKET np_printCuadruplos np_printTablas
+    principal : PRINCIPAL OPAREN CPAREN OBRACKET estatutos CBRACKET np_end np_printCuadruplos np_printTablas 
     '''
     print("YA TERMINÓ PRINCIPAL!!!!!!!!!!!")
     global funcionActual
@@ -62,6 +63,12 @@ def p_principal(p):
     funcionActual = "PRINCIPAL"
     #mt.deleteFuncion(funcionActual)
     # agregar np_agregarFuncion
+
+def p_np_end(p):
+    '''
+    np_end :
+    '''
+    gc.endProgram()
 
 def p_np_printTablas(p):
     '''
