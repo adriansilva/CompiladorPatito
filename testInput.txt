@@ -7,8 +7,8 @@ FUNCION INT f(INT a, CHAR j)
 VAR INT: h = d*e;
 {
   SI(a<b)ENTONCES{
-  b = c*a;
-  REGRESA b+c;
+  b = c*3;
+  REGRESA 4+3;
   }
 }
 

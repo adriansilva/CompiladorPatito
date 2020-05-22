@@ -27,6 +27,7 @@ esParametro = False
 funcionObjetivo = 'PRINCIPAL'
 
 mt.addFuncion(funcionActual,'VOID')
+mt.addFuncion('CONSTANTES', 'VOID')
 
 precedence = (
     ('left','PLUS','MINUS'),
@@ -426,8 +427,8 @@ def p_termino_1(p):
 def p_termino1_1(p):
     '''
     termino1 : posibleID
-             | ENTERO np_contieneID_Constante_Entero
-             | FLOTANTE np_contieneID_Constante_Flotante
+             | ENTERO np_addConstanteINT np_enviarACuadruplosC
+             | FLOTANTE np_addConstanteFLOAT np_enviarACuadruplosC
              | llamadaFuncion
     '''
 
@@ -534,12 +535,17 @@ def p_np_contieneID(p):
         print("El ID:",p[-1],"no existe en la funcion:", funcionActual)
         exit(-1)
 
-def p_np_contieneID_Constante_Entero(p):
+def p_np_addConstanteINT(p):
     '''
-    np_contieneID_Constante_Entero :
+    np_addConstanteINT :
     '''
-    if not mt.contieneID('PROGRAMA','c_'+str(p[-1])):
-        mt.addVariable('PROGRAMA','c_'+str(p[-1]),'C_INT',False)
+    mt.addConstante(p[-1], "INT")
+
+def p_np_addConstanteFLOAT(p):
+    '''
+    np_addConstanteFLOAT :
+    '''
+    mt.addConstante(p[-1], "FLOAT")
 
 def p_np_contieneID_Constante_Flotante(p):
     '''
@@ -566,6 +572,12 @@ def p_np_enviarACuadruplos(p):
     np_enviarACuadruplos :
     '''
     gc.operando(p[-2],mt.getTipoVariable(funcionActual,p[-2]),mt.getDimensionVariable(funcionActual,p[-2]))
+
+def p_np_enviarACuadruplosC(p):
+    '''
+    np_enviarACuadruplosC :
+    '''
+    gc.operando(p[-2],mt.getTipoVariable('CONSTANTES',p[-2]),0)
 
 
 def p_np_actualizarDimensiones(p):

@@ -87,6 +87,12 @@ class ManejadorDeTablas:
         else:
             return self.tablaFunciones['PROGRAMA'].tablaVariable[var].dimension
 
+    def addConstante(self, con, tipoVariable):
+        v = Variable(tipoVariable, 13000)
+
+        if con not in self.tablaFunciones['CONSTANTES'].tablaVariable:
+            self.tablaFunciones['CONSTANTES'].tablaVariable[con] = v
+
     def printTablas(self):
         for i in self.tablaFunciones:
             print("función:",i,"de tipo:",self.tablaFunciones[i].tipo,"con parametros:",self.tablaFunciones[i].parametros)
