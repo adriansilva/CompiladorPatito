@@ -188,6 +188,7 @@ class generadorDeCuadruplos:
 
         print("Se añadió un operando:", self.pilaOperandos)
         print(self.pilaOperadores)
+
     def ifStatement(self):
         print(self.pilaOperandos)
         print(self.pilaTipos)
@@ -267,8 +268,7 @@ class generadorDeCuadruplos:
 
     def whileStatementInicia(self):
         operando = self.pilaOperandos.pop()
-        self.pilaTipos.pop()
-        self.pilaDimensiones.pop()
+        self.pilaSaltos.append(len(self.outputCuadruplos))
 
         if self.pilaTipos.pop() == 'BOOL' and self.pilaDimensiones.pop() == 0:
             self.pilaMigajas.append(len(self.outputCuadruplos))
@@ -284,7 +284,7 @@ class generadorDeCuadruplos:
         self.outputCuadruplos.append(list(('GOTO',None,None,self.pilaSaltos.pop())))
 
         indiceCuadruploAModificar = self.pilaMigajas.pop()
-        self.outputCuadruplos[indiceCuadruploAModificar][3] = len(self.outputCuadruplos)+1
+        self.outputCuadruplos[indiceCuadruploAModificar][3] = len(self.outputCuadruplos) + 1
         #Generas cuadruplo GOTO a top pila de saltos
         #Actualizas GOTOF que está en el top de las migajas con línea actual (tamaño de outputCuadruplos)
 
