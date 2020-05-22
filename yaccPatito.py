@@ -23,6 +23,8 @@ mt = tablas.ManejadorDeTablas()
 tipoVariable = None
 funcionActual = 'PROGRAMA'
 currentDimension = 0
+esParametro = False
+funcionObjetivo = 'PRINCIPAL'
 
 mt.addFuncion(funcionActual,'VOID')
 
@@ -52,7 +54,7 @@ def p_programa3(p):
 
 def p_principal(p):
     '''
-    principal : PRINCIPAL OPAREN CPAREN OBRACKET estatutos CBRACKET np_printCuadruplos
+    principal : PRINCIPAL OPAREN CPAREN OBRACKET estatutos CBRACKET np_printCuadruplos np_printTablas
     '''
     print("YA TERMINÓ PRINCIPAL!!!!!!!!!!!")
     global funcionActual
@@ -60,6 +62,12 @@ def p_principal(p):
     funcionActual = "PRINCIPAL"
     #mt.deleteFuncion(funcionActual)
     # agregar np_agregarFuncion
+
+def p_np_printTablas(p):
+    '''
+    np_printTablas :
+    '''
+    mt.printTablas()
 
 def p_declaracion(p):
     '''
@@ -96,15 +104,29 @@ def p_declaracion3_1(p):
 
 def p_declaracionFuncion(p):
     '''
-    declaracionFuncion : FUNCION VOID ID np_declfunc OPAREN declaracionFuncionParametros CPAREN declaracionFuncionVariables OBRACKET estatutos CBRACKET np_endFunc
-                       | FUNCION INT ID np_declfunc OPAREN declaracionFuncionParametros CPAREN declaracionFuncionVariables OBRACKET estatutos CBRACKET np_endFunc
-                       | FUNCION FLOAT ID np_declfunc OPAREN declaracionFuncionParametros CPAREN declaracionFuncionVariables OBRACKET estatutos CBRACKET np_endFunc
-                       | FUNCION CHAR ID np_declfunc OPAREN declaracionFuncionParametros CPAREN declaracionFuncionVariables OBRACKET estatutos CBRACKET np_endFunc
+    declaracionFuncion : FUNCION VOID ID np_declfunc OPAREN np_esParametro declaracionFuncionParametros np_yaNoEsParametro CPAREN declaracionFuncionVariables OBRACKET estatutos CBRACKET np_endFunc
+                       | FUNCION INT ID np_declfunc OPAREN np_esParametro declaracionFuncionParametros np_yaNoEsParametro CPAREN declaracionFuncionVariables OBRACKET estatutos CBRACKET np_endFunc
+                       | FUNCION FLOAT ID np_declfunc OPAREN np_esParametro declaracionFuncionParametros CPAREN np_yaNoEsParametro declaracionFuncionVariables OBRACKET estatutos CBRACKET np_endFunc
+                       | FUNCION CHAR ID np_declfunc OPAREN np_esParametro declaracionFuncionParametros CPAREN np_yaNoEsParametro declaracionFuncionVariables OBRACKET estatutos CBRACKET np_endFunc
     '''
     global funcionActual
     print("Successful Function Declaration")
     #mt.deleteFuncion(p[3])
     funcionActual = "PROGRAMA"
+
+def p_np_esParametro(p):
+    '''
+    np_esParametro :
+    '''
+    global esParametro
+    esParametro = True
+
+def p_np_yaNoEsParametro(p):
+    '''
+    np_yaNoEsParametro :
+    '''
+    global esParametro
+    esParametro = False
 
 def p_np_endFunc(p):
     '''
@@ -251,29 +273,48 @@ def p_np_terminaElse(p):
 
 def p_llamadaFuncion(p):
     '''
-    llamadaFuncion : ID OPAREN primerParametro extraParametros CPAREN
+    llamadaFuncion : ID np_existeFuncion np_llamadaFuncion OPAREN paramsLlamada1 CPAREN np_goSUB
     '''
-    if not mt.existeFuncion(p[1]):
-        print("No existe la funcion:",p[1])
+
+def p_np_existeFuncion(p):
+    '''
+    np_existeFuncion :
+    '''
+    if not mt.existeFuncion(p[-1]):
+        print("No existe la funcion:",p[-1])
         exit(-1)
-# checar si ID existe en tabla funciones con np veda
-# considerar agregar la posibilidad de pasar segmentos de matrices o arreglos
 
-def p_primerParametro(p):
+def p_np_llamadaFuncion(p):
     '''
-    primerParametro : expresion
-                    | empty
+    np_llamadaFuncion :
     '''
-# revisar si ver tipo de expresion es cuadruplo o no
-# considerar agregar variable global (arreeglo) para tipos de parametros de funcion
+    global funcionObjetivo
+    funcionObjetivo = p[-2]
+    gc.llamadaFuncion(funcionObjetivo)
 
-def p_extraParametros(p):
+def p_paramsLlamada1(p):
     '''
-    extraParametros : COMA expresion extraParametros
-                    | empty
+    paramsLlamada1 : empty
+                   | paramsLlamada2
     '''
-# revisar si ver tipo de expresion es cuadruplo o no
-# considerar agregar variable global (arreeglo) para tipos de parametros de funcion
+
+def p_paramsLlamada2(p):
+    '''
+    paramsLlamada2 : np_agregarFondo expresion np_quitarFondo np_resolverParam
+                   | np_agregarFondo expresion np_quitarFondo np_resolverParam COMA paramsLlamada2
+    '''
+
+def p_np_resolverParam(p):
+    '''
+    np_resolverParam :
+    '''
+    gc.resolverParam(funcionObjetivo)
+
+def p_np_goSUB(p):
+    '''
+    np_goSUB :
+    '''
+    gc.goSUB(funcionObjetivo)
 
 def p_lectura(p):
     '''
@@ -492,14 +533,14 @@ def p_np_addVariableParametro(p):
     '''
     np_addVariableParametro :
     '''
-
-    mt.addVariable(funcionActual, p[-1], p[-2], True) #direccion esta hardcodeada por ahora
+    print(funcionActual,p[-1],tipoVariable)
+    mt.addVariable(funcionActual, p[-1], tipoVariable, esParametro) #direccion esta hardcodeada por ahora
 
 def p_np_addVariable(p):
     '''
     np_addVariable :
     '''
-    mt.addVariable(funcionActual, p[-1], tipoVariable, False) #direccion esta hardcodeada por ahora
+    mt.addVariable(funcionActual, p[-1], tipoVariable, esParametro) #direccion esta hardcodeada por ahora
 
 def p_np_enviarACuadruplos(p):
     '''

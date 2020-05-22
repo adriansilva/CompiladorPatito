@@ -19,7 +19,10 @@ class Variable:
         self.dimension = 0
 
 class ManejadorDeTablas:
-    tablaFunciones = {}
+    tablaFunciones = None
+
+    def __init__(self):
+        self.tablaFunciones = {}
 
     def addFuncion(self, nombreFuncion, tipoFuncion):
         f = Funcion(tipoFuncion)
@@ -63,12 +66,11 @@ class ManejadorDeTablas:
         self.tablaFunciones[nombreFuncion].tablaVariable[nombreVariable].dimension = dimension
 
     def contieneID(self, nombreFuncion, nombreVariable):
-        print("Si existe el id",nombreVariable,"en la función",nombreFuncion)
         return (nombreVariable in self.tablaFunciones[nombreFuncion].tablaVariable or
                 nombreVariable in self.tablaFunciones["PROGRAMA"].tablaVariable)
 
     def existeFuncion(self, nombreFuncion):
-        return nombreFuncion in self.tablaFunciones
+        return (nombreFuncion in self.tablaFunciones)
 
     def getTipoVariable(self, func, var):
         if var in self.tablaFunciones[func].tablaVariable:
@@ -84,3 +86,9 @@ class ManejadorDeTablas:
             return self.tablaFunciones[func].tablaVariable[var].dimension
         else:
             return self.tablaFunciones['PROGRAMA'].tablaVariable[var].dimension
+
+    def printTablas(self):
+        for i in self.tablaFunciones:
+            print("función:",i,"de tipo:",self.tablaFunciones[i].tipo,"con parametros:",self.tablaFunciones[i].parametros)
+            for j in self.tablaFunciones[i].tablaVariable:
+                print("variable:",j,"de tipo:",self.tablaFunciones[i].tablaVariable[j].tipo)

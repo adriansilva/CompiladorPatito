@@ -1,6 +1,7 @@
 PROGRAMA p;
 VAR INT: a, b, c;
 VAR INT: d, e;
+VAR CHAR: o;
 
 FUNCION INT f(INT a, CHAR j)
 VAR INT: h = d*e;
@@ -11,6 +12,6 @@ VAR INT: h = d*e;
   }
 
 }
-PRINCIPAL(){
-
+PRINCIPAL(){x
+  f(a,i);
 }

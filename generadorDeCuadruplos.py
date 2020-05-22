@@ -361,12 +361,27 @@ class generadorDeCuadruplos:
                 self.outputCuadruplos.append(list(('GOTO',None,None,None)))
 
     def endFunc(self):
-        whereToJump = len(self.outputCuadruplos)
+        whereToJump = len(self.outputCuadruplos)+1
         while len(self.pilaReturns) > 0:
             index = self.pilaReturns.pop()
             self.outputCuadruplos[index][3] = whereToJump
 
         self.outputCuadruplos.append(list(('ENDfunc',None,None,None)))
+
+    def llamadaFuncion(self,func):
+        self.outputCuadruplos.append(list(('ERA',None,None,func)))
+
+    def resolverParam(self, func):
+        #if self.pilaTipos[-1] !=  
+        operando = self.pilaOperandos.pop()
+        self.pilaTipos.pop()
+        self.pilaDimensiones.pop()
+        #Falta determinar donde se va a guardar el parámetro,
+        #probablemente en alguna variable dentro de la función objetivo
+        self.outputCuadruplos.append(list(('PARAM',operando,None,'Tabla de Variables de: '+func)))
+
+    def goSUB(self,func):
+        self.outputCuadruplos.append(list(('GOSUB',None,None,func)))
 
     def printCuadruplos(self):
         f = open('outputCuadruplos.txt','w')
