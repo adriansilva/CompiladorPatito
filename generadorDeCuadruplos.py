@@ -234,11 +234,12 @@ class generadorDeCuadruplos:
         self.outputCuadruplos[indiceCuadruploAModificar][3] = len(self.outputCuadruplos)+1
 
     def elseStatement(self):
+        indiceCuadruploAModificar = self.pilaMigajas.pop()
+        self.outputCuadruplos[indiceCuadruploAModificar][3] = len(self.outputCuadruplos)+2
+
         self.pilaMigajas.append(len(self.outputCuadruplos))
         self.outputCuadruplos.append(list(('GOTO',None,None,None)))
-        #El jump cuando al condición sea falsa es a donde comienza el else, después del jump al final del if-else
-        indiceCuadruploAModificar = self.pilaMigajas.pop()
-        self.outputCuadruplos[indiceCuadruploAModificar][3] = len(self.outputCuadruplos)+1
+        #El jump cuando al condición sea falsa es a donde comienza el else, después del jump al final del if-
         #Meter línea actual a pila de migajas
         #Generas cuadruplo GOTOV
 
@@ -331,7 +332,7 @@ class generadorDeCuadruplos:
         self.outputCuadruplos.append(list(('GOTO',None,None,self.pilaSaltos.pop())))
 
         indiceCuadruploAModificar = self.pilaMigajas.pop()
-        self.outputCuadruplos[indiceCuadruploAModificar][3] = len(self.outputCuadruplos)
+        self.outputCuadruplos[indiceCuadruploAModificar][3] = len(self.outputCuadruplos)+1
         #Generas cuadruplo GOTO hacia top de pila de pilaSaltos
         #Actualizar top de pila de migajas con línea actual
 
