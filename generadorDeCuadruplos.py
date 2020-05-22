@@ -252,7 +252,7 @@ class generadorDeCuadruplos:
         #Actualizas GOTO del top de pila de migajas con línea actual
 
     def whileStatementExpresion(self):
-        self.pilaSaltos.append(len(self.outputCuadruplos))
+        self.pilaSaltos.append(len(self.outputCuadruplos) + 1)
         #Guardar linea actual en pila de saltos
         '''
         MIENTRAS(A<=B+C)HAZ{
@@ -270,7 +270,6 @@ class generadorDeCuadruplos:
 
     def whileStatementInicia(self):
         operando = self.pilaOperandos.pop()
-        self.pilaSaltos.append(len(self.outputCuadruplos))
 
         if self.pilaTipos.pop() == 'BOOL' and self.pilaDimensiones.pop() == 0:
             self.pilaMigajas.append(len(self.outputCuadruplos))

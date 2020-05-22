@@ -420,7 +420,7 @@ def p_estatutoRepeticionIncondicional(p):
 
 def p_estatutoRepeticionCondicional(p):
     '''
-    estatutoRepeticionCondicional : MIENTRAS OPAREN np_agregarFondo expresion np_quitarFondo CPAREN HAZ OBRACKET npWhileInicia estatutos CBRACKET npWhileTermina
+    estatutoRepeticionCondicional : MIENTRAS OPAREN np_agregarFondo npWhileStExp expresion np_quitarFondo CPAREN HAZ OBRACKET npWhileInicia estatutos CBRACKET npWhileTermina
     '''
     print("Que hay de nuevo viejo")
 
@@ -428,7 +428,7 @@ def p_npWhileStExp(p):
     '''
     npWhileStExp :
     '''
-    #gc.whileStatementExpresion()
+    gc.whileStatementExpresion()
 
 def p_npWhileInicia(p):
     '''
