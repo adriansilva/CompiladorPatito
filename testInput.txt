@@ -7,9 +7,9 @@ VAR INT: h = d*e;
 {
   SI(a<b) ENTONCES {
       a = b*(c+d);
-  }
-  SINO{
-      b = d+c;
+      MIENTRAS(a<b)HAZ{
+        a = b;
+      }
   }
 }
 
