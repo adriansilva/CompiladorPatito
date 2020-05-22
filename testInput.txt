@@ -7,6 +7,12 @@ VAR INT: h = d*e;
 {
   SI(a<b) ENTONCES {
       a = b*(c+d);
+      SI(a<b)ENTONCES{
+      a = a;
+      }
+      SINO{
+      b = b;
+      }
   }
   SINO{
       b = d+c;
