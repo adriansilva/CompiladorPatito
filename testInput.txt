@@ -1,6 +1,6 @@
 PROGRAMA p;
 VAR INT: a, b, c;
-VAR INT: d, e, i;
+VAR INT: d = a, e, i;
 VAR CHAR: o;
 
 FUNCION INT f(INT a, CHAR j)
@@ -20,6 +20,7 @@ VAR INT: h = d*e;
   REGRESA b+c;
   }
 }
+
 
 PRINCIPAL(){
   f(a,i);

@@ -383,6 +383,14 @@ class generadorDeCuadruplos:
     def goSUB(self,func):
         self.outputCuadruplos.append(list(('GOSUB',None,None,func)))
 
+    def gotoMain(self):
+        self.pilaMigajas.append(len(self.outputCuadruplos))
+        self.outputCuadruplos.append(list(('GOTO',None,None,None)))
+
+    def updateMain(self):
+        update = self.pilaMigajas.pop()
+        self.outputCuadruplos[update][3] = len(self.outputCuadruplos) + 1
+
     def endProgram(self):
         self.outputCuadruplos.append(list(('END',None, None,None)))
 
