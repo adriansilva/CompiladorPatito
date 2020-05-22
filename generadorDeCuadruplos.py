@@ -10,6 +10,7 @@ class generadorDeCuadruplos:
     pilaDimensiones = None
     outputCuadruplos = None
     contadorTemporales = None
+    pilaReturns = None
 
     def __init__(self):
         self.pilaSaltos = []
@@ -19,6 +20,7 @@ class generadorDeCuadruplos:
         self.pilaDimensiones = []
         self.outputCuadruplos = []
         self.pilaMigajas = []
+        self.pilaReturns = []
         self.contadorTemporales = 0
 
     # TODO: FALTA agregar el tipo del temporal y sus dimensiones a las pilas respectivas
@@ -335,6 +337,37 @@ class generadorDeCuadruplos:
         self.outputCuadruplos[indiceCuadruploAModificar][3] = len(self.outputCuadruplos)+1
         #Generas cuadruplo GOTO hacia top de pila de pilaSaltos
         #Actualizar top de pila de migajas con línea actual
+
+    def regresa(self,tipoFunc,tipoVar):
+        print(tipoFunc," <---Func | Var---> ",self.pilaTipos[-1])
+        if tipoVar == 'VOID':
+            if tipoFunc == 'VOID':
+                self.outputCuadruplos.append(list(('RETURN',None,None,None)))
+                self.pilaReturns.append(len(self.outputCuadruplos))
+                self.outputCuadruplos.append(list(('GOTO',None,None,None)))
+            else:
+                print("El tipo de retorno no matcheAAA con el tipo de la función.")
+                exit(-1)
+        else:
+            if self.pilaTipos[-1] != tipoFunc:
+                print("El tipo de retorno no matcheaaaa con el tipo de la función.")
+                exit(-1)
+            else:
+                operando = self.pilaOperandos.pop()
+                tipo = self.pilaTipos.pop()
+                self.pilaDimensiones.pop()
+
+                self.outputCuadruplos.append(list(('RETURN',None,None,operando)))
+                self.pilaReturns.append(len(self.outputCuadruplos))
+                self.outputCuadruplos.append(list(('GOTO',None,None,None)))
+
+    def endFunc(self):
+        whereToJump = len(self.outputCuadruplos)
+        while len(self.pilaReturns) > 0:
+            index = self.pilaReturns.pop()
+            self.outputCuadruplos[index][3] = whereToJump
+
+        self.outputCuadruplos.append(list(('ENDfunc',None,None,None)))
 
     def printCuadruplos(self):
         f = open('outputCuadruplos.txt','w')

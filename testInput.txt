@@ -5,26 +5,12 @@ VAR INT: d, e;
 FUNCION INT f(INT a, CHAR j)
 VAR INT: h = d*e;
 {
-  SI(a<b) ENTONCES {
-      a = b*(c+d);
-<<<<<<< HEAD
-      SI(a<b)ENTONCES{
-      a = a;
-      }
-      SINO{
-      b = b;
-      }
+  SI(a<b)ENTONCES{
+  b = c*a;
+  REGRESA b+c;
   }
-  SINO{
-      b = d+c;
-=======
-      MIENTRAS(a<b)HAZ{
-        a = b;
-      }
->>>>>>> 19eec8f736593877f1e9091324eaf92fc53add81
-  }
-}
 
+}
 PRINCIPAL(){
 
 }

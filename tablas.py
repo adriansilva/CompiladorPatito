@@ -76,6 +76,9 @@ class ManejadorDeTablas:
         else:
             return self.tablaFunciones['PROGRAMA'].tablaVariable[var].tipo
 
+    def getTipoFuncion(self,func):
+        return self.tablaFunciones[func].tipo
+
     def getDimensionVariable(self, func, var):
         if var in self.tablaFunciones[func].tablaVariable:
             return self.tablaFunciones[func].tablaVariable[var].dimension

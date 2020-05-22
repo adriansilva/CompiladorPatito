@@ -96,15 +96,22 @@ def p_declaracion3_1(p):
 
 def p_declaracionFuncion(p):
     '''
-    declaracionFuncion : FUNCION VOID ID np_declfunc OPAREN declaracionFuncionParametros CPAREN np_termino declaracionFuncionVariables np_termino OBRACKET estatutos CBRACKET
-                       | FUNCION INT ID np_declfunc OPAREN declaracionFuncionParametros CPAREN declaracionFuncionVariables OBRACKET estatutos CBRACKET
-                       | FUNCION FLOAT ID np_declfunc OPAREN declaracionFuncionParametros CPAREN declaracionFuncionVariables OBRACKET estatutos CBRACKET
-                       | FUNCION CHAR ID np_declfunc OPAREN declaracionFuncionParametros CPAREN declaracionFuncionVariables OBRACKET estatutos CBRACKET
+    declaracionFuncion : FUNCION VOID ID np_declfunc OPAREN declaracionFuncionParametros CPAREN declaracionFuncionVariables OBRACKET estatutos CBRACKET np_endFunc
+                       | FUNCION INT ID np_declfunc OPAREN declaracionFuncionParametros CPAREN declaracionFuncionVariables OBRACKET estatutos CBRACKET np_endFunc
+                       | FUNCION FLOAT ID np_declfunc OPAREN declaracionFuncionParametros CPAREN declaracionFuncionVariables OBRACKET estatutos CBRACKET np_endFunc
+                       | FUNCION CHAR ID np_declfunc OPAREN declaracionFuncionParametros CPAREN declaracionFuncionVariables OBRACKET estatutos CBRACKET np_endFunc
     '''
     global funcionActual
     print("Successful Function Declaration")
     #mt.deleteFuncion(p[3])
     funcionActual = "PROGRAMA"
+
+def p_np_endFunc(p):
+    '''
+    np_endFunc :
+    '''
+    gc.endFunc()
+    print("Se llamo a una función.")
 
 def p_np_termino(p):
     '''
@@ -155,12 +162,14 @@ def p_np_declfunc(p):
     if not mt.existeFuncion(funcionActual):
         mt.addFuncion(p[-1], p[-2])
     else:
-        print("ÝA EXISTE LA FUNCIÓN:",funcionActual)
+        print("YA EXISTE LA FUNCIÓN:",funcionActual)
+        print(p[-1])
+        exit(-1)
 
 def p_estatutos_1(p):
     '''
-    estatutos : empty
-              | return
+    estatutos : return
+              | empty
     '''
 
 def p_estatutos_2(p):
@@ -435,11 +444,27 @@ def p_npWhileTermina(p):
 
 def p_return(p):
     '''
-    return : REGRESA expresion SEMICOLON
+    return : REGRESA np_agregarFondo expresion np_quitarFondo SEMICOLON np_return
+           | REGRESA SEMICOLON np_returnVOID
     '''
 
+def p_np_return(p):
+    '''
+    np_return :
+    '''
+    print('X')
+    gc.regresa(mt.getTipoFuncion(funcionActual),'X')
+
+def p_np_returnVOID(p):
+    '''
+    np_returnVOID :
+    '''
+    print('Void')
+    gc.regresa(mt.getTipoFuncion(funcionActual),'VOID')
+
 def p_error(p):
-    print("Something's wrong baby :(")
+    print("Hay un error de sintaxis!")
+    exit(-1)
 
 def p_np_contieneID(p):
     '''
