@@ -202,6 +202,9 @@ class generadorDeCuadruplos:
         else:
             self.outputCuadruplos.append(list(('PRINT', s, None, None)))
 
+    def read(self, id):
+        self.outputCuadruplos.append(list(('READ', None, None, id)))
+
     def ifStatement(self):
         print(self.pilaOperandos)
         print(self.pilaTipos)

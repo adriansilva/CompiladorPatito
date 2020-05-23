@@ -48,4 +48,6 @@
 ['*', '4', '5', 'Temporal_15']
 ['PRINT', 'Temporal_15', None, None]
 ['PRINT', '"HELLO WORLD"', None, None]
+['READ', None, None, 'a']
+['READ', None, None, 'b']
 ['END', None, None, None]

@@ -351,7 +351,7 @@ def p_np_goSUB(p):
 
 def p_lectura(p):
     '''
-    lectura : LEE OPAREN posibleID lectura2 CPAREN SEMICOLON
+    lectura : LEE OPAREN posibleID np_read lectura2 CPAREN SEMICOLON
     '''
 
 def p_lectura2_1(p):
@@ -361,8 +361,14 @@ def p_lectura2_1(p):
 
 def p_lectura2_3(p):
     '''
-    lectura2 : COMA posibleID lectura2
+    lectura2 : COMA posibleID np_read lectura2
     '''
+
+def p_np_read(p):
+    '''
+    np_read :
+    '''
+    gc.read(p[-1])
 
 def p_asignacion(p):
     '''
@@ -457,6 +463,7 @@ def p_posibleID_1(p):
               | ID np_contieneID np_enviarACuadruplos OCORCH np_agregarFondo expresion np_quitarFondo CCORCH
               | ID np_contieneID np_enviarACuadruplos OCORCH np_agregarFondo expresion np_quitarFondo COMA np_agregarFondo expresion np_quitarFondo CCORCH
     '''
+    p[0] = p[1] #NO BORRAR lo usa lectura
     #Restar la dimension actual en 1 por cada expresion
     #Verificar que el resultado no sea menor a cero
     #Guardar las dimensiones (tops de pila) en la variable que estas utilizando
