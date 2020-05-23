@@ -28,6 +28,7 @@ funcionObjetivo = 'PRINCIPAL'
 
 gc.mt.addFuncion(funcionActual,'VOID')
 gc.mt.addFuncion('CONSTANTES', 'VOID')
+gc.mt.addFuncion('TEMPORALES','VOID')
 gc.mt.addVariable('CONSTANTES','1','INT',False)
 
 precedence = (
@@ -204,6 +205,10 @@ def p_np_declfunc(p):
     funcionActual = p[-1]
     if not gc.mt.existeFuncion(funcionActual):
         gc.mt.addFuncion(p[-1], p[-2])
+        if p[-2] != 'VOID':
+            print(p[-2])
+            gc.mt.addVariable('PROGRAMA',funcionActual,p[-2],False)
+            gc.mt.actualizarDimensiones('PROGRAMA',funcionActual,0)
     else:
         print("YA EXISTE LA FUNCIÓN:",funcionActual)
         print(p[-1])
@@ -294,7 +299,7 @@ def p_np_terminaElse(p):
 
 def p_llamadaFuncion(p):
     '''
-    llamadaFuncion : ID np_existeFuncion np_llamadaFuncion OPAREN paramsLlamada1 CPAREN np_goSUB
+    llamadaFuncion : ID np_existeFuncion np_llamadaFuncion np_agregarFondoParam OPAREN paramsLlamada1 CPAREN np_quitarFondoParam np_goSUB
     '''
 
 def p_np_existeFuncion(p):
@@ -312,6 +317,18 @@ def p_np_llamadaFuncion(p):
     global funcionObjetivo
     funcionObjetivo = p[-2]
     gc.llamadaFuncion(funcionObjetivo)
+
+def p_np_agregarFondoParam(p):
+    '''
+    np_agregarFondoParam :
+    '''
+    gc.agregarFondoParam()
+
+def p_np_quitarFondoParam(p):
+    '''
+    np_quitarFondoParam :
+    '''
+    gc.quitarFondoParam(p[-7])
 
 def p_paramsLlamada1(p):
     '''
@@ -335,7 +352,7 @@ def p_np_goSUB(p):
     '''
     np_goSUB :
     '''
-    gc.goSUB(funcionObjetivo)
+    gc.goSUB(p[-8])
 
 def p_lectura(p):
     '''
@@ -501,7 +518,7 @@ def p_np_terminaFor(p):
     '''
     np_terminaFor :
     '''
-    gc.forStatementTermina()
+    gc.forStatementTermina(funcionActual)
 
 def p_estatutoRepeticionCondicional(p):
     '''
@@ -588,13 +605,13 @@ def p_np_enviarACuadruplos(p):
     '''
     np_enviarACuadruplos :
     '''
-    gc.operando(p[-2],gc.mt.getTipoVariable(funcionActual,p[-2]),gc.mt.getDimensionVariable(funcionActual,p[-2]))
+    gc.operando(p[-2],gc.mt.getTipoVariable(funcionActual,p[-2]),gc.mt.getDimensionVariable(funcionActual,p[-2]),funcionActual)
 
 def p_np_enviarACuadruplosC(p):
     '''
     np_enviarACuadruplosC :
     '''
-    gc.operando(str(p[-2]),gc.mt.getTipoVariable('CONSTANTES',str(p[-2])),0)
+    gc.operando(str(p[-2]),gc.mt.getTipoVariable('CONSTANTES',str(p[-2])),0,funcionActual)
 
 
 def p_np_actualizarDimensiones(p):

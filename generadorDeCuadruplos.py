@@ -13,6 +13,7 @@ class generadorDeCuadruplos:
     contadorTemporales = None
     pilaReturns = None
     pilaIDFor = None
+    pilaParams = None
     mt = None
 
     def __init__(self):
@@ -26,6 +27,7 @@ class generadorDeCuadruplos:
         self.pilaReturns = []
         self.contadorTemporales = 0
         self.pilaIDFor = []
+        self.pilaParams = []
         self.mt = tablas.ManejadorDeTablas()
 
     # TODO: FALTA agregar el tipo del temporal y sus dimensiones a las pilas respectivas
@@ -54,9 +56,9 @@ class generadorDeCuadruplos:
                     self.outputCuadruplos.append(list((tempOperador,tempOperando2,None,tempOperando1)))
                     self.pilaOperandos.append(tempOperando1)
                 else:
-                    self.outputCuadruplos.append(list((tempOperador,tempOperando1,tempOperando2,'Temporal_'+str(self.contadorTemporales))))
-                    self.pilaOperandos.append('Temporal_'+str(self.contadorTemporales))
-                    self.contadorTemporales = self.contadorTemporales + 1
+                    nuevoTemporal = self.mt.getNewTemporal(resultado[0])
+                    self.outputCuadruplos.append(list((tempOperador,tempOperando1,tempOperando2,nuevoTemporal)))
+                    self.pilaOperandos.append(nuevoTemporal)
                 self.pilaTipos.append(resultado[0])
                 self.pilaDimensiones.append(resultado[1])
                 print("Resultado Final:",resultado)
@@ -64,8 +66,10 @@ class generadorDeCuadruplos:
 
         if o in ['*','/']:
             while self.pilaOperadores and self.pilaOperadores[-1] in ['*','/']: #mientras haya operadores de mayor o igual jerarquia, ejecutarlos.
-                self.outputCuadruplos.append(list((self.pilaOperadores[-1], self.pilaOperandos[-2], self.pilaOperandos[-1], 'Temporal_'+str(self.contadorTemporales))))
                 resultado = cs.cubo(self.pilaTipos[-2],self.pilaTipos[-1],self.pilaOperadores[-1],self.pilaDimensiones[-2],self.pilaDimensiones[-1])
+                nuevoTemporal = self.mt.getNewTemporal(resultado[0])
+
+                self.outputCuadruplos.append(list((self.pilaOperadores[-1], self.pilaOperandos[-2], self.pilaOperandos[-1], nuevoTemporal)))
                 self.pilaOperadores.pop() #remueve operador 1
                 self.pilaOperandos.pop() #remueve operando 1
                 self.pilaOperandos.pop() #remueve operando 2
@@ -74,18 +78,18 @@ class generadorDeCuadruplos:
                 self.pilaDimensiones.pop()
                 self.pilaDimensiones.pop()
 
-                self.pilaOperandos.append('Temporal_'+str(self.contadorTemporales))
+                self.pilaOperandos.append(nuevoTemporal)
                 self.pilaTipos.append(resultado[0])
                 self.pilaDimensiones.append(resultado[1])
-                self.contadorTemporales = self.contadorTemporales + 1
 
             self.pilaOperadores.append(o)
 
         if o in ['+','-']:
-
             while self.pilaOperadores and self.pilaOperadores[-1] in ['*','/', '+','-']: #mientras haya operadores de mayor o igual jerarquia, ejecutarlos.
-                self.outputCuadruplos.append(list((self.pilaOperadores[-1], self.pilaOperandos[-2], self.pilaOperandos[-1], 'Temporal_'+str(self.contadorTemporales))))
                 resultado = cs.cubo(self.pilaTipos[-2],self.pilaTipos[-1],self.pilaOperadores[-1],self.pilaDimensiones[-2],self.pilaDimensiones[-1])
+                nuevoTemporal = self.mt.getNewTemporal(resultado[0])
+
+                self.outputCuadruplos.append(list((self.pilaOperadores[-1], self.pilaOperandos[-2], self.pilaOperandos[-1], nuevoTemporal)))
                 self.pilaOperadores.pop() #remueve operador 1
                 self.pilaOperandos.pop() #remueve operando 1
                 self.pilaOperandos.pop() #remueve operando 2
@@ -94,19 +98,20 @@ class generadorDeCuadruplos:
                 self.pilaDimensiones.pop()
                 self.pilaDimensiones.pop()
 
-                self.pilaOperandos.append('Temporal_'+str(self.contadorTemporales))
+                self.pilaOperandos.append(nuevoTemporal)
                 print("Resultado:",resultado[0])
                 self.pilaTipos.append(resultado[0])
                 self.pilaDimensiones.append(resultado[1])
-                self.contadorTemporales = self.contadorTemporales + 1
 
             self.pilaOperadores.append(o)
 
         if o in ['<=','>=','<>','>','<','==']:
 
             while self.pilaOperadores and self.pilaOperadores[-1] in ['*','/', '+','-', '<=','>=','<>','>','<','==']: #mientras haya operadores de mayor o igual jerarquia, ejecutarlos.
-                self.outputCuadruplos.append(list((self.pilaOperadores[-1], self.pilaOperandos[-2], self.pilaOperandos[-1], 'Temporal_'+str(self.contadorTemporales))))
                 resultado = cs.cubo(self.pilaTipos[-2],self.pilaTipos[-1],self.pilaOperadores[-1],self.pilaDimensiones[-2],self.pilaDimensiones[-1])
+                nuevoTemporal = self.mt.getNewTemporal(resultado[0])
+
+                self.outputCuadruplos.append(list((self.pilaOperadores[-1], self.pilaOperandos[-2], self.pilaOperandos[-1], nuevoTemporal)))
                 self.pilaOperadores.pop() #remueve operador 1
                 self.pilaOperandos.pop() #remueve operando 1
                 self.pilaOperandos.pop() #remueve operando 2
@@ -115,18 +120,18 @@ class generadorDeCuadruplos:
                 self.pilaDimensiones.pop()
                 self.pilaDimensiones.pop()
 
-                self.pilaOperandos.append('Temporal_'+str(self.contadorTemporales))
+                self.pilaOperandos.append(nuevoTemporal)
                 self.pilaTipos.append(resultado[0])
                 self.pilaDimensiones.append(resultado[1])
-                self.contadorTemporales = self.contadorTemporales + 1
 
             self.pilaOperadores.append(o)
 
         if o in ['&&', '||']:
-
             while self.pilaOperadores and self.pilaOperadores[-1] in ['*','/', '+','-', '<=','>=','<>','>','<','==', '&&', '||']: #mientras haya operadores de mayor o igual jerarquia, ejecutarlos.
-                self.outputCuadruplos.append(list((self.pilaOperadores[-1], self.pilaOperandos[-2], self.pilaOperandos[-1], 'Temporal_'+str(self.contadorTemporales))))
                 resultado = cs.cubo(self.pilaTipos[-2],self.pilaTipos[-1],self.pilaOperadores[-1],self.pilaDimensiones[-2],self.pilaDimensiones[-1])
+                nuevoTemporal = self.mt.getNewTemporal(resultado[0])
+
+                self.outputCuadruplos.append(list((self.pilaOperadores[-1], self.pilaOperandos[-2], self.pilaOperandos[-1], nuevoTemporal)))
                 self.pilaOperadores.pop() #remueve operador 1
                 self.pilaOperandos.pop() #remueve operando 1
                 self.pilaOperandos.pop() #remueve operando 2
@@ -135,10 +140,9 @@ class generadorDeCuadruplos:
                 self.pilaDimensiones.pop()
                 self.pilaDimensiones.pop()
 
-                self.pilaOperandos.append('Temporal_'+str(self.contadorTemporales))
+                self.pilaOperandos.append(nuevoTemporal)
                 self.pilaTipos.append(resultado[0])
                 self.pilaDimensiones.append(resultado[1])
-                self.contadorTemporales = self.contadorTemporales + 1
 
             self.pilaOperadores.append(o)
 
@@ -157,8 +161,10 @@ class generadorDeCuadruplos:
                     self.pilaOperadores.pop() #remueve operador 1
                     self.pilaOperandos.pop() #remueve operando 1
                 else:
-                    self.outputCuadruplos.append(list((self.pilaOperadores[-1], self.pilaOperandos[-2], self.pilaOperandos[-1], 'Temporal_'+str(self.contadorTemporales))))
                     resultado = cs.cubo(self.pilaTipos[-2],self.pilaTipos[-1],self.pilaOperadores[-1],self.pilaDimensiones[-2],self.pilaDimensiones[-1])
+                    nuevoTemporal = self.mt.getNewTemporal(resultado[0])
+
+                    self.outputCuadruplos.append(list((self.pilaOperadores[-1], self.pilaOperandos[-2], self.pilaOperandos[-1], nuevoTemporal)))
                     self.pilaOperadores.pop() #remueve operador 1
                     self.pilaOperandos.pop() #remueve operando 1
                     self.pilaOperandos.pop() #remueve operando 2
@@ -167,10 +173,9 @@ class generadorDeCuadruplos:
                     self.pilaDimensiones.pop()
                     self.pilaDimensiones.pop()
 
-                    self.pilaOperandos.append('Temporal_'+str(self.contadorTemporales))
+                    self.pilaOperandos.append(nuevoTemporal)
                     self.pilaTipos.append(resultado[0])
                     self.pilaDimensiones.append(resultado[1])
-                    self.contadorTemporales = self.contadorTemporales + 1
 
             if self.pilaOperandos: # vaciar la pila de operandos si queda un valor residual. Sirve para el caso de: a = b = 2 * 3;
                 self.pilaOperandos = []
@@ -181,15 +186,16 @@ class generadorDeCuadruplos:
         print("Pila operandos: ",self.pilaOperandos)
         print("Pila tipos: ",self.pilaTipos)
         print()
+
         for i in self.outputCuadruplos:
             print(i)
         print()
 
-    def operando(self, o, tipo, dimensiones):
+    def operando(self, o, tipo, dimensiones, func):
         #Añadir a pila de operandos
         #Añadir a pila de tipos
         #Añadir a pila de dimensiones
-        self.pilaOperandos.append(o)
+        self.pilaOperandos.append(self.mt.getDireccionVariable(func,o))
         self.pilaTipos.append(tipo)
         self.pilaDimensiones.append(dimensiones)
 
@@ -210,6 +216,7 @@ class generadorDeCuadruplos:
         else:
             print("La expresion del if en el cuadruplo:", len(self.outputCuadruplos), "no tiene resultado boleano o no es un valor único.")
             exit(-1)
+
         print("Salio")
         #Haces pop a pila de operandos
         #Te aseguras que el tipo sea
@@ -305,15 +312,17 @@ class generadorDeCuadruplos:
     def forStatementFalso(self):
 
         operando = self.pilaOperandos.pop()
+        tipo = self.pilaTipos.pop()
 
-        if self.pilaTipos.pop() == 'INT' and self.pilaDimensiones.pop() == 0:
+        if tipo == 'INT' and self.pilaDimensiones.pop() == 0:
             #Si la 'X' es mayor a tu expresion, ya terminaste el for. Es necesario convertir a boleano para usar el GOTOV
-            self.outputCuadruplos.append(list(('<',self.pilaIDFor[-1],operando,'Temporal_'+str(self.contadorTemporales))))
+            nuevoTemporal = self.mt.getNewTemporal('BOOL')
+            self.outputCuadruplos.append(list(('<=',self.pilaIDFor[-1],operando,nuevoTemporal)))
 
             #Se necesita crear aquí la nueva variable temporal para que se utilice y guardarla en mt
 
             self.pilaMigajas.append(len(self.outputCuadruplos))
-            self.outputCuadruplos.append(list(('GOTOF','Temporal_'+str(self.contadorTemporales),None,None)))
+            self.outputCuadruplos.append(list(('GOTOF',nuevoTemporal,None,None)))
         else:
             print("La expresion del for en el cuadruplo:", len(self.outputCuadruplos), "no tiene resultado entero o es un valor único.")
             exit(-1)
@@ -333,8 +342,8 @@ class generadorDeCuadruplos:
         6. ...
         '''
 
-    def forStatementTermina(self):
-        self.outputCuadruplos.append(list(('+',self.pilaIDFor[-1],'1',self.pilaIDFor.pop())))
+    def forStatementTermina(self,func):
+        self.outputCuadruplos.append(list(('+',self.mt.getDireccionVariable(func,self.pilaIDFor[-1]),self.mt.getDireccionVariable('CONSTANTES','1'),self.mt.getDireccionVariable(func,self.pilaIDFor.pop()))))
         #Cambiar 1 por dirección de tabla de constantes
 
         self.outputCuadruplos.append(list(('GOTO',None,None,self.pilaSaltos.pop())))
@@ -378,10 +387,34 @@ class generadorDeCuadruplos:
     def llamadaFuncion(self,func):
         self.outputCuadruplos.append(list(('ERA',None,None,func)))
 
+    def agregarFondoParam(self):
+        self.pilaParams.append('(')
+
+    def quitarFondoParam(self,nombreFuncion):
+        params = ""
+        while self.pilaParams[-1] != '(':
+            param = self.pilaParams.pop()
+            if param == 'INT':
+                params = "i" + params
+            if param == 'FLOAT':
+                params = "f" + params
+            if param == 'CHAR':
+                params = "c" + params
+            if param == 'BOOL':
+                params = "b" + params
+
+        self.pilaParams.pop()
+        if params != self.mt.getParamsFuncion(nombreFuncion):
+            print("El número de parámetros o los tipos no coinciden entre la llamada y la función:",nombreFuncion)
+            print("Params llamada:",params," /// Params función:",self.mt.getParamsFuncion(nombreFuncion))
+            exit(-1)
+        else:
+            print("Se llamó exitosamente a la función",nombreFuncion,"!\n\n\n\n\n")
+
     def resolverParam(self, func):
         #if self.pilaTipos[-1] !=
         operando = self.pilaOperandos.pop()
-        self.pilaTipos.pop()
+        self.pilaParams.append(self.pilaTipos.pop())
         self.pilaDimensiones.pop()
         #Falta determinar donde se va a guardar el parámetro,
         #probablemente en alguna variable dentro de la función objetivo
@@ -389,6 +422,13 @@ class generadorDeCuadruplos:
 
     def goSUB(self,func):
         self.outputCuadruplos.append(list(('GOSUB',None,None,func)))
+
+        tipoNuevoTemporal = self.mt.getTipoFuncion(func)
+        nuevoTemporal = self.mt.getNewTemporal(tipoNuevoTemporal)
+
+        self.outputCuadruplos.append(list(('=',self.mt.getDireccionVariable('PROGRAMA',func),None,nuevoTemporal)))
+        #print("OPERANDOOOO")
+        self.operando('Temporal_'+str(nuevoTemporal),tipoNuevoTemporal,0,'TEMPORALES')
 
     def gotoMain(self):
         self.pilaMigajas.append(len(self.outputCuadruplos))
