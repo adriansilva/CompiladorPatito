@@ -30,7 +30,7 @@ gc.mt.addFuncion(funcionActual,'VOID')
 gc.mt.addFuncion('FUNCIONES', 'VOID')
 gc.mt.addFuncion('TEMPORALES', 'VOID')
 gc.mt.addFuncion('CONSTANTES', 'VOID')
-gc.mt.addVariable('CONSTANTES','1','INT',False)
+gc.mt.addConstante('1','INT')
 
 precedence = (
     ('left','PLUS','MINUS'),
@@ -370,7 +370,7 @@ def p_np_read(p):
     '''
     np_read :
     '''
-    gc.read(p[-1])
+    gc.read(p[-1], funcionActual)
 
 def p_asignacion(p):
     '''

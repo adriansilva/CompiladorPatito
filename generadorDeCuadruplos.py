@@ -230,8 +230,8 @@ class generadorDeCuadruplos:
         else:
             self.outputCuadruplos.append(list(('PRINT', s, None, None)))
 
-    def read(self, id):
-        self.outputCuadruplos.append(list(('READ', None, None, id)))
+    def read(self, id, func):
+        self.outputCuadruplos.append(list(('READ', None, None, self.mt.getAddress(func, id))))
 
     def ifStatement(self):
         print(self.pilaOperandos)
@@ -333,7 +333,7 @@ class generadorDeCuadruplos:
 
     def forStatementInicia(self, funcionActual, id):
         if self.mt.getTipoVariable(funcionActual,id) == 'INT':
-            self.pilaIDFor.append(id)
+            self.pilaIDFor.append(self.mt.getAddress(funcionActual, id))
             self.pilaSaltos.append(len(self.outputCuadruplos)+1)
         else:
             print("El for necesita una variable entera para comparar.")
@@ -377,7 +377,7 @@ class generadorDeCuadruplos:
         '''
 
     def forStatementTermina(self):
-        self.outputCuadruplos.append(list(('+',self.pilaIDFor[-1],'1',self.pilaIDFor.pop())))
+        self.outputCuadruplos.append(list(('+',self.pilaIDFor[-1],self.mt.getAddress('CONSTANTES', '1'),self.pilaIDFor.pop())))
         #Cambiar 1 por dirección de tabla de constantes
 
         self.outputCuadruplos.append(list(('GOTO',None,None,self.pilaSaltos.pop())))

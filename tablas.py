@@ -73,14 +73,6 @@ class ManejadorDeTablas:
             exit(-1)
 
 
-        if nombreFuncion == 'TEMPORALES':
-            address = self.tempAddress[1]
-            self.tempAddress[1] += 1
-
-        if nombreFuncion == 'FUNCIONES':
-            address = self.funcAddress[1]
-            self.funcAddress[1] += 1
-
         if nombreFuncion == 'PROGRAMA' and tipoVariable == 'INT':
             address = self.globalInt[1]
             self.globalInt[1] += 1
@@ -93,17 +85,25 @@ class ManejadorDeTablas:
             address = self.globalChar[1]
             self.globalChar[1] += 1     
 
-        if nombreFuncion != 'PROGRAMA' and tipoVariable == 'INT':
+        if nombreFuncion != 'PROGRAMA' and nombreFuncion != 'FUNCIONES' and tipoVariable == 'INT':
             address = self.localInt[1]
             self.localInt[1] += 1
 
-        if nombreFuncion != 'PROGRAMA' and tipoVariable == 'FLOAT':
+        if nombreFuncion != 'PROGRAMA' and nombreFuncion != 'FUNCIONES' and tipoVariable == 'FLOAT':
             address = self.localFloat[1]
             self.localFloat[1] += 1
 
-        if nombreFuncion != 'PROGRAMA' and tipoVariable == 'CHAR':
+        if nombreFuncion != 'PROGRAMA' and nombreFuncion != 'FUNCIONES' and tipoVariable == 'CHAR':
             address = self.localChar[1]
-            self.localChar[1] += 1   
+            self.localChar[1] += 1  
+
+        if nombreFuncion == 'TEMPORALES':
+            address = self.tempAddress[1]
+            self.tempAddress[1] += 1
+
+        if nombreFuncion == 'FUNCIONES':
+            address = self.funcAddress[1]
+            self.funcAddress[1] += 1
 
         v = Variable(tipoVariable, address)
 
