@@ -244,8 +244,8 @@ def p_escritura2_1(p):
 
 def p_escritura2_2(p):
     '''
-    escritura2 : posibleID escritura3
-               | STRING escritura3
+    escritura2 : np_agregarFondo expresion np_quitarFondo np_print escritura3
+               | STRING np_printStr escritura3
     '''
     # agregar np_agregarVariableConstante
 
@@ -256,10 +256,22 @@ def p_escritura3_1(p):
 
 def p_escritura3_3(p):
     '''
-    escritura3 : COMA expresion escritura3
-               | COMA STRING escritura3
+    escritura3 : COMA np_agregarFondo expresion np_quitarFondo np_print escritura3
+               | COMA STRING np_printStr escritura3
     '''
     # agregar np_agregarVariableConstante
+
+def p_np_print(p):
+    '''
+    np_print :
+    '''
+    gc.print()
+
+def p_np_printStr(p):
+    '''
+    np_printStr :
+    '''
+    gc.print(p[-1])
 
 def p_decision(p):
     '''

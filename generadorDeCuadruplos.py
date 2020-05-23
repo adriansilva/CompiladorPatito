@@ -196,6 +196,12 @@ class generadorDeCuadruplos:
         print("Se añadió un operando:", self.pilaOperandos)
         print(self.pilaOperadores)
 
+    def print(self, s = None):
+        if s == None:
+            self.outputCuadruplos.append(list(('PRINT', self.pilaOperandos[-1], None, None)))
+        else:
+            self.outputCuadruplos.append(list(('PRINT', s, None, None)))
+
     def ifStatement(self):
         print(self.pilaOperandos)
         print(self.pilaTipos)

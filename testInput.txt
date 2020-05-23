@@ -31,4 +31,6 @@ PRINCIPAL(){
       a = b+c;
     }
   }
+
+  ESCRIBE(4+2*2, 4*5, "HELLO WORLD");
 }
