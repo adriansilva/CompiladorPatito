@@ -99,7 +99,8 @@ cuboDimensiones = [[ #ValorÚnico  Arreglo  Matriz
                          [-1,       -1,       2]  #Matriz
                    ]
                   ]
-
+#mat[3,3]
+# A[3] = mat[0]
 def typeToInt(tipo):
     switcher = {
         'INT':   0,

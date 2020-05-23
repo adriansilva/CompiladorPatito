@@ -1,7 +1,7 @@
 PROGRAMA p;
 VAR INT: a, b, c;
 VAR INT: d = a, e, i;
-VAR CHAR: o;
+VAR CHAR: o, dj = o;
 
 FUNCION INT f(INT a, CHAR j)
 VAR INT: h = d*e;
@@ -9,7 +9,9 @@ VAR INT: h = d*e;
   SI(a<b)ENTONCES{
   b = c*3;
   REGRESA 4+3;
+  REGRESA 4+4;
   }
+  a = b+c;
 }
 
 FUNCION INT g(INT a, CHAR j)
@@ -24,4 +26,9 @@ VAR INT: h = d*e;
 
 PRINCIPAL(){
   f(a,i);
+  DESDE a HASTA a*b+c HAZ{
+    DESDE b HASTA 8 HAZ{
+      a = b+c;
+    }
+  }
 }

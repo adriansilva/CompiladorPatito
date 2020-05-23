@@ -19,15 +19,16 @@ import generadorDeCuadruplos
 from lexPatito import tokens
 
 gc = generadorDeCuadruplos.generadorDeCuadruplos()
-mt = tablas.ManejadorDeTablas()
+#mt = tablas.ManejadorDeTablas()
 tipoVariable = None
 funcionActual = 'PROGRAMA'
 currentDimension = 0
 esParametro = False
 funcionObjetivo = 'PRINCIPAL'
 
-mt.addFuncion(funcionActual,'VOID')
-mt.addFuncion('CONSTANTES', 'VOID')
+gc.mt.addFuncion(funcionActual,'VOID')
+gc.mt.addFuncion('CONSTANTES', 'VOID')
+gc.mt.addVariable('CONSTANTES','1','INT',False)
 
 precedence = (
     ('left','PLUS','MINUS'),
@@ -62,13 +63,13 @@ def p_programa3(p):
 
 def p_principal(p):
     '''
-    principal : PRINCIPAL np_updateMain OPAREN CPAREN OBRACKET estatutos CBRACKET np_end np_printCuadruplos np_printTablas 
+    principal : PRINCIPAL np_updateMain OPAREN CPAREN OBRACKET estatutos CBRACKET np_end np_printCuadruplos np_printTablas
     '''
     print("YA TERMINÓ PRINCIPAL!!!!!!!!!!!")
     global funcionActual
-    #mt.deleteFuncion(funcionActual)
+    #gc.mt.deleteFuncion(funcionActual)
     funcionActual = "PRINCIPAL"
-    #mt.deleteFuncion(funcionActual)
+    #gc.mt.deleteFuncion(funcionActual)
     # agregar np_agregarFuncion
 
 def p_np_updateMain(p):
@@ -87,7 +88,7 @@ def p_np_printTablas(p):
     '''
     np_printTablas :
     '''
-    mt.printTablas()
+    gc.mt.printTablas()
 
 def p_declaracion(p):
     '''
@@ -131,7 +132,7 @@ def p_declaracionFuncion(p):
     '''
     global funcionActual
     print("Successful Function Declaration")
-    #mt.deleteFuncion(p[3])
+    #gc.mt.deleteFuncion(p[3])
     funcionActual = "PROGRAMA"
 
 def p_np_esParametro(p):
@@ -201,8 +202,8 @@ def p_np_declfunc(p):
     '''
     global funcionActual
     funcionActual = p[-1]
-    if not mt.existeFuncion(funcionActual):
-        mt.addFuncion(p[-1], p[-2])
+    if not gc.mt.existeFuncion(funcionActual):
+        gc.mt.addFuncion(p[-1], p[-2])
     else:
         print("YA EXISTE LA FUNCIÓN:",funcionActual)
         print(p[-1])
@@ -210,7 +211,7 @@ def p_np_declfunc(p):
 
 def p_estatutos_1(p):
     '''
-    estatutos : return
+    estatutos : return estatutos
               | empty
     '''
 
@@ -300,7 +301,7 @@ def p_np_existeFuncion(p):
     '''
     np_existeFuncion :
     '''
-    if not mt.existeFuncion(p[-1]):
+    if not gc.mt.existeFuncion(p[-1]):
         print("No existe la funcion:",p[-1])
         exit(-1)
 
@@ -444,7 +445,12 @@ def p_posibleID_1(p):
               | ID np_contieneID np_enviarACuadruplos OCORCH np_agregarFondo expresion np_quitarFondo CCORCH
               | ID np_contieneID np_enviarACuadruplos OCORCH np_agregarFondo expresion np_quitarFondo COMA np_agregarFondo expresion np_quitarFondo CCORCH
     '''
-
+    #Restar la dimension actual en 1 por cada expresion
+    #Verificar que el resultado no sea menor a cero
+    #Guardar las dimensiones (tops de pila) en la variable que estas utilizando
+    # funcion{nombre, tipo, tablaVariables}
+    # tablaVariables{nombre, tipo, dirección, dimension, dimensionx, dimensiony, referencias[(1),(2,4),(5,6)]}
+    #                                                                           * (M(5*limS1+6)) (B) C
 def p_posibleIDDeclaracion_1(p):
     '''
     posibleIDDeclaracion : np_updateCurrentDimension0 ID np_addVariable np_enviarACuadruplos np_actualizarDimensiones
@@ -475,9 +481,27 @@ def p_np_updateCurrentDimension2(p):
 
 def p_estatutoRepeticionIncondicional(p):
     '''
-    estatutoRepeticionIncondicional : DESDE ID np_contieneID HASTA expresion HAZ OBRACKET estatutos CBRACKET
+    estatutoRepeticionIncondicional : DESDE ID np_contieneID HASTA np_iniciaFor np_agregarFondo expresion np_quitarFondo np_forFalso HAZ OBRACKET estatutos CBRACKET np_terminaFor
     '''
     # agregar np_contieneID
+
+def p_np_iniciaFor(p):
+    '''
+    np_iniciaFor :
+    '''
+    gc.forStatementInicia(funcionActual, p[-3])
+
+def p_np_forFalso(p):
+    '''
+    np_forFalso :
+    '''
+    gc.forStatementFalso()
+
+def p_np_terminaFor(p):
+    '''
+    np_terminaFor :
+    '''
+    gc.forStatementTermina()
 
 def p_estatutoRepeticionCondicional(p):
     '''
@@ -514,14 +538,14 @@ def p_np_return(p):
     np_return :
     '''
     print('X')
-    gc.regresa(mt.getTipoFuncion(funcionActual),'X')
+    gc.regresa(gc.mt.getTipoFuncion(funcionActual),'X')
 
 def p_np_returnVOID(p):
     '''
     np_returnVOID :
     '''
     print('Void')
-    gc.regresa(mt.getTipoFuncion(funcionActual),'VOID')
+    gc.regresa(gc.mt.getTipoFuncion(funcionActual),'VOID')
 
 def p_error(p):
     print("Hay un error de sintaxis!")
@@ -531,7 +555,7 @@ def p_np_contieneID(p):
     '''
     np_contieneID :
     '''
-    if not mt.contieneID(funcionActual,p[-1]):
+    if not gc.mt.contieneID(funcionActual,p[-1]):
         print("El ID:",p[-1],"no existe en la funcion:", funcionActual)
         exit(-1)
 
@@ -539,52 +563,45 @@ def p_np_addConstanteINT(p):
     '''
     np_addConstanteINT :
     '''
-    mt.addConstante(p[-1], "INT")
+    gc.mt.addConstante(str(p[-1]), "INT")
 
 def p_np_addConstanteFLOAT(p):
     '''
     np_addConstanteFLOAT :
     '''
-    mt.addConstante(p[-1], "FLOAT")
-
-def p_np_contieneID_Constante_Flotante(p):
-    '''
-    np_contieneID_Constante_Flotante :
-    '''
-    if not mt.contieneID('PROGRAMA','c_'+str(p[-1])):
-        mt.addVariable('PROGRAMA','c_'+str(p[-1]),'C_FLOAT',False)
+    gc.mt.addConstante(str(p[-1]), "FLOAT")
 
 def p_np_addVariableParametro(p):
     '''
     np_addVariableParametro :
     '''
     print(funcionActual,p[-1],tipoVariable)
-    mt.addVariable(funcionActual, p[-1], tipoVariable, esParametro) #direccion esta hardcodeada por ahora
+    gc.mt.addVariable(funcionActual, p[-1], tipoVariable, esParametro) #direccion esta hardcodeada por ahora
 
 def p_np_addVariable(p):
     '''
     np_addVariable :
     '''
-    mt.addVariable(funcionActual, p[-1], tipoVariable, esParametro) #direccion esta hardcodeada por ahora
+    gc.mt.addVariable(funcionActual, p[-1], tipoVariable, esParametro) #direccion esta hardcodeada por ahora
 
 def p_np_enviarACuadruplos(p):
     '''
     np_enviarACuadruplos :
     '''
-    gc.operando(p[-2],mt.getTipoVariable(funcionActual,p[-2]),mt.getDimensionVariable(funcionActual,p[-2]))
+    gc.operando(p[-2],gc.mt.getTipoVariable(funcionActual,p[-2]),gc.mt.getDimensionVariable(funcionActual,p[-2]))
 
 def p_np_enviarACuadruplosC(p):
     '''
     np_enviarACuadruplosC :
     '''
-    gc.operando(p[-2],mt.getTipoVariable('CONSTANTES',p[-2]),0)
+    gc.operando(str(p[-2]),gc.mt.getTipoVariable('CONSTANTES',str(p[-2])),0)
 
 
 def p_np_actualizarDimensiones(p):
     '''
     np_actualizarDimensiones :
     '''
-    mt.actualizarDimensiones(funcionActual,p[-3],currentDimension)
+    gc.mt.actualizarDimensiones(funcionActual,p[-3],currentDimension)
 
 def p_np_agregarFondo(p):
     '''

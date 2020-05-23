@@ -1,5 +1,6 @@
 import cuboSemantico as cs
 import os,sys
+import tablas
 
 class generadorDeCuadruplos:
     pilaSaltos = None
@@ -11,6 +12,8 @@ class generadorDeCuadruplos:
     outputCuadruplos = None
     contadorTemporales = None
     pilaReturns = None
+    pilaIDFor = None
+    mt = None
 
     def __init__(self):
         self.pilaSaltos = []
@@ -22,6 +25,8 @@ class generadorDeCuadruplos:
         self.pilaMigajas = []
         self.pilaReturns = []
         self.contadorTemporales = 0
+        self.pilaIDFor = []
+        self.mt = tablas.ManejadorDeTablas()
 
     # TODO: FALTA agregar el tipo del temporal y sus dimensiones a las pilas respectivas
     # TODO: FALTA hacer check que las operaciones entre variables sean validas
@@ -289,8 +294,31 @@ class generadorDeCuadruplos:
         #Generas cuadruplo GOTO a top pila de saltos
         #Actualizas GOTOF que está en el top de las migajas con línea actual (tamaño de outputCuadruplos)
 
-    def forStatementExpresion(self):
-        self.pilaSaltos.append(len(self.outputCuadruplos))
+    def forStatementInicia(self, funcionActual, id):
+        if self.mt.getTipoVariable(funcionActual,id) == 'INT':
+            self.pilaIDFor.append(id)
+            self.pilaSaltos.append(len(self.outputCuadruplos)+1)
+        else:
+            print("El for necesita una variable entera para comparar.")
+            exit(-1)
+
+    def forStatementFalso(self):
+
+        operando = self.pilaOperandos.pop()
+
+        if self.pilaTipos.pop() == 'INT' and self.pilaDimensiones.pop() == 0:
+            #Si la 'X' es mayor a tu expresion, ya terminaste el for. Es necesario convertir a boleano para usar el GOTOV
+            self.outputCuadruplos.append(list(('<',self.pilaIDFor[-1],operando,'Temporal_'+str(self.contadorTemporales))))
+
+            #Se necesita crear aquí la nueva variable temporal para que se utilice y guardarla en mt
+
+            self.pilaMigajas.append(len(self.outputCuadruplos))
+            self.outputCuadruplos.append(list(('GOTOF','Temporal_'+str(self.contadorTemporales),None,None)))
+        else:
+            print("La expresion del for en el cuadruplo:", len(self.outputCuadruplos), "no tiene resultado entero o es un valor único.")
+            exit(-1)
+        #Agregas a pila de migajas línea actual (tamaño de outputCuadruplos)
+        #Generas cuadruplo GOTOF
         #Guardar linea actual en pila de saltos
         #Te aseguras que el tipo de la expresion sea entero
         '''
@@ -305,30 +333,9 @@ class generadorDeCuadruplos:
         6. ...
         '''
 
-    def forStatementInicia(self):
-        operando = self.pilaOperandos.pop()
-        self.pilaTipos.pop()
-        self.pilaDimensiones.pop()
-
-        if self.pilaTipos.pop() == 'INT' and self.pilaDimensiones.pop() == 0:
-            #Si la 'X' es mayor a tu expresion, ya terminaste el for. Es necesario convertir a boleano para usar el GOTOV
-            self.outputCuadruplos.append(list(('>',self.pilaOperandos[-1],operando,'Temporal_'+str(self.contadorTemporales))))
-
-            #Se necesita crear aquí la nueva variable temporal para que se utilice
-
-            self.pilaMigajas.append(len(self.outputCuadruplos))
-            self.outputCuadruplos.append(list(('GOTOV','Temporal_'+str(self.contadorTemporales),None,None)))
-        else:
-            print("La expresion del for en el cuadruplo:", len(self.outputCuadruplos), "no tiene resultado entero o es un valor único.")
-            exit(-1)
-        #Agregas a pila de migajas línea actual (tamaño de outputCuadruplos)
-        #Generas cuadruplo GOTOF
-
     def forStatementTermina(self):
-        #Se saca la 'X' de las pilas
-        self.pilaOperandos.pop()
-        self.pilaTipos.pop()
-        self.pilaDimensiones.pop()
+        self.outputCuadruplos.append(list(('+',self.pilaIDFor[-1],'1',self.pilaIDFor.pop())))
+        #Cambiar 1 por dirección de tabla de constantes
 
         self.outputCuadruplos.append(list(('GOTO',None,None,self.pilaSaltos.pop())))
 
@@ -372,7 +379,7 @@ class generadorDeCuadruplos:
         self.outputCuadruplos.append(list(('ERA',None,None,func)))
 
     def resolverParam(self, func):
-        #if self.pilaTipos[-1] !=  
+        #if self.pilaTipos[-1] !=
         operando = self.pilaOperandos.pop()
         self.pilaTipos.pop()
         self.pilaDimensiones.pop()

@@ -78,6 +78,8 @@ class ManejadorDeTablas:
         else:
             return self.tablaFunciones['PROGRAMA'].tablaVariable[var].tipo
 
+    #Necesitamos un get dirección variable
+
     def getTipoFuncion(self,func):
         return self.tablaFunciones[func].tipo
 
