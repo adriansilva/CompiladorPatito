@@ -32,7 +32,7 @@ PRINCIPAL(){
     }
   }
 
-  ESCRIBE(4+2*2, 4*5, "HELLO WORLD");
+  ESCRIBE(4+2*2.3, 4*5, "HELLO WORLD");
 
   LEE(a, b);
 }

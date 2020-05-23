@@ -75,7 +75,7 @@ class ManejadorDeTablas:
             if tipoVariable == 'FLOAT':
                 self.tablaFunciones[nombreFuncion].parametros += "f"
                 direccion += self.tablaFunciones[nombreFuncion].contadorFloat + 1000 #Floats en 6000/9000
-                self.tablaFunciones[nombreFuncion].contadorFlot += 1
+                self.tablaFunciones[nombreFuncion].contadorFloat += 1
             if tipoVariable == 'CHAR':
                 self.tablaFunciones[nombreFuncion].parametros += "c"
                 direccion += self.tablaFunciones[nombreFuncion].contadorChar + 2000 #Chars en 7000/10000
@@ -102,7 +102,7 @@ class ManejadorDeTablas:
                 self.tablaFunciones[nombreFuncion].contadorInt += 1
             if tipoVariable == 'FLOAT':
                 direccion += self.tablaFunciones[nombreFuncion].contadorFloat + 1000*esTemporal #Floats en 6000/9000
-                self.tablaFunciones[nombreFuncion].contadorFlot += 1
+                self.tablaFunciones[nombreFuncion].contadorFloat += 1
             if tipoVariable == 'CHAR':
                 direccion += self.tablaFunciones[nombreFuncion].contadorChar + 2000*esTemporal #Chars en 7000/10000
                 self.tablaFunciones[nombreFuncion].contadorChar += 1
@@ -156,7 +156,7 @@ class ManejadorDeTablas:
             self.tablaFunciones['TEMPORALES'].contadorInt += 1
         if tipoVariable == 'FLOAT':
             direccion += self.tablaFunciones['TEMPORALES'].contadorFloat + 2000 #Floats en 6000/9000
-            self.tablaFunciones['TEMPORALES'].contadorFlot += 1
+            self.tablaFunciones['TEMPORALES'].contadorFloat += 1
         if tipoVariable == 'CHAR':
             direccion += self.tablaFunciones['TEMPORALES'].contadorChar + 4000 #Chars en 7000/10000
             self.tablaFunciones['TEMPORALES'].contadorChar += 1
@@ -193,7 +193,7 @@ class ManejadorDeTablas:
             self.tablaFunciones['CONSTANTES'].contadorInt += 1
         if tipoVariable == 'FLOAT':
             direccion += self.tablaFunciones['CONSTANTES'].contadorFloat + 1000 #Floats en 6000/9000
-            self.tablaFunciones['CONSTANTES'].contadorFlot += 1
+            self.tablaFunciones['CONSTANTES'].contadorFloat += 1
         if tipoVariable == 'CHAR':
             direccion += self.tablaFunciones['CONSTANTES'].contadorChar + 2000 #Chars en 7000/10000
             self.tablaFunciones['CONSTANTES'].contadorChar += 1

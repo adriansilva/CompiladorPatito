@@ -385,7 +385,7 @@ def p_np_read(p):
     '''
     np_read :
     '''
-    gc.read(p[-1])
+    gc.read(p[-1],funcionActual)
 
 def p_asignacion(p):
     '''
