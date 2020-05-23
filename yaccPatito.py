@@ -27,6 +27,7 @@ esParametro = False
 funcionObjetivo = 'PRINCIPAL'
 
 gc.mt.addFuncion(funcionActual,'VOID')
+gc.mt.addFuncion('FUNCIONES', 'VOID')
 gc.mt.addFuncion('TEMPORALES', 'VOID')
 gc.mt.addFuncion('CONSTANTES', 'VOID')
 gc.mt.addVariable('CONSTANTES','1','INT',False)
@@ -558,14 +559,14 @@ def p_np_return(p):
     np_return :
     '''
     print('X')
-    gc.regresa(gc.mt.getTipoFuncion(funcionActual),'X')
+    gc.regresa(gc.mt.getTipoFuncion(funcionActual),'X', funcionActual)
 
 def p_np_returnVOID(p):
     '''
     np_returnVOID :
     '''
     print('Void')
-    gc.regresa(gc.mt.getTipoFuncion(funcionActual),'VOID')
+    gc.regresa(gc.mt.getTipoFuncion(funcionActual),'VOID', funcionActual)
 
 def p_error(p):
     print("Hay un error de sintaxis!")
@@ -608,13 +609,13 @@ def p_np_enviarACuadruplos(p):
     '''
     np_enviarACuadruplos :
     '''
-    gc.operando(p[-2],gc.mt.getTipoVariable(funcionActual,p[-2]),gc.mt.getDimensionVariable(funcionActual,p[-2]))
+    gc.operando(p[-2],gc.mt.getTipoVariable(funcionActual,p[-2]),gc.mt.getDimensionVariable(funcionActual,p[-2]), funcionActual)
 
 def p_np_enviarACuadruplosC(p):
     '''
     np_enviarACuadruplosC :
     '''
-    gc.operando(str(p[-2]),gc.mt.getTipoVariable('CONSTANTES',str(p[-2])),0)
+    gc.operando(str(p[-2]),gc.mt.getTipoVariable('CONSTANTES',str(p[-2])),0, funcionActual)
 
 
 def p_np_actualizarDimensiones(p):

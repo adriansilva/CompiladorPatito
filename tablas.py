@@ -31,10 +31,12 @@ class ManejadorDeTablas:
     localChar = None
     tempAddress = None
     constAddress = None
+    funcAddress = None
 
     def __init__(self):
         self.tablaFunciones = {}
 
+        self.funcAddress = [1000,1000]
         self.globalInt = [2000, 2000]
         self.globalFloat = [3000, 3000]
         self.globalChar = [4000, 4000]
@@ -71,6 +73,13 @@ class ManejadorDeTablas:
             exit(-1)
 
 
+        if nombreFuncion == 'TEMPORALES':
+            address = self.tempAddress[1]
+            self.tempAddress[1] += 1
+
+        if nombreFuncion == 'FUNCIONES':
+            address = self.funcAddress[1]
+            self.funcAddress[1] += 1
 
         if nombreFuncion == 'PROGRAMA' and tipoVariable == 'INT':
             address = self.globalInt[1]
@@ -82,7 +91,7 @@ class ManejadorDeTablas:
 
         if nombreFuncion == 'PROGRAMA' and tipoVariable == 'CHAR':
             address = self.globalChar[1]
-            self.globalChar[1] += 1
+            self.globalChar[1] += 1     
 
         if nombreFuncion != 'PROGRAMA' and tipoVariable == 'INT':
             address = self.localInt[1]
@@ -94,11 +103,7 @@ class ManejadorDeTablas:
 
         if nombreFuncion != 'PROGRAMA' and tipoVariable == 'CHAR':
             address = self.localChar[1]
-            self.localChar[1] += 1        
-
-        if nombreFuncion == 'TEMPORALES':
-            address = self.tempAddress[1]
-            self.tempAddress[1] += 1
+            self.localChar[1] += 1   
 
         v = Variable(tipoVariable, address)
 
@@ -150,6 +155,18 @@ class ManejadorDeTablas:
             self.tablaFunciones['CONSTANTES'].tablaVariable[con] = v
 
     def getAddress(self, nombreFuncion, nombreVariable):
+
+        if nombreVariable not in self.tablaFunciones[nombreFuncion].tablaVariable:
+
+            if nombreVariable in self.tablaFunciones['PROGRAMA'].tablaVariable:
+                return self.tablaFunciones['PROGRAMA'].tablaVariable[nombreVariable].dirAlmacenamiento
+            
+            if nombreVariable in self.tablaFunciones['CONSTANTES'].tablaVariable:
+                return self.tablaFunciones['CONSTANTES'].tablaVariable[nombreVariable].dirAlmacenamiento
+
+            if nombreVariable in self.tablaFunciones['TEMPORALES'].tablaVariable:
+                return self.tablaFunciones['TEMPORALES'].tablaVariable[nombreVariable].dirAlmacenamiento
+            
         return self.tablaFunciones[nombreFuncion].tablaVariable[nombreVariable].dirAlmacenamiento
 
     def printTablas(self):
