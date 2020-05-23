@@ -14,18 +14,18 @@ VAR INT: h = d*e;
   a = b+c;
 }
 
-FUNCION INT g(INT a, CHAR j)
+FUNCION CHAR fc(INT a, INT b)
 VAR INT: h = d*e;
 {
   SI(a<b)ENTONCES{
   b = c*a;
-  REGRESA b+c;
+  REGRESA dj;
   }
 }
 
 
 PRINCIPAL(){
-  f(a,i);
+  a = f(a,fc(a,b));
   DESDE a HASTA a*b+c HAZ{
     DESDE b HASTA 8 HAZ{
       a = b+c;
