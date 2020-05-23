@@ -27,6 +27,7 @@ esParametro = False
 funcionObjetivo = 'PRINCIPAL'
 
 gc.mt.addFuncion(funcionActual,'VOID')
+gc.mt.addFuncion('TEMPORALES', 'VOID')
 gc.mt.addFuncion('CONSTANTES', 'VOID')
 gc.mt.addVariable('CONSTANTES','1','INT',False)
 
