@@ -7,11 +7,12 @@ class Funcion:
     contadorChar = None
     contadorBool = None
     contadorTemporales = None
-    contadorConstantes = None
+    #contadorConstantes = None
 
-    # Globales: Int 5000 Float 6000 Char 7000
-    # Funcion: Int 8000 Float 9000 Char 10000
-    # Constantes: Int 11000 Float 12000 Char 13000
+    # Globales: Int 5000 Float 6000 Char 7000 Bool 8000
+    # Funcion: Int 9000 Float 10000 Char 11000 Bool 12000
+    # Constantes: Int 13000 Float 14000 Char 15000
+    # Temporales: Int 16000 Float 18000 Char 20000 Bool 22000
 
     def __init__(self, tipo):
         self.tipo = tipo
@@ -21,8 +22,8 @@ class Funcion:
         self.contadorFloat = 0
         self.contadorChar = 0
         self.contadorBool = 0
-        self.contadorTemporales = 13000
-        self.contadorConstantes = 12000
+        self.contadorTemporales = 0
+        #self.contadorConstantes = 12000
 
 class Variable:
     tipo = None
@@ -57,7 +58,8 @@ class ManejadorDeTablas:
         #print(self.tablaFunciones)
 
     def addVariable(self, nombreFuncion, nombreVariable, tipoVariable, esParametro):
-        direccion = 0
+        direccion = None
+        esTemporal = 1
         print("agregando variable", nombreVariable, "a", nombreFuncion)
         print()
         if nombreVariable in self.tablaFunciones[nombreFuncion].tablaVariable:
@@ -65,44 +67,51 @@ class ManejadorDeTablas:
             exit(-1)
 
         if esParametro:
+            direccion = 9000
             if tipoVariable == 'INT':
                 self.tablaFunciones[nombreFuncion].parametros += "i"
+                direccion += self.tablaFunciones[nombreFuncion].contadorInt
+                self.tablaFunciones[nombreFuncion].contadorInt += 1
             if tipoVariable == 'FLOAT':
                 self.tablaFunciones[nombreFuncion].parametros += "f"
+                direccion += self.tablaFunciones[nombreFuncion].contadorFloat + 1000 #Floats en 6000/9000
+                self.tablaFunciones[nombreFuncion].contadorFlot += 1
             if tipoVariable == 'CHAR':
                 self.tablaFunciones[nombreFuncion].parametros += "c"
+                direccion += self.tablaFunciones[nombreFuncion].contadorChar + 2000 #Chars en 7000/10000
+                self.tablaFunciones[nombreFuncion].contadorChar += 1
             if tipoVariable == 'BOOL':
                 self.tablaFunciones[nombreFuncion].parametros += "b"
+                direccion += self.tablaFunciones[nombreFuncion].contadorBool + 3000 #Bools en 8000/11000
+                self.tablaFunciones[nombreFuncion].contadorBool += 1
         else:
             if nombreFuncion == 'PROGRAMA':
                 direccion = 5000
             if nombreFuncion == 'CONSTANTES':
-                direccion = self.tablaFunciones[nombreFuncion].contadorConstantes
-                self.tablaFunciones[nombreFuncion].contadorConstantes += 1
-                pass
+                direccion = 13000
             if nombreFuncion == 'TEMPORALES':
-                direccion = self.tablaFunciones[nombreFuncion].contadorTemporales
-                cont = self.tablaFunciones[nombreFuncion].contadorTemporales
-                self.tablaFunciones[nombreFuncion].contadorTemporales += 1
-                nombreVariable = 'Temporal_' + str(cont)
-                pass
+                direccion = 16000
+                esTemporal = 2
+                self.contadorTemporales += 1
             if nombreFuncion not in ['PROGRAMA','CONSTANTES','TEMPORALES']:
                 print("ESTAMOS DECLARAAAANDO FUNCIONES.")
-                direccion = 8000
+                direccion = 9000
 
             if tipoVariable == 'INT':
                 direccion += self.tablaFunciones[nombreFuncion].contadorInt
                 self.tablaFunciones[nombreFuncion].contadorInt += 1
             if tipoVariable == 'FLOAT':
-                direccion += self.tablaFunciones[nombreFuncion].contadorFloat + 1000 #Floats en 6000/9000
+                direccion += self.tablaFunciones[nombreFuncion].contadorFloat + 1000*esTemporal #Floats en 6000/9000
                 self.tablaFunciones[nombreFuncion].contadorFlot += 1
             if tipoVariable == 'CHAR':
-                direccion += self.tablaFunciones[nombreFuncion].contadorChar + 2000 #Chars en 7000/10000
+                direccion += self.tablaFunciones[nombreFuncion].contadorChar + 2000*esTemporal #Chars en 7000/10000
                 self.tablaFunciones[nombreFuncion].contadorChar += 1
             if tipoVariable == 'BOOL':
-                direccion += self.tablaFunciones[nombreFuncion].contadorBool + 3000 #Bools en 8000/11000
+                direccion += self.tablaFunciones[nombreFuncion].contadorBool + 3000*esTemporal #Bools en 8000/11000
                 self.tablaFunciones[nombreFuncion].contadorBool += 1
 
+            if nombreFuncion == 'TEMPORALES':
+                nombreVariable = 'Temporal_'+str(direccion)
         v = Variable(tipoVariable, direccion)
         self.tablaFunciones[nombreFuncion].tablaVariable[nombreVariable] = v
         #print(self.tablaFunciones[nombreFuncion].tablaVariable)
@@ -136,20 +145,31 @@ class ManejadorDeTablas:
                 if var in self.tablaFunciones['TEMPORALES'].tablaVariable:
                     return self.tablaFunciones['TEMPORALES'].tablaVariable[var].dirAlmacenamiento
                 else:
+                    print()
                     return self.tablaFunciones['PROGRAMA'].tablaVariable[var].dirAlmacenamiento
                     #print(self.tablaFunciones['CONSTANTES'].tablaVariable[var].dirAlmacenamiento,"\n\n\n\n\n\n\n\n\n\n\n\n")
 
     def getNewTemporal(self,tipoVariable):
-        v = Variable(tipoVariable,self.tablaFunciones['TEMPORALES'].contadorTemporales)
+        direccion = 16000
+        if tipoVariable == 'INT':
+            direccion += self.tablaFunciones['TEMPORALES'].contadorInt
+            self.tablaFunciones['TEMPORALES'].contadorInt += 1
+        if tipoVariable == 'FLOAT':
+            direccion += self.tablaFunciones['TEMPORALES'].contadorFloat + 2000 #Floats en 6000/9000
+            self.tablaFunciones['TEMPORALES'].contadorFlot += 1
+        if tipoVariable == 'CHAR':
+            direccion += self.tablaFunciones['TEMPORALES'].contadorChar + 4000 #Chars en 7000/10000
+            self.tablaFunciones['TEMPORALES'].contadorChar += 1
+        if tipoVariable == 'BOOL':
+            direccion += self.tablaFunciones['TEMPORALES'].contadorBool + 6000 #Bools en 8000/11000
+            self.tablaFunciones['TEMPORALES'].contadorBool += 1
+        print("***************",direccion,"**************")
+        v = Variable(tipoVariable, direccion)
 
-        cont = self.tablaFunciones['TEMPORALES'].contadorTemporales
+        self.tablaFunciones['TEMPORALES'].tablaVariable['Temporal_'+str(direccion)] = v
         self.tablaFunciones['TEMPORALES'].contadorTemporales += 1
 
-        s = 'Temporal_'+str(cont)
-
-        self.tablaFunciones['TEMPORALES'].tablaVariable[s] = v
-
-        return cont
+        return direccion
 
     def getParamsFuncion(self,func):
         return self.tablaFunciones[func].parametros
@@ -164,11 +184,25 @@ class ManejadorDeTablas:
             return self.tablaFunciones['PROGRAMA'].tablaVariable[var].dimension
 
     def addConstante(self, con, tipoVariable):
-        v = Variable(tipoVariable, self.tablaFunciones['CONSTANTES'].contadorConstantes)
+        if con in self.tablaFunciones['CONSTANTES'].tablaVariable:
+            return
 
-        if con not in self.tablaFunciones['CONSTANTES'].tablaVariable:
-            self.tablaFunciones['CONSTANTES'].tablaVariable[con] = v
-            self.tablaFunciones['CONSTANTES'].contadorConstantes += 1
+        direccion = 13000
+        if tipoVariable == 'INT':
+            direccion += self.tablaFunciones['CONSTANTES'].contadorInt
+            self.tablaFunciones['CONSTANTES'].contadorInt += 1
+        if tipoVariable == 'FLOAT':
+            direccion += self.tablaFunciones['CONSTANTES'].contadorFloat + 1000 #Floats en 6000/9000
+            self.tablaFunciones['CONSTANTES'].contadorFlot += 1
+        if tipoVariable == 'CHAR':
+            direccion += self.tablaFunciones['CONSTANTES'].contadorChar + 2000 #Chars en 7000/10000
+            self.tablaFunciones['CONSTANTES'].contadorChar += 1
+        if tipoVariable == 'BOOL':
+            direccion += self.tablaFunciones['CONSTANTES'].contadorBool + 3000 #Bools en 8000/11000
+            self.tablaFunciones['CONSTANTES'].contadorBool += 1
+        v = Variable(tipoVariable, direccion)
+
+        self.tablaFunciones['CONSTANTES'].tablaVariable[con] = v
 
     def printTablas(self):
         for i in self.tablaFunciones:
