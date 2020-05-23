@@ -16,6 +16,7 @@ class generadorDeCuadruplos:
     pilaParams = None
     mt = None
 
+
     def __init__(self):
         self.pilaSaltos = []
         self.pilaOperandos = []
@@ -29,6 +30,7 @@ class generadorDeCuadruplos:
         self.pilaIDFor = []
         self.pilaParams = []
         self.mt = tablas.ManejadorDeTablas()
+
 
     # TODO: FALTA agregar el tipo del temporal y sus dimensiones a las pilas respectivas
     # TODO: FALTA hacer check que las operaciones entre variables sean validas
@@ -201,6 +203,15 @@ class generadorDeCuadruplos:
 
         print("Se añadió un operando:", self.pilaOperandos)
         print(self.pilaOperadores)
+
+    def print(self, s = None):
+        if s == None:
+            self.outputCuadruplos.append(list(('PRINT', self.pilaOperandos[-1], None, None)))
+        else:
+            self.outputCuadruplos.append(list(('PRINT', s, None, None)))
+
+    def read(self, id):
+        self.outputCuadruplos.append(list(('READ', None, None, id)))
 
     def ifStatement(self):
         print(self.pilaOperandos)

@@ -9,6 +9,10 @@ class Funcion:
     contadorTemporales = None
     contadorConstantes = None
 
+    # Globales: Int 5000 Float 6000 Char 7000
+    # Funcion: Int 8000 Float 9000 Char 10000
+    # Constantes: Int 11000 Float 12000 Char 13000
+
     def __init__(self, tipo):
         self.tipo = tipo
         self.tablaVariable = {}
