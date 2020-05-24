@@ -15,10 +15,12 @@ import ply.yacc as yacc
 import sys
 import tablas
 import generadorDeCuadruplos
+import MaquinaVirtual
 
 from lexPatito import tokens
 
 gc = generadorDeCuadruplos.generadorDeCuadruplos()
+mv = MaquinaVirtual.MaquinaVirtual()
 #mt = tablas.ManejadorDeTablas()
 tipoVariable = None
 funcionActual = 'PROGRAMA'
@@ -41,6 +43,8 @@ def p_programa(p):
     '''
     programa : PROGRAMA ID SEMICOLON programa2
     '''
+    cuadruplos = gc.returnCuadruplos()
+    mv.processInput(cuadruplos)
 
 def p_programa2(p):
     '''

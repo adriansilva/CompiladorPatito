@@ -4,7 +4,7 @@ class MaquinaVirtual:
     memoria = None
 
     def __init__(self):
-        self.memoria = [None] * 40000
+        self.memoria = {}
 
 
     def processInput(self, cuadruplos):
@@ -13,6 +13,7 @@ class MaquinaVirtual:
         while cuadruplos[ip][0] != 'END':
 
             #GOTO
+            input(cuadruplos[ip])
 
             if cuadruplos[ip][0] == 'GOTO':
                 ip = cuadruplos[ip][3]
@@ -69,15 +70,23 @@ class MaquinaVirtual:
             if cuadruplos[ip][0] == '<>':
                 self.memoria[cuadruplos[ip][3]] = self.memoria[cuadruplos[ip][1]] != self.memoria[cuadruplos[ip][2]]
 
-            # LOGIC
+            # LOGIC ---------------------------------
             if cuadruplos[ip][0] == '&&':
                 self.memoria[cuadruplos[ip][3]] = self.memoria[cuadruplos[ip][1]] and self.memoria[cuadruplos[ip][2]]
 
             if cuadruplos[ip][0] == '||':
                 self.memoria[cuadruplos[ip][3]] = self.memoria[cuadruplos[ip][1]] or self.memoria[cuadruplos[ip][2]]
 
+            # PRINT ---------------------------------
 
-            # INCREMENTA INSTRUCTION POINTER    
+            if cuadruplos[ip][0] == 'PRINT':
+                print(self.memoria[cuadruplos[ip][1]])
 
+            # READ ---------------------------------
+
+            if cuadruplos[ip][0] == 'READ':
+                self.memoria[cuadruplos[ip][3]] = input("input")
+
+            # INCREMENTA INSTRUCTION POINTER   
             ip += 1
 

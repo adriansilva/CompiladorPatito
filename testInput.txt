@@ -1,39 +1,28 @@
 PROGRAMA p;
-VAR INT: a, b, c;
-VAR INT: d = a, e;
-VAR FLOAT: i[20,20];
-VAR CHAR: o, dj = o;
-
-FUNCION INT f(INT a, CHAR j)
-VAR INT: h = d*e;
-{
-  SI(a<b)ENTONCES{
-  b = c*3;
-  REGRESA 4+3;
-  REGRESA 4+4;
-  }
-  a = b+c;
-}
-
-FUNCION CHAR fc(INT a, INT b)
-VAR INT: h = d*e;
-{
-  SI(a<b)ENTONCES{
-  b = c*a;
-  REGRESA dj;
-  }
-}
+VAR INT: a, b, c, d;
 
 
 PRINCIPAL(){
-  a = f(a,fc(a,b));
-  DESDE a HASTA a*b+c HAZ{
-    DESDE b HASTA 8 HAZ{
-      a = b+c;
+
+  a = 0;
+  b = 0;
+  c = 4;
+  d = 0;
+
+  DESDE a HASTA 1*c HAZ{
+    DESDE b HASTA 2 HAZ{
+      d = b+c;
     }
   }
 
-  ESCRIBE(4+2*2.3, 4*5, "HELLO WORLD");
+  ESCRIBE(d);
+
+  SI(a<b)ENTONCES{
+    b = c*a;
+    ESCRIBE(b);
+  }
+
+  ESCRIBE(4+2*2.3, 4*5);
 
   LEE(a, b);
 }

@@ -410,3 +410,6 @@ class generadorDeCuadruplos:
 
         for c in self.outputCuadruplos:
             print(c, file=f)
+
+    def returnCuadruplos(self):
+        return self.outputCuadruplos
