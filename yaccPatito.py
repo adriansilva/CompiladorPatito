@@ -70,7 +70,7 @@ def p_programa3(p):
 
 def p_principal(p):
     '''
-    principal : PRINCIPAL np_updateMain OPAREN CPAREN OBRACKET estatutos CBRACKET np_end np_printCuadruplos np_printTablas
+    principal : PRINCIPAL np_declfuncprincipal np_updateMain OPAREN CPAREN OBRACKET estatutos CBRACKET np_end np_printCuadruplos np_printTablas
     '''
     print("YA TERMINÓ PRINCIPAL!!!!!!!!!!!")
     global funcionActual
@@ -210,6 +210,14 @@ def p_np_declfunc(p):
         print("YA EXISTE LA FUNCIÓN:",funcionActual)
         print(p[-1])
         exit(-1)
+
+def p_np_declprincipal(p):
+    '''
+    np_declfuncprincipal :
+    '''
+    global funcionActual
+    funcionActual = p[-1]
+    gc.mt.addFuncion(p[-1], 'VOID')
 
 def p_estatutos_1(p):
     '''
