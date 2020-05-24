@@ -278,7 +278,7 @@ class generadorDeCuadruplos:
 
     def forStatementInicia(self, funcionActual, id):
         if self.mt.getTipoVariable(funcionActual,id) == 'INT':
-            self.pilaIDFor.append(id)
+            self.pilaIDFor.append(self.mt.getDireccionVariable(funcionActual, id))
             self.pilaSaltos.append(len(self.outputCuadruplos)+1)
         else:
             print("El for necesita una variable entera para comparar.")
@@ -307,7 +307,7 @@ class generadorDeCuadruplos:
         #Te aseguras que el tipo de la expresion sea entero
 
     def forStatementTermina(self,func):
-        self.outputCuadruplos.append(list(('+',self.mt.getDireccionVariable(func,self.pilaIDFor[-1]),self.mt.getDireccionVariable('CONSTANTES','1'),self.mt.getDireccionVariable(func,self.pilaIDFor.pop()))))
+        self.outputCuadruplos.append(list(('+',self.pilaIDFor[-1],self.mt.getDireccionVariable('CONSTANTES','1'),self.pilaIDFor.pop())))
         #Cambiar 1 por dirección de tabla de constantes
 
         self.outputCuadruplos.append(list(('GOTO',None,None,self.pilaSaltos.pop())))
