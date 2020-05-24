@@ -14,6 +14,7 @@ class generadorDeCuadruplos:
     pilaReturns = None
     pilaIDFor = None
     pilaParams = None
+    constanteDeclarada = None # revisa si el cuadruplo de asignacion de una constate ya existe
     mt = None
 
 
@@ -29,6 +30,7 @@ class generadorDeCuadruplos:
         self.contadorTemporales = 0
         self.pilaIDFor = []
         self.pilaParams = []
+        self.constanteDeclarada = []
         self.mt = tablas.ManejadorDeTablas()
 
 
@@ -200,6 +202,11 @@ class generadorDeCuadruplos:
 
         print("Se añadió un operando:", o)
         #print(self.pilaOperadores)
+
+    def constanteCuadruplo(self, con):
+        if con not in self.constanteDeclarada:
+            self.outputCuadruplos.append(list(('=', con, None, self.mt.getDireccionVariable('CONSTANTES', str(con)))))
+            self.constanteDeclarada.append(con)
 
     def print(self, s = None):
         if s == None:

@@ -31,7 +31,8 @@ funcionObjetivo = 'PRINCIPAL'
 gc.mt.addFuncion(funcionActual,'VOID')
 gc.mt.addFuncion('TEMPORALES', 'VOID')
 gc.mt.addFuncion('CONSTANTES', 'VOID')
-gc.mt.addVariable('CONSTANTES','1','INT',False)
+gc.mt.addConstante(str(1),'INT')
+gc.constanteCuadruplo(1)
 
 precedence = (
     ('left','PLUS','MINUS'),
@@ -45,6 +46,7 @@ def p_programa(p):
     '''
     cuadruplos = gc.returnCuadruplos()
     mv.processInput(cuadruplos)
+    p[0] = 'TERMINO DE PROCESAR PROGRAMA'
 
 def p_programa2(p):
     '''
@@ -567,11 +569,15 @@ def p_np_addConstanteINT(p):
     '''
     gc.mt.addConstante(str(p[-1]), "INT")
 
+    gc.constanteCuadruplo(int(p[-1]))
+
 def p_np_addConstanteFLOAT(p):
     '''
     np_addConstanteFLOAT :
     '''
     gc.mt.addConstante(str(p[-1]), "FLOAT")
+
+    gc.constanteCuadruplo(float(p[-1]))
 
 def p_np_addVariableParametro(p):
     '''

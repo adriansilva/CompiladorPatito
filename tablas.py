@@ -96,7 +96,7 @@ class ManejadorDeTablas:
             if nombreFuncion == 'TEMPORALES':
                 direccion = 16000
                 esTemporal = 2
-                self.contadorTemporales += 1
+                self.tablaFunciones['TEMPORALES'].contadorTemporales += 1
             if nombreFuncion not in ['PROGRAMA','CONSTANTES','TEMPORALES']:
                 direccion = 9000
 

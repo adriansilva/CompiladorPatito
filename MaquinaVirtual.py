@@ -10,25 +10,26 @@ class MaquinaVirtual:
     def processInput(self, cuadruplos):
         ip = 0
 
+        print("INICIA MAQUINA VIRTUAL")
+
         while cuadruplos[ip][0] != 'END':
 
             #GOTO
-            input(cuadruplos[ip])
 
             if cuadruplos[ip][0] == 'GOTO':
-                ip = cuadruplos[ip][3]
+                ip = cuadruplos[ip][3] - 1
                 continue
 
             if cuadruplos[ip][0] == 'GOTOF':
 
                 if self.memoria[cuadruplos[ip][1]] == False:
-                    ip = cuadruplos[ip][3]
+                    ip = cuadruplos[ip][3] - 1
                     continue
 
             if cuadruplos[ip][0] == 'GOTOV':
 
                 if self.memoria[cuadruplos[ip][1]] == True:
-                    ip = cuadruplos[ip][3]
+                    ip = cuadruplos[ip][3] - 1
                     continue 
 
             # operadores primitivos ---------------------------------
@@ -48,7 +49,10 @@ class MaquinaVirtual:
             # ASIGNACION ---------------------------------
 
             if cuadruplos[ip][0] == '=':
-                self.memoria[cuadruplos[ip][3]] = self.memoria[cuadruplos[ip][1]] 
+                if cuadruplos[ip][3]  >= 13000 and cuadruplos[ip][3] < 16000: # SI estamos agregando una constante
+                    self.memoria[cuadruplos[ip][3]] = cuadruplos[ip][1]
+                else:
+                    self.memoria[cuadruplos[ip][3]] = self.memoria[cuadruplos[ip][1]] 
 
             # RELOP ---------------------------------
 
@@ -85,7 +89,7 @@ class MaquinaVirtual:
             # READ ---------------------------------
 
             if cuadruplos[ip][0] == 'READ':
-                self.memoria[cuadruplos[ip][3]] = input("input")
+                self.memoria[cuadruplos[ip][3]] = input("input: ")
 
             # INCREMENTA INSTRUCTION POINTER   
             ip += 1
