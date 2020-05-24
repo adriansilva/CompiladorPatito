@@ -1,0 +1,6 @@
+PROGRAMA p;
+VAR INT: a, b[20,20];
+
+PRINCIPAL(){
+
+}

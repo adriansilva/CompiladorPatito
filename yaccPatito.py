@@ -157,15 +157,6 @@ def p_np_endFunc(p):
     gc.endFunc()
     print("Se llamo a una función.")
 
-def p_np_termino(p):
-    '''
-    np_termino :
-    '''
-    print("TERMINO CON VARIABLES\n\n\n")
-    # agregar np_tipoDeFuncion (es necesario?)
-    # agregar np_agregarFuncion
-    # agregar np_ borrar variables locales
-
 def p_declaracionFuncionParametros_1(p): #define argumentos
     '''
     declaracionFuncionParametros : empty
@@ -206,7 +197,7 @@ def p_np_declfunc(p):
     if not gc.mt.existeFuncion(funcionActual):
         gc.mt.addFuncion(p[-1], p[-2])
         if p[-2] != 'VOID':
-            print(p[-2])
+            #print(p[-2])
             gc.mt.addVariable('PROGRAMA',funcionActual,p[-2],False)
             gc.mt.actualizarDimensiones('PROGRAMA',funcionActual,0)
     else:
@@ -283,7 +274,7 @@ def p_decision(p):
     decision : SI OPAREN np_agregarFondo expresion np_quitarFondo np_iniciaIf CPAREN ENTONCES OBRACKET estatutos CBRACKET SINO OBRACKET np_iniciaElse np_agregarFondo estatutos np_quitarFondo np_terminaElse CBRACKET
              | SI OPAREN np_agregarFondo expresion np_quitarFondo np_iniciaIf CPAREN ENTONCES OBRACKET estatutos CBRACKET np_terminaIf
     '''
-    print("tomando decision")
+    #print("tomando decision")
 
 def p_np_iniciaIf(p):
     '''
@@ -391,7 +382,6 @@ def p_asignacion(p):
     '''
     asignacion : posibleID np_agregarFondo ASSIGN np_insertarOperador np_agregarFondo expresion np_quitarFondo np_quitarFondo SEMICOLON
     '''
-# checar si el np para ver si el resultado de la derecha es del mismo tipo que de la izq es cuadruplo o no
 
 def p_expresion_3(p):
     '''
@@ -404,16 +394,6 @@ def p_expresion_1(p):
     expresion : termino
     '''
 
-    #elif p[2] == "&&" || p[2] == "||":
-    #    if p[2] == "&&":
-    #        p[0] = (p[1] && p[3])
-    #    else:
-    #        p[0] = (p[1] || p[3])
-    #else:
-    #    if p[2] == "<=":
-    #        p[0] =
-
-
 def p_termino_3(p):
     '''
     termino : termino PLUS np_insertarOperador termino
@@ -421,28 +401,6 @@ def p_termino_3(p):
             | termino MULTIPLY np_insertarOperador termino
             | termino DIVIDE np_insertarOperador termino
     '''
-    #Este código se va a usar cuando ya tengamos tabla de variables
-    """
-    if(isinstance(p[3], tuple)):
-        if (len(p[3]) == 3) & (p[3][0] == '(') & (p[3][2] == ')'):
-            if p[2] == '+':
-                p[0] = p[1] + p[3][1]
-            elif p[2] == '-':
-                p[0] = p[1] - p[3][1]
-            elif p[2] == '*':
-                p[0] = p[1] * p[3][1]
-            elif p[2] == '/':
-                p[0] = p[1] / p[3][1]
-    else:
-        if p[2] == '+':
-            p[0] = p[1] + p[3]
-        elif p[2] == '-':
-            p[0] = p[1] - p[3]
-        elif p[2] == '*':
-            p[0] = p[1] * p[3]
-        elif p[2] == '/':
-            p[0] = p[1] / p[3]
-    """
 
 def p_np_insertarOperador(p):
     '''
@@ -489,31 +447,35 @@ def p_posibleID_1(p):
     #                                                                           * (M(5*limS1+6)) (B) C
 def p_posibleIDDeclaracion_1(p):
     '''
-    posibleIDDeclaracion : np_updateCurrentDimension0 ID np_addVariable np_enviarACuadruplos np_actualizarDimensiones
-                         | np_updateCurrentDimension1 ID np_addVariable np_enviarACuadruplos np_actualizarDimensiones OCORCH expresion CCORCH
-                         | np_updateCurrentDimension2 ID np_addVariable np_enviarACuadruplos np_actualizarDimensiones OCORCH expresion COMA expresion CCORCH
+    posibleIDDeclaracion : ID np_addVariable np_enviarACuadruplos np_actualizarDimensiones
+                         | ID np_addVariable np_enviarACuadruplos np_actualizarDimensiones OCORCH ENTERO np_addConstanteINT np_asignarDimensionX CCORCH np_asignarMemoria1
+                         | ID np_addVariable np_enviarACuadruplos np_actualizarDimensiones OCORCH ENTERO np_addConstanteINT np_asignarDimensionX COMA ENTERO np_addConstanteINT np_asignarDimensionY CCORCH np_asignarMemoria2
     '''
 
-def p_np_updateCurrentDimension0(p):
+def p_np_asignarDimensionX(p):
     '''
-    np_updateCurrentDimension0 :
+    np_asignarDimensionX :
     '''
-    global currentDimension
-    currentDimension = 0
+    gc.mt.asignarDimensionX(funcionActual,p[-7],p[-2])
 
-def p_np_updateCurrentDimension1(p):
+def p_np_asignarDimensionY(p):
     '''
-    np_updateCurrentDimension1 :
+    np_asignarDimensionY :
     '''
-    global currentDimension
-    currentDimension = 1
+    #print(funcionActual,p[-11],p[-2])
+    gc.mt.asignarDimensionY(funcionActual,p[-11],p[-2])
 
-def p_np_updateCurrentDimension2(p):
+def p_np_asignarMemoria1(p):
     '''
-    np_updateCurrentDimension2 :
+    np_asignarMemoria1 :
     '''
-    global currentDimension
-    currentDimension = 2
+    gc.mt.asignarMemoria(funcionActual,p[-9],tipoVariable)
+
+def p_np_asignarMemoria2(p):
+    '''
+    np_asignarMemoria2 :
+    '''
+    gc.mt.asignarMemoria(funcionActual,p[-13],tipoVariable)
 
 def p_estatutoRepeticionIncondicional(p):
     '''
@@ -543,7 +505,7 @@ def p_estatutoRepeticionCondicional(p):
     '''
     estatutoRepeticionCondicional : MIENTRAS OPAREN np_agregarFondo npWhileStExp expresion np_quitarFondo CPAREN HAZ OBRACKET npWhileInicia estatutos CBRACKET npWhileTermina
     '''
-    print("Que hay de nuevo viejo")
+    #print("Que hay de nuevo viejo")
 
 def p_npWhileStExp(p):
     '''
@@ -573,14 +535,14 @@ def p_np_return(p):
     '''
     np_return :
     '''
-    print('X')
+    #print('X')
     gc.regresa(gc.mt.getTipoFuncion(funcionActual),'X')
 
 def p_np_returnVOID(p):
     '''
     np_returnVOID :
     '''
-    print('Void')
+    #print('Void')
     gc.regresa(gc.mt.getTipoFuncion(funcionActual),'VOID')
 
 def p_error(p):
@@ -611,13 +573,14 @@ def p_np_addVariableParametro(p):
     '''
     np_addVariableParametro :
     '''
-    print(funcionActual,p[-1],tipoVariable)
+    #print(funcionActual,p[-1],tipoVariable)
     gc.mt.addVariable(funcionActual, p[-1], tipoVariable, esParametro) #direccion esta hardcodeada por ahora
 
 def p_np_addVariable(p):
     '''
     np_addVariable :
     '''
+    #print("Se está intentando agregar la variable:",p[-1])
     gc.mt.addVariable(funcionActual, p[-1], tipoVariable, esParametro) #direccion esta hardcodeada por ahora
 
 def p_np_enviarACuadruplos(p):
@@ -643,14 +606,14 @@ def p_np_agregarFondo(p):
     '''
     np_agregarFondo :
     '''
-    print("se agregó fondo exitosamente.")
+    #print("se agregó fondo exitosamente.")
     gc.operador('(')
 
 def p_np_quitarFondo(p):
     '''
     np_quitarFondo :
     '''
-    print("Se quitó fondo exitosamente!")
+    #print("Se quitó fondo exitosamente!")
     gc.operador(')')
 
 def p_np_printCuadruplos(p):
@@ -670,31 +633,3 @@ f = open("testInput.txt", "r")
 result = parser.parse(f.read())
 
 print(result)
-'''
-s=''
-
-while True:
-    try:
-        s += input('')
-    except EOFError:
-        break
-    s+="\n"
-    if not s: continue
-    if s[len(s)-2] == '°':
-        break
-
-print(s)
-result = parser.parse(s[0:-2])
-print(result)
-
-
-while True:
-    try:
-        s = input('')
-    except EOFError:
-        break
-    if not s: continue
-
-    result = parser.parse(s)
-    print(result)
-'''

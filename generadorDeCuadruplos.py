@@ -46,10 +46,9 @@ class generadorDeCuadruplos:
                 tempOperador = self.pilaOperadores.pop()
                 tempOperando2 = self.pilaOperandos.pop()
                 tempOperando1 = self.pilaOperandos.pop()
-                print((tempOperador,tempOperando1,tempOperando2))
+                #print((tempOperador,tempOperando1,tempOperando2))
                 resultado = cs.cubo(self.pilaTipos[-2],self.pilaTipos[-1],tempOperador,self.pilaDimensiones[-2],self.pilaDimensiones[-1])
-                #print(self.pilaTipos[-2],self.pilaTipos[-1])
-                print("Resultado:",resultado)
+
                 self.pilaTipos.pop()
                 self.pilaTipos.pop()
                 self.pilaDimensiones.pop()
@@ -63,7 +62,6 @@ class generadorDeCuadruplos:
                     self.pilaOperandos.append(nuevoTemporal)
                 self.pilaTipos.append(resultado[0])
                 self.pilaDimensiones.append(resultado[1])
-                print("Resultado Final:",resultado)
             self.pilaOperadores.pop()
 
         if o in ['*','/']:
@@ -101,7 +99,6 @@ class generadorDeCuadruplos:
                 self.pilaDimensiones.pop()
 
                 self.pilaOperandos.append(nuevoTemporal)
-                print("Resultado:",resultado[0])
                 self.pilaTipos.append(resultado[0])
                 self.pilaDimensiones.append(resultado[1])
 
@@ -183,11 +180,11 @@ class generadorDeCuadruplos:
                 self.pilaOperandos = []
 
         #Para cada operador, implementar lógica de pops y push
-        print("Se añadió un operador:",o)
-        print("Pila operadores:",self.pilaOperadores)
-        print("Pila operandos: ",self.pilaOperandos)
-        print("Pila tipos: ",self.pilaTipos)
-        print()
+        #print("Se añadió un operador:",o)
+        #print("Pila operadores:",self.pilaOperadores)
+        #print("Pila operandos: ",self.pilaOperandos)
+        #print("Pila tipos: ",self.pilaTipos)
+        #print()
 
         for i in self.outputCuadruplos:
             print(i)
@@ -201,8 +198,8 @@ class generadorDeCuadruplos:
         self.pilaTipos.append(tipo)
         self.pilaDimensiones.append(dimensiones)
 
-        print("Se añadió un operando:", self.pilaOperandos)
-        print(self.pilaOperadores)
+        print("Se añadió un operando:", o)
+        #print(self.pilaOperadores)
 
     def print(self, s = None):
         if s == None:
@@ -219,7 +216,7 @@ class generadorDeCuadruplos:
         operando = self.pilaOperandos.pop()
 
         if self.pilaTipos.pop() == 'BOOL' and self.pilaDimensiones.pop() == 0:
-            print("Migaja")
+            #print("Migaja")
             self.pilaMigajas.append(len(self.outputCuadruplos))
             print(self.pilaMigajas)
             self.outputCuadruplos.append(list(('GOTOF',operando,None,None)))
@@ -228,30 +225,10 @@ class generadorDeCuadruplos:
             print("La expresion del if en el cuadruplo:", len(self.outputCuadruplos), "no tiene resultado boleano o no es un valor único.")
             exit(-1)
 
-        print("Salio")
         #Haces pop a pila de operandos
         #Te aseguras que el tipo sea
         #Meter línea actual a pila de migajas
         #Generas cuadruplo GOTOF
-
-        '''
-        if(A==B+C){
-
-        }
-        else{
-
-        }
-        1. + B C T1
-        2. == A T1 T2
-        3. GOTOF T2 8
-        4. ...
-        5. ...
-        6. ...
-        7. GOTO   10
-        8. ...
-        9. Ultima instruccion del else
-        10. sigue codigo normal
-        '''
 
     def terminaIfStatement(self):
         #El jump cuando la condición sea falsa es al final del if
@@ -277,19 +254,6 @@ class generadorDeCuadruplos:
     def whileStatementExpresion(self):
         self.pilaSaltos.append(len(self.outputCuadruplos) + 1)
         #Guardar linea actual en pila de saltos
-        '''
-        MIENTRAS(A<=B+C)HAZ{
-
-        }
-        1. + B C T1
-        2. <= A T1 T2
-        3. GOTOF T2  8
-        4. ...
-        5. ...
-        6. ...
-        7. GOTO 1
-        8. ...
-        '''
 
     def whileStatementInicia(self):
         operando = self.pilaOperandos.pop()
@@ -341,17 +305,6 @@ class generadorDeCuadruplos:
         #Generas cuadruplo GOTOF
         #Guardar linea actual en pila de saltos
         #Te aseguras que el tipo de la expresion sea entero
-        '''
-        DESDE X HASTA Y*5 HAZ{
-
-        }
-        1. * Y 5 T1
-        2. GOTOF 6
-        3. ...
-        4. ...
-        5. GOTO 1
-        6. ...
-        '''
 
     def forStatementTermina(self,func):
         self.outputCuadruplos.append(list(('+',self.mt.getDireccionVariable(func,self.pilaIDFor[-1]),self.mt.getDireccionVariable('CONSTANTES','1'),self.mt.getDireccionVariable(func,self.pilaIDFor.pop()))))
@@ -372,11 +325,11 @@ class generadorDeCuadruplos:
                 self.pilaReturns.append(len(self.outputCuadruplos))
                 self.outputCuadruplos.append(list(('GOTO',None,None,None)))
             else:
-                print("El tipo de retorno no matcheAAA con el tipo de la función.")
+                print("El tipo de retorno no matche(VOID) con el tipo de la función.")
                 exit(-1)
         else:
             if self.pilaTipos[-1] != tipoFunc:
-                print("El tipo de retorno no matcheaaaa con el tipo de la función.")
+                print("El tipo de retorno no matche(!=VOID) con el tipo de la función.")
                 exit(-1)
             else:
                 operando = self.pilaOperandos.pop()

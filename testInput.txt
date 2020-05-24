@@ -1,6 +1,7 @@
 PROGRAMA p;
 VAR INT: a, b, c;
-VAR INT: d = a, e, i;
+VAR INT: d = a, e;
+VAR FLOAT: i[20,20];
 VAR CHAR: o, dj = o;
 
 FUNCION INT f(INT a, CHAR j)

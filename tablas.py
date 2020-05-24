@@ -29,11 +29,15 @@ class Variable:
     tipo = None
     dimension = None
     dirAlmacenamiento = None
+    dimensionX = None
+    dimensionY = None
 
     def __init__(self, tipo, dirAlmacenamiento):
         self.tipo = tipo
         self.dirAlmacenamiento = dirAlmacenamiento
         self.dimension = 0
+        self.dimensionX = 1
+        self.dimensionY = 1
 
 class ManejadorDeTablas:
     tablaFunciones = None
@@ -94,7 +98,6 @@ class ManejadorDeTablas:
                 esTemporal = 2
                 self.contadorTemporales += 1
             if nombreFuncion not in ['PROGRAMA','CONSTANTES','TEMPORALES']:
-                print("ESTAMOS DECLARAAAANDO FUNCIONES.")
                 direccion = 9000
 
             if tipoVariable == 'INT':
@@ -119,6 +122,26 @@ class ManejadorDeTablas:
     def actualizarDimensiones(self, nombreFuncion, nombreVariable, dimension):
         self.tablaFunciones[nombreFuncion].tablaVariable[nombreVariable].dimension = dimension
 
+    def asignarDimensionX(self,func,var,valor):
+        self.tablaFunciones[func].tablaVariable[var].dimensionX = valor
+        self.tablaFunciones[func].tablaVariable[var].dimension = 1
+
+    def asignarDimensionY(self,func,var,valor):
+        self.tablaFunciones[func].tablaVariable[var].dimensionY = valor
+        self.tablaFunciones[func].tablaVariable[var].dimension = 2
+
+    def asignarMemoria(self,func,var,tipoVariable):
+        nuevaMemoria = self.tablaFunciones[func].tablaVariable[var].dimensionX*self.tablaFunciones[func].tablaVariable[var].dimensionY - 1 #Porque ya reservaste 1 espacio automáticamente añ añadirla a la función
+
+        if tipoVariable == 'INT':
+            self.tablaFunciones[func].contadorInt += nuevaMemoria
+        if tipoVariable == 'FLOAT':
+            self.tablaFunciones[func].contadorFloat += nuevaMemoria
+        if tipoVariable == 'CHAR':
+            self.tablaFunciones[func].contadorChar += nuevaMemoria
+        if tipoVariable == 'BOOL':
+            self.tablaFunciones[func].contadorBool += nuevaMemoria
+
     def contieneID(self, nombreFuncion, nombreVariable):
         return (nombreVariable in self.tablaFunciones[nombreFuncion].tablaVariable or
                 nombreVariable in self.tablaFunciones["PROGRAMA"].tablaVariable)
@@ -132,7 +155,6 @@ class ManejadorDeTablas:
         else:
             return self.tablaFunciones['PROGRAMA'].tablaVariable[var].tipo
 
-    #Necesitamos un get dirección variable
     def getDireccionVariable(self,func,var):
         print(self.tablaFunciones['TEMPORALES'].tablaVariable)
         print("Esto es un var:",var, "Y aqui termina.")
@@ -147,7 +169,6 @@ class ManejadorDeTablas:
                 else:
                     print()
                     return self.tablaFunciones['PROGRAMA'].tablaVariable[var].dirAlmacenamiento
-                    #print(self.tablaFunciones['CONSTANTES'].tablaVariable[var].dirAlmacenamiento,"\n\n\n\n\n\n\n\n\n\n\n\n")
 
     def getNewTemporal(self,tipoVariable):
         direccion = 16000
@@ -209,3 +230,8 @@ class ManejadorDeTablas:
             print("función:",i,"de tipo:",self.tablaFunciones[i].tipo,"con parametros:",self.tablaFunciones[i].parametros)
             for j in self.tablaFunciones[i].tablaVariable:
                 print("variable:",j,"de tipo:",self.tablaFunciones[i].tablaVariable[j].tipo)
+        print("Las variables usadas por tipo en PROGRAMA son:")
+        print(self.tablaFunciones['PROGRAMA'].contadorInt)
+        print(self.tablaFunciones['PROGRAMA'].contadorFloat)
+        print(self.tablaFunciones['PROGRAMA'].contadorChar)
+        print(self.tablaFunciones['PROGRAMA'].contadorBool)
