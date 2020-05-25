@@ -72,10 +72,9 @@ Tipo: (Int | Float | Char)
 
 """
 
-def t_COMENTARIO(t):
+def t_COMMENT(t):
     r'\%\%.*'
-    t.type = 'COMENTARIO'
-    return t
+    pass
 
 def t_LOGIC(t):
     r'\&\& | \|\|'
