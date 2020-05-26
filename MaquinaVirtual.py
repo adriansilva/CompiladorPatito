@@ -1,10 +1,13 @@
 
 class MaquinaVirtual:
 
-    memoria = None
+    heap = None
+    stack = None
 
     def __init__(self):
-        self.memoria = {}
+        self.heap = {}      # memoria que almacena variables globales, constantes y temporales
+        self.stack = [{}]   # memoria local, cada ves que se usa una funcion, se agrega otro diccionario a esta 
+                            # lista de diccionarios y representa una nueva seccion de memoria
 
     def processInput(self, cuadruplos, mt):
         ip = 0
@@ -21,69 +24,86 @@ class MaquinaVirtual:
 
             if cuadruplos[ip][0] == 'GOTOF':
 
-                if self.memoria[cuadruplos[ip][1]] == False:
+                if self.getValue(cuadruplos[ip][1]) == False:
                     ip = cuadruplos[ip][3] - 1
                     continue
 
             if cuadruplos[ip][0] == 'GOTOV':
 
-                if self.memoria[cuadruplos[ip][1]] == True:
+                if self.getValue(cuadruplos[ip][1]) == True:
                     ip = cuadruplos[ip][3] - 1
                     continue
 
             # operadores primitivos ---------------------------------
 
             if cuadruplos[ip][0] == '+':
-                self.memoria[cuadruplos[ip][3]] = self.memoria[cuadruplos[ip][1]] + self.memoria[cuadruplos[ip][2]]
+                valor = self.getValue(cuadruplos[ip][1]) + self.getValue(cuadruplos[ip][2])
+                self.setValue(cuadruplos[ip][3], valor)
 
             if cuadruplos[ip][0] == '-':
-                self.memoria[cuadruplos[ip][3]] = self.memoria[cuadruplos[ip][1]] - self.memoria[cuadruplos[ip][2]]
+                valor = self.getValue(cuadruplos[ip][1]) - self.getValue(cuadruplos[ip][2])
+                self.setValue(cuadruplos[ip][3], valor)
 
             if cuadruplos[ip][0] == '*':
-                self.memoria[cuadruplos[ip][3]] = self.memoria[cuadruplos[ip][1]] * self.memoria[cuadruplos[ip][2]]
+                valor = self.getValue(cuadruplos[ip][1]) * self.getValue(cuadruplos[ip][2])
+                self.setValue(cuadruplos[ip][3], valor)
 
             if cuadruplos[ip][0] == '/':
-                self.memoria[cuadruplos[ip][3]] = self.memoria[cuadruplos[ip][1]] / self.memoria[cuadruplos[ip][2]]
+                valor = self.getValue(cuadruplos[ip][1]) / self.getValue(cuadruplos[ip][2])
+                self.setValue(cuadruplos[ip][3], valor)
 
             # ASIGNACION ---------------------------------
 
             if cuadruplos[ip][0] == '=':
+                
                 if cuadruplos[ip][3]  >= 13000 and cuadruplos[ip][3] < 16000: # SI estamos agregando una constante
-                    self.memoria[cuadruplos[ip][3]] = cuadruplos[ip][1]
+                    constante = cuadruplos[ip][1]
+                    self.setValue(cuadruplos[ip][3], constante)
+
                 else:
-                    self.memoria[cuadruplos[ip][3]] = self.memoria[cuadruplos[ip][1]]
+                    valor = self.getValue(cuadruplos[ip][1])
+                    self.setValue(cuadruplos[ip][3], valor)
+
 
             # RELOP ---------------------------------
 
             if cuadruplos[ip][0] == '<':
-                self.memoria[cuadruplos[ip][3]] = self.memoria[cuadruplos[ip][1]] < self.memoria[cuadruplos[ip][2]]
+                valor = self.getValue(cuadruplos[ip][1]) < self.getValue(cuadruplos[ip][2])
+                self.setValue(cuadruplos[ip][3], valor)
 
             if cuadruplos[ip][0] == '<=':
-                self.memoria[cuadruplos[ip][3]] = self.memoria[cuadruplos[ip][1]] <= self.memoria[cuadruplos[ip][2]]
+                valor = self.getValue(cuadruplos[ip][1]) <= self.getValue(cuadruplos[ip][2])
+                self.setValue(cuadruplos[ip][3], valor)
 
             if cuadruplos[ip][0] == '>':
-                self.memoria[cuadruplos[ip][3]] = self.memoria[cuadruplos[ip][1]] > self.memoria[cuadruplos[ip][2]]
+                valor = self.getValue(cuadruplos[ip][1]) > self.getValue(cuadruplos[ip][2])
+                self.setValue(cuadruplos[ip][3], valor)
 
             if cuadruplos[ip][0] == '>=':
-                self.memoria[cuadruplos[ip][3]] = self.memoria[cuadruplos[ip][1]] >= self.memoria[cuadruplos[ip][2]]
+                valor = self.getValue(cuadruplos[ip][1]) >= self.getValue(cuadruplos[ip][2])
+                self.setValue(cuadruplos[ip][3], valor)
 
             if cuadruplos[ip][0] == '==':
-                self.memoria[cuadruplos[ip][3]] = self.memoria[cuadruplos[ip][1]] == self.memoria[cuadruplos[ip][2]]
+                valor = self.getValue(cuadruplos[ip][1]) == self.getValue(cuadruplos[ip][2])
+                self.setValue(cuadruplos[ip][3], valor)
 
             if cuadruplos[ip][0] == '<>':
-                self.memoria[cuadruplos[ip][3]] = self.memoria[cuadruplos[ip][1]] != self.memoria[cuadruplos[ip][2]]
+                valor = self.getValue(cuadruplos[ip][1]) != self.getValue(cuadruplos[ip][2])
+                self.setValue(cuadruplos[ip][3], valor)
 
             # LOGIC ---------------------------------
             if cuadruplos[ip][0] == '&&':
-                self.memoria[cuadruplos[ip][3]] = self.memoria[cuadruplos[ip][1]] and self.memoria[cuadruplos[ip][2]]
+                valor = self.getValue(cuadruplos[ip][1]) and self.getValue(cuadruplos[ip][2])
+                self.setValue(cuadruplos[ip][3], valor)
 
             if cuadruplos[ip][0] == '||':
-                self.memoria[cuadruplos[ip][3]] = self.memoria[cuadruplos[ip][1]] or self.memoria[cuadruplos[ip][2]]
+                valor = self.getValue(cuadruplos[ip][1]) or self.getValue(cuadruplos[ip][2])
+                self.setValue(cuadruplos[ip][3], valor)
 
             # PRINT ---------------------------------
 
             if cuadruplos[ip][0] == 'PRINT':
-                print(self.memoria[cuadruplos[ip][1]])
+                print(self.getValue(cuadruplos[ip][1]))
 
             # READ ---------------------------------
 
@@ -95,7 +115,7 @@ class MaquinaVirtual:
                         (cuadruplos[ip][3] >= 9000 and cuadruplos[ip][3] <10000) or
                         (cuadruplos[ip][3] >= 13000 and cuadruplos[ip][3] <14000) or
                         (cuadruplos[ip][3] >= 16000 and cuadruplos[ip][3] <18000)):
-                        self.memoria[cuadruplos[ip][3]] = temp
+                        self.setValue(cuadruplos[ip][3], temp)
                     else:
                         print("ERROR DE ASIGNACION: El tipo de dato introducido (INT) no matchea con la variable.")
                         exit(-1)
@@ -107,7 +127,7 @@ class MaquinaVirtual:
                             (cuadruplos[ip][3] >= 10000 and cuadruplos[ip][3] <11000) or
                             (cuadruplos[ip][3] >= 14000 and cuadruplos[ip][3] <15000) or
                             (cuadruplos[ip][3] >= 18000 and cuadruplos[ip][3] <20000)):
-                            self.memoria[cuadruplos[ip][3]] = temp
+                            self.setValue(cuadruplos[ip][3], temp)
                         else:
                             print("ERROR DE ASIGNACION: El tipo de dato introducido (FLOAT) no matchea con la variable.")
                             exit(-1)
@@ -116,7 +136,7 @@ class MaquinaVirtual:
                             (cuadruplos[ip][3] >= 11000 and cuadruplos[ip][3] <12000) or
                             (cuadruplos[ip][3] >= 15000 and cuadruplos[ip][3] <16000) or
                             (cuadruplos[ip][3] >= 20000 and cuadruplos[ip][3] <22000)):
-                            self.memoria[cuadruplos[ip][3]] = temp
+                            self.setValue(cuadruplos[ip][3], temp)
                         else:
                             print("ERROR DE ASIGNACION: El tipo de dato introducido (CHAR/STRING) no matchea con la variable.")
                             exit(-1)
@@ -124,3 +144,21 @@ class MaquinaVirtual:
 
             # INCREMENTA INSTRUCTION POINTER
             ip += 1
+
+    def getValue(self, address):
+
+        if address >= 9000 and address < 13000: # la direccion es local entonces esta almacenada en stack
+            return self.stack[-1][address]
+
+        else: # la direccion esta almacenada en heap
+            return self.heap[address]
+
+    def setValue(self, address, value):
+
+        if address >= 9000 and address < 13000: # la direccion es local entonces esta almacenada en stack
+            self.stack[-1][address] = value
+
+        else: # la direccion esta almacenada en heap
+            self.heap[address] = value
+
+        
