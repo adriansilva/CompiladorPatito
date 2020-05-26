@@ -145,6 +145,9 @@ class MaquinaVirtual:
             if cuadruplos[ip][0] == 'ERA': # agrega un segmento de memoria
                 self.stack.append({})
 
+            if cuadruplos[ip][0] == 'ENDfunc': # agrega un segmento de memoria
+                self.stack.pop()
+
             # INCREMENTA INSTRUCTION POINTER
             ip += 1
 
