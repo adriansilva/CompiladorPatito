@@ -52,7 +52,7 @@ class ManejadorDeTablas:
     def addFuncion(self, nombreFuncion, tipoFuncion):
         f = Funcion(tipoFuncion)
 
-        print("Añadiendo funcion:",nombreFuncion,"de tipo",tipoFuncion)
+        #print("Añadiendo funcion:",nombreFuncion,"de tipo",tipoFuncion)
 
         if nombreFuncion in self.tablaFunciones:
             print("Error, la funcion", nombreFuncion, "ya fue declarada\n")
@@ -68,8 +68,8 @@ class ManejadorDeTablas:
     def addVariable(self, nombreFuncion, nombreVariable, tipoVariable, esParametro):
         direccion = None
         esTemporal = 1
-        print("agregando variable", nombreVariable, "a", nombreFuncion)
-        print()
+        #print("agregando variable", nombreVariable, "a", nombreFuncion)
+        #print()
         if nombreVariable in self.tablaFunciones[nombreFuncion].tablaVariable:
             print("Error, variable ya fue declarada\n", nombreVariable, nombreFuncion)
             exit(-1)
@@ -160,8 +160,8 @@ class ManejadorDeTablas:
             return self.tablaFunciones['PROGRAMA'].tablaVariable[var].tipo
 
     def getDireccionVariable(self,func,var):
-        print(self.tablaFunciones['TEMPORALES'].tablaVariable)
-        print("Esto es un var:",var, "Y aqui termina.")
+        #print(self.tablaFunciones['TEMPORALES'].tablaVariable)
+        #print("Esto es un var:",var, "Y aqui termina.")
         if var in self.tablaFunciones[func].tablaVariable:
             return self.tablaFunciones[func].tablaVariable[var].dirAlmacenamiento
         else:
@@ -188,7 +188,7 @@ class ManejadorDeTablas:
         if tipoVariable == 'BOOL':
             direccion += self.tablaFunciones['TEMPORALES'].contadorBool + 6000 #Bools en 8000/11000
             self.tablaFunciones['TEMPORALES'].contadorBool += 1
-        print("***************",direccion,"**************")
+        #print("***************",direccion,"**************")
         v = Variable(tipoVariable, direccion)
 
         self.tablaFunciones['TEMPORALES'].tablaVariable['Temporal_'+str(direccion)] = v

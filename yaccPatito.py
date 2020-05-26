@@ -56,7 +56,6 @@ def p_programa2(p):
     programa2 : declaracion programa2
               | np_gotoMain programa3
     '''
-    print("Ya declaro variables.")
 
 def p_np_gotoMain(p):
     '''
@@ -69,18 +68,13 @@ def p_programa3(p):
     programa3 : declaracionFuncion programa3
               | principal
     '''
-    print("Ya declaro funciones.")
 
 def p_principal(p):
     '''
     principal : PRINCIPAL np_declfuncprincipal np_updateMain OPAREN CPAREN OBRACKET estatutos CBRACKET np_end np_printCuadruplos np_printTablas
     '''
-    print("YA TERMINÓ PRINCIPAL!!!!!!!!!!!")
     global funcionActual
-    #gc.mt.deleteFuncion(funcionActual)
     funcionActual = "PRINCIPAL"
-    #gc.mt.deleteFuncion(funcionActual)
-    # agregar np_agregarFuncion
 
 def p_np_updateMain(p):
     '''
@@ -106,11 +100,6 @@ def p_declaracion(p):
                 | VAR FLOAT np_defineTipo COLON declaracion2
                 | VAR CHAR np_defineTipo COLON declaracion2
     '''
-    # agregar np_tipoDeVariable
-    #
-    # def np_tipoDeVariable(p):
-    # np_tipoDeVariable :
-    # global tipoDeVariable = p[-1]
 
 def p_np_defineTipo(p):
     '''
@@ -141,8 +130,6 @@ def p_declaracionFuncion(p):
                        | FUNCION CHAR ID np_declfunc OPAREN np_esParametro declaracionFuncionParametros np_yaNoEsParametro CPAREN declaracionFuncionVariables OBRACKET estatutos CBRACKET np_endFunc
     '''
     global funcionActual
-    print("Successful Function Declaration")
-    #gc.mt.deleteFuncion(p[3])
     funcionActual = "PROGRAMA"
 
 def p_np_esParametro(p):
@@ -164,7 +151,7 @@ def p_np_endFunc(p):
     np_endFunc :
     '''
     gc.endFunc(funcionActual)
-    print("Se llamo a una función.")
+    #print("Se llamo a una función.")
 
 def p_declaracionFuncionParametros_1(p): #define argumentos
     '''
@@ -239,7 +226,7 @@ def p_estatutos_2(p):
               | escritura estatutos
               | decision estatutos
     '''
-    print("llamando estatutos")
+    #print("llamando estatutos")
 
 def p_estatutos_3(p):
     '''
@@ -261,7 +248,6 @@ def p_escritura2_2(p):
     escritura2 : np_agregarFondo expresion np_quitarFondo np_print escritura3
                | STRING np_printStr escritura3
     '''
-    # agregar np_agregarVariableConstante
 
 def p_escritura3_1(p):
     '''
@@ -273,7 +259,6 @@ def p_escritura3_3(p):
     escritura3 : COMA np_agregarFondo expresion np_quitarFondo np_print escritura3
                | COMA STRING np_printStr escritura3
     '''
-    # agregar np_agregarVariableConstante
 
 def p_np_print(p):
     '''
@@ -292,7 +277,6 @@ def p_decision(p):
     decision : SI OPAREN np_agregarFondo expresion np_quitarFondo np_iniciaIf CPAREN ENTONCES OBRACKET estatutos CBRACKET SINO OBRACKET np_iniciaElse np_agregarFondo estatutos np_quitarFondo np_terminaElse CBRACKET
              | SI OPAREN np_agregarFondo expresion np_quitarFondo np_iniciaIf CPAREN ENTONCES OBRACKET estatutos CBRACKET np_terminaIf
     '''
-    #print("tomando decision")
 
 def p_np_iniciaIf(p):
     '''
@@ -475,7 +459,6 @@ def p_constante(p):
 
 def p_termino1_uminus(p):
     'termino1 : MINUS np_updateUMINUSTRUE constante %prec UMINUS'
-    #print(p[1],p[2],"yessss")
 
     p[0] = -p[3]
     print(p[0])
@@ -510,7 +493,6 @@ def p_np_asignarDimensionY(p):
     '''
     np_asignarDimensionY :
     '''
-    #print(funcionActual,p[-11],p[-2])
     gc.mt.asignarDimensionY(funcionActual,p[-11],p[-2])
 
 def p_np_asignarMemoria1(p):
@@ -529,7 +511,6 @@ def p_estatutoRepeticionIncondicional(p):
     '''
     estatutoRepeticionIncondicional : DESDE ID np_contieneID HASTA np_iniciaFor np_agregarFondo expresion np_quitarFondo np_forFalso HAZ OBRACKET estatutos CBRACKET np_terminaFor
     '''
-    # agregar np_contieneID
 
 def p_np_iniciaFor(p):
     '''
@@ -553,7 +534,6 @@ def p_estatutoRepeticionCondicional(p):
     '''
     estatutoRepeticionCondicional : MIENTRAS OPAREN np_agregarFondo npWhileStExp expresion np_quitarFondo CPAREN HAZ OBRACKET npWhileInicia estatutos CBRACKET npWhileTermina
     '''
-    #print("Que hay de nuevo viejo")
 
 def p_npWhileStExp(p):
     '''
@@ -583,14 +563,12 @@ def p_np_return(p):
     '''
     np_return :
     '''
-    #print('X')
     gc.regresa(gc.mt.getTipoFuncion(funcionActual),'X',funcionActual)
 
 def p_np_returnVOID(p):
     '''
     np_returnVOID :
     '''
-    #print('Void')
     gc.regresa(gc.mt.getTipoFuncion(funcionActual),'VOID',funcionActual)
 
 def p_error(p):
@@ -609,7 +587,6 @@ def p_np_addConstanteINT(p):
     '''
     np_addConstanteINT :
     '''
-    #print(p[-1],"!!!!!!!!!!!!!!!!!!!!!\n\n\n\n")
     temp = p[-1]
     if esUMINUS == True:
         temp = -temp
@@ -642,15 +619,13 @@ def p_np_addVariableParametro(p):
     '''
     np_addVariableParametro :
     '''
-    #print(funcionActual,p[-1],tipoVariable)
-    gc.mt.addVariable(funcionActual, p[-1], tipoVariable, esParametro) #direccion esta hardcodeada por ahora
+    gc.mt.addVariable(funcionActual, p[-1], tipoVariable, esParametro) 
 
 def p_np_addVariable(p):
     '''
     np_addVariable :
     '''
-    #print("Se está intentando agregar la variable:",p[-1])
-    gc.mt.addVariable(funcionActual, p[-1], tipoVariable, esParametro) #direccion esta hardcodeada por ahora
+    gc.mt.addVariable(funcionActual, p[-1], tipoVariable, esParametro) 
 
 def p_np_enviarACuadruplos(p):
     '''

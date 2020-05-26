@@ -36,7 +36,7 @@ class generadorDeCuadruplos:
 
     def updateDirFunc(self,func):
         self.mt.tablaFunciones[func].inicianCuadruplos = len(self.outputCuadruplos)+1
-        print("La dirección del cuádruplo donde empieza la función",func,"es:",self.mt.tablaFunciones[func].inicianCuadruplos)
+        #print("La dirección del cuádruplo donde empieza la función",func,"es:",self.mt.tablaFunciones[func].inicianCuadruplos)
 
     # TODO: FALTA agregar el tipo del temporal y sus dimensiones a las pilas respectivas
     # TODO: FALTA hacer check que las operaciones entre variables sean validas
@@ -47,7 +47,7 @@ class generadorDeCuadruplos:
         #Si se cierra el paréntesis, se limpia toda la pila hasta el fondo falso
 
         if o == ')':
-            print('Se está limpiando la pila...')
+            #print('Se está limpiando la pila...')
             while self.pilaOperadores[-1] != '(':
                 tempOperador = self.pilaOperadores.pop()
                 tempOperando2 = self.pilaOperandos.pop()
@@ -193,8 +193,9 @@ class generadorDeCuadruplos:
         #print()
 
         for i in self.outputCuadruplos:
-            print(i)
-        print()
+            #print(i)
+            pass
+        #print()
 
     def operando(self, o, tipo, dimensiones, func):
         #Añadir a pila de operandos
@@ -204,7 +205,7 @@ class generadorDeCuadruplos:
         self.pilaTipos.append(tipo)
         self.pilaDimensiones.append(dimensiones)
 
-        print("Se añadió un operando:", o)
+        #print("Se añadió un operando:", o)
         #print(self.pilaOperadores)
 
     def constanteCuadruplo(self, con):
@@ -222,16 +223,16 @@ class generadorDeCuadruplos:
         self.outputCuadruplos.append(list(('READ', None, None, self.mt.getDireccionVariable(func,id))))
 
     def ifStatement(self):
-        print(self.pilaOperandos)
-        print(self.pilaTipos)
+        #print(self.pilaOperandos)
+        #print(self.pilaTipos)
         operando = self.pilaOperandos.pop()
 
         if self.pilaTipos.pop() == 'BOOL' and self.pilaDimensiones.pop() == 0:
             #print("Migaja")
             self.pilaMigajas.append(len(self.outputCuadruplos))
-            print(self.pilaMigajas)
+            #print(self.pilaMigajas)
             self.outputCuadruplos.append(list(('GOTOF',operando,None,None)))
-            print(self.outputCuadruplos)
+            #print(self.outputCuadruplos)
         else:
             print("La expresion del if en el cuadruplo:", len(self.outputCuadruplos), "no tiene resultado boleano o no es un valor único.")
             exit(-1)
@@ -329,7 +330,7 @@ class generadorDeCuadruplos:
         #Actualizar top de pila de migajas con línea actual
 
     def regresa(self,tipoFunc,tipoVar,func):
-        print(tipoFunc," <---Func | Var---> ",self.pilaTipos[-1])
+        #print(tipoFunc," <---Func | Var---> ",self.pilaTipos[-1])
         self.mt.tablaFunciones[func].tieneReturn = True
         if tipoVar == 'VOID':
             if tipoFunc == 'VOID':
