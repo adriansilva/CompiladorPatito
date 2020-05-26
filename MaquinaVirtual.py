@@ -141,6 +141,9 @@ class MaquinaVirtual:
                             print("ERROR DE ASIGNACION: El tipo de dato introducido (CHAR/STRING) no matchea con la variable.")
                             exit(-1)
 
+            # FUNCION ---------------------------------
+            if cuadruplos[ip][0] == 'ERA': # agrega un segmento de memoria
+                self.stack.append({})
 
             # INCREMENTA INSTRUCTION POINTER
             ip += 1
