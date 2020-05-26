@@ -34,6 +34,10 @@ class generadorDeCuadruplos:
         self.mt = tablas.ManejadorDeTablas()
 
 
+    def updateDirFunc(self,func):
+        self.mt.tablaFunciones[func].inicianCuadruplos = len(self.outputCuadruplos)+1
+        print("La dirección del cuádruplo donde empieza la función",func,"es:",self.mt.tablaFunciones[func].inicianCuadruplos)
+
     # TODO: FALTA agregar el tipo del temporal y sus dimensiones a las pilas respectivas
     # TODO: FALTA hacer check que las operaciones entre variables sean validas
     def operador(self, o):
@@ -324,8 +328,9 @@ class generadorDeCuadruplos:
         #Generas cuadruplo GOTO hacia top de pila de pilaSaltos
         #Actualizar top de pila de migajas con línea actual
 
-    def regresa(self,tipoFunc,tipoVar):
+    def regresa(self,tipoFunc,tipoVar,func):
         print(tipoFunc," <---Func | Var---> ",self.pilaTipos[-1])
+        self.mt.tablaFunciones[func].tieneReturn = True
         if tipoVar == 'VOID':
             if tipoFunc == 'VOID':
                 self.outputCuadruplos.append(list(('RETURN',None,None,None)))
@@ -347,7 +352,10 @@ class generadorDeCuadruplos:
                 self.pilaReturns.append(len(self.outputCuadruplos))
                 self.outputCuadruplos.append(list(('GOTO',None,None,None)))
 
-    def endFunc(self):
+    def endFunc(self, func):
+        if not self.mt.tablaFunciones[func].tieneReturn and self.mt.getTipoFuncion(func) != 'VOID':
+            print("Todas las funciones de tipo diferente a VOID necesitan un REGRESA.")
+            exit(-1)
         whereToJump = len(self.outputCuadruplos)+1
         while len(self.pilaReturns) > 0:
             index = self.pilaReturns.pop()

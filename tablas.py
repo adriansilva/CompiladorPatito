@@ -2,6 +2,8 @@ class Funcion:
     tipo = None
     tablaVariable = None
     parametros = None
+    inicianCuadruplos = None
+    tieneReturn = None
     contadorInt = None
     contadorFloat = None
     contadorChar = None
@@ -18,6 +20,8 @@ class Funcion:
         self.tipo = tipo
         self.tablaVariable = {}
         self.parametros = ""
+        self.inicianCuadruplos = 1
+        self.tieneReturn = False
         self.contadorInt = 0
         self.contadorFloat = 0
         self.contadorChar = 0

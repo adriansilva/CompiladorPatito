@@ -26,6 +26,7 @@ tipoVariable = None
 funcionActual = 'PROGRAMA'
 currentDimension = 0
 esParametro = False
+esUMINUS = False
 funcionObjetivo = 'PRINCIPAL'
 
 gc.mt.addFuncion(funcionActual,'VOID')
@@ -37,7 +38,8 @@ gc.constanteCuadruplo(1)
 precedence = (
     ('left','PLUS','MINUS'),
     ('left','MULTIPLY','DIVIDE'),
-    ('left','OPMATRIZ')
+    ('left','OPMATRIZ'),
+    ('right', 'UMINUS')
 )
 
 def p_programa(p):
@@ -134,8 +136,8 @@ def p_declaracionFuncion(p):
     '''
     declaracionFuncion : FUNCION VOID ID np_declfunc OPAREN np_esParametro declaracionFuncionParametros np_yaNoEsParametro CPAREN declaracionFuncionVariables OBRACKET estatutos CBRACKET np_endFunc
                        | FUNCION INT ID np_declfunc OPAREN np_esParametro declaracionFuncionParametros np_yaNoEsParametro CPAREN declaracionFuncionVariables OBRACKET estatutos CBRACKET np_endFunc
-                       | FUNCION FLOAT ID np_declfunc OPAREN np_esParametro declaracionFuncionParametros CPAREN np_yaNoEsParametro declaracionFuncionVariables OBRACKET estatutos CBRACKET np_endFunc
-                       | FUNCION CHAR ID np_declfunc OPAREN np_esParametro declaracionFuncionParametros CPAREN np_yaNoEsParametro declaracionFuncionVariables OBRACKET estatutos CBRACKET np_endFunc
+                       | FUNCION FLOAT ID np_declfunc OPAREN np_esParametro declaracionFuncionParametros np_yaNoEsParametro CPAREN declaracionFuncionVariables OBRACKET estatutos CBRACKET np_endFunc
+                       | FUNCION CHAR ID np_declfunc OPAREN np_esParametro declaracionFuncionParametros np_yaNoEsParametro CPAREN declaracionFuncionVariables OBRACKET estatutos CBRACKET np_endFunc
     '''
     global funcionActual
     print("Successful Function Declaration")
@@ -160,7 +162,7 @@ def p_np_endFunc(p):
     '''
     np_endFunc :
     '''
-    gc.endFunc()
+    gc.endFunc(funcionActual)
     print("Se llamo a una función.")
 
 def p_declaracionFuncionParametros_1(p): #define argumentos
@@ -201,7 +203,8 @@ def p_np_declfunc(p):
     global funcionActual
     funcionActual = p[-1]
     if not gc.mt.existeFuncion(funcionActual):
-        gc.mt.addFuncion(p[-1], p[-2])
+        gc.mt.addFuncion(funcionActual, p[-2])
+        gc.updateDirFunc(funcionActual)
         if p[-2] != 'VOID':
             #print(p[-2])
             gc.mt.addVariable('PROGRAMA',funcionActual,p[-2],False)
@@ -318,6 +321,7 @@ def p_llamadaFuncion(p):
     '''
     llamadaFuncion : ID np_existeFuncion np_llamadaFuncion np_agregarFondoParam OPAREN paramsLlamada1 CPAREN np_quitarFondoParam np_goSUB
     '''
+    p[0] = 100000
 
 def p_np_existeFuncion(p):
     '''
@@ -429,22 +433,51 @@ def p_termino_2(p):
 
 def p_termino_1(p):
     '''
-    termino : termino1
+    termino : termino1 np_updateUMINUSFALSE
     '''
+
+def p_np_updateUMINUSFALSE(p):
+    '''
+    np_updateUMINUSFALSE :
+    '''
+    global esUMINUS
+    esUMINUS = False
+
+def p_np_updateUMINUSTRUE(p):
+    '''
+    np_updateUMINUSTRUE :
+    '''
+    global esUMINUS
+    esUMINUS = True
 
 def p_termino1_1(p):
     '''
     termino1 : posibleID
-             | ENTERO np_addConstanteINT np_enviarACuadruplosC
-             | FLOTANTE np_addConstanteFLOAT np_enviarACuadruplosC
+             | constante
+             | QUOT CARACTER np_addConstanteCHAR np_enviarACuadruplosC QUOT
              | llamadaFuncion
     '''
+    p[0] = p[1]
 
 def p_termino1_3(p):
     '''
     termino1 : OPAREN np_insertarOperador expresion CPAREN np_insertarOperador
-             | QUOT CARACTER QUOT
     '''
+
+def p_constante(p):
+    '''
+    constante : ENTERO np_addConstanteINT
+              | FLOTANTE np_addConstanteFLOAT
+    '''
+    p[0] = p[1]
+    p[1] = -p[1]
+
+def p_termino1_uminus(p):
+    'termino1 : MINUS np_updateUMINUSTRUE constante %prec UMINUS'
+    #print(p[1],p[2],"yessss")
+
+    p[0] = -p[3]
+    print(p[0])
 
 def p_posibleID_1(p):
     '''
@@ -550,14 +583,14 @@ def p_np_return(p):
     np_return :
     '''
     #print('X')
-    gc.regresa(gc.mt.getTipoFuncion(funcionActual),'X')
+    gc.regresa(gc.mt.getTipoFuncion(funcionActual),'X',funcionActual)
 
 def p_np_returnVOID(p):
     '''
     np_returnVOID :
     '''
     #print('Void')
-    gc.regresa(gc.mt.getTipoFuncion(funcionActual),'VOID')
+    gc.regresa(gc.mt.getTipoFuncion(funcionActual),'VOID',funcionActual)
 
 def p_error(p):
     print("Hay un error de sintaxis!")
@@ -575,17 +608,34 @@ def p_np_addConstanteINT(p):
     '''
     np_addConstanteINT :
     '''
-    gc.mt.addConstante(str(p[-1]), "INT")
-
-    gc.constanteCuadruplo(int(p[-1]))
+    #print(p[-1],"!!!!!!!!!!!!!!!!!!!!!\n\n\n\n")
+    temp = p[-1]
+    if esUMINUS == True:
+        temp = -temp
+        #print("SI CAMBIO!",temp,"!!!!!!!!!!!!!!!!!!!!!\n\n\n\n")
+    gc.mt.addConstante(str(temp), "INT")
+    gc.constanteCuadruplo(int(temp))
+    gc.operando(str(temp),gc.mt.getTipoVariable('CONSTANTES',str(temp)),0,funcionActual)
 
 def p_np_addConstanteFLOAT(p):
     '''
     np_addConstanteFLOAT :
     '''
-    gc.mt.addConstante(str(p[-1]), "FLOAT")
+    temp = p[-1]
+    if esUMINUS == True:
+        temp = -temp
+        #print("SI CAMBIO!",temp,"!!!!!!!!!!!!!!!!!!!!!\n\n\n\n")
+    gc.mt.addConstante(str(temp), "FLOAT")
+    gc.constanteCuadruplo(float(temp))
+    gc.operando(str(temp),gc.mt.getTipoVariable('CONSTANTES',str(temp)),0,funcionActual)
 
-    gc.constanteCuadruplo(float(p[-1]))
+def p_np_addConstanteCHAR(p):
+    '''
+    np_addConstanteCHAR :
+    '''
+    print("Llego")
+    gc.mt.addConstante(p[-1],"CHAR")
+    gc.constanteCuadruplo(char(p[-1]))
 
 def p_np_addVariableParametro(p):
     '''
@@ -611,6 +661,7 @@ def p_np_enviarACuadruplosC(p):
     '''
     np_enviarACuadruplosC :
     '''
+    print(p[-2],"!!!YEAAAH")
     gc.operando(str(p[-2]),gc.mt.getTipoVariable('CONSTANTES',str(p[-2])),0,funcionActual)
 
 
@@ -640,6 +691,12 @@ def p_np_printCuadruplos(p):
     '''
     gc.printCuadruplos()
 
+def p_np_test(p):
+    '''
+    np_test :
+    '''
+    print("SI LLEGA")
+
 def p_empty(p):
     '''
     empty :
@@ -647,7 +704,7 @@ def p_empty(p):
 
 parser = yacc.yacc(start='')
 
-f = open("testInput.txt", "r")
+f = open("testInput2.txt", "r")
 result = parser.parse(f.read())
 
 print(result)

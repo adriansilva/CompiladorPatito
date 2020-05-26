@@ -1,6 +1,13 @@
 PROGRAMA p;
-VAR INT: a, b[20,20];
+VAR INT: a, b = -2;
+VAR FLOAT: c = -1.445;
+VAR CHAR: r;
+
+FUNCION CHAR f(){
+REGRESA r;
+}
 
 PRINCIPAL(){
-
+ESCRIBE(b);
+ESCRIBE(c);
 }

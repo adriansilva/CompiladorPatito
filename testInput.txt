@@ -1,6 +1,16 @@
 PROGRAMA p;
 VAR INT: a, b, c, d;
 
+FUNCION VOID f()
+{
+  REGRESA;
+}
+
+FUNCION INT f2(){
+  REGRESA 1;
+}
+
+
 
 PRINCIPAL( %%Aquí there's a comment
 
