@@ -1,7 +1,11 @@
-k = 2
+a = 4
+print(type(a)== int)
 
-g = (k = 1+k)
+a = True
+print(type(a)==bool)
 
-print(g)
+a = 4.12
+print(type(a)==float)
 
-print(k)
+a = 'a'
+print(type(a) == str)

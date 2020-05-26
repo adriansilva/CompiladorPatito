@@ -1,6 +1,6 @@
 PROGRAMA p;
 VAR INT: a, b = -2;
-VAR FLOAT: c = -1.445;
+VAR FLOAT: c = -1.445-4;
 VAR CHAR: r;
 
 FUNCION CHAR f(){
@@ -10,4 +10,7 @@ REGRESA r;
 PRINCIPAL(){
 ESCRIBE(b);
 ESCRIBE(c);
+LEE(a);
+LEE(r);
+LEE(a,b);
 }

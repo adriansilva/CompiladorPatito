@@ -47,7 +47,8 @@ def p_programa(p):
     programa : PROGRAMA ID SEMICOLON programa2
     '''
     cuadruplos = gc.returnCuadruplos()
-    mv.processInput(cuadruplos)
+    tabla = gc.mt
+    mv.processInput(cuadruplos,tabla)
     p[0] = 'TERMINO DE PROCESAR PROGRAMA'
 
 def p_programa2(p):
