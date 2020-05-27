@@ -9,6 +9,7 @@ class Funcion:
     contadorChar = None
     contadorBool = None
     contadorTemporales = None
+    comienzaFuncion = None
     #contadorConstantes = None
 
     # Globales: Int 5000 Float 6000 Char 7000 Bool 8000
@@ -27,6 +28,7 @@ class Funcion:
         self.contadorChar = 0
         self.contadorBool = 0
         self.contadorTemporales = 0
+        self.comienzaFuncion = 0
         #self.contadorConstantes = 12000
 
 class Variable:
@@ -64,6 +66,12 @@ class ManejadorDeTablas:
     def deleteFuncion(self, nombreFuncion):
         self.tablaFunciones[nombreFuncion] = None
         #print(self.tablaFunciones)
+
+    def comienzaFunc(self, func, funcStart):
+        self.tablaFunciones[func].comienzaFunc = funcStart
+
+    def getFuncComienza(self, func):
+        return self.tablaFunciones[func].comienzaFunc
 
     def addVariable(self, nombreFuncion, nombreVariable, tipoVariable, esParametro):
         direccion = None

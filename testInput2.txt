@@ -3,14 +3,24 @@ VAR INT: a, b = -2, z;
 VAR FLOAT: c = -1.445-4;
 VAR CHAR: r = 'b';
 
-FUNCION CHAR f(){
-REGRESA '?';
+FUNCION CHAR f(INT k, FLOAT u, CHAR i){
+    z = 3;
+    REGRESA '?';
+}
+
+FUNCION INT f2(INT v, INT x){
+    REGRESA v + x;
 }
 
 PRINCIPAL(){
-ESCRIBE(b);
-ESCRIBE(c);
-LEE(a);
-LEE(r);
-LEE(a,b);
+    r = f(2, 2.3, f(4,4.5,'v'));
+
+    a = 4 + f2(2,f2(3,3));
+
+    ESCRIBE(r);
+    ESCRIBE(c);
+    ESCRIBE(a);
+    %%LEE(a);
+    %%LEE(r);
+    %%LEE(a,b);
 }

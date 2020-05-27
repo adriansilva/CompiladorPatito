@@ -124,10 +124,10 @@ def p_declaracion3_1(p):
 
 def p_declaracionFuncion(p):
     '''
-    declaracionFuncion : FUNCION VOID ID np_declfunc OPAREN np_esParametro declaracionFuncionParametros np_yaNoEsParametro CPAREN declaracionFuncionVariables OBRACKET estatutos CBRACKET np_endFunc
-                       | FUNCION INT ID np_declfunc OPAREN np_esParametro declaracionFuncionParametros np_yaNoEsParametro CPAREN declaracionFuncionVariables OBRACKET estatutos CBRACKET np_endFunc
-                       | FUNCION FLOAT ID np_declfunc OPAREN np_esParametro declaracionFuncionParametros np_yaNoEsParametro CPAREN declaracionFuncionVariables OBRACKET estatutos CBRACKET np_endFunc
-                       | FUNCION CHAR ID np_declfunc OPAREN np_esParametro declaracionFuncionParametros np_yaNoEsParametro CPAREN declaracionFuncionVariables OBRACKET estatutos CBRACKET np_endFunc
+    declaracionFuncion : FUNCION VOID ID np_declfunc np_comienzaFunc OPAREN np_esParametro declaracionFuncionParametros np_yaNoEsParametro CPAREN declaracionFuncionVariables OBRACKET estatutos CBRACKET np_endFunc
+                       | FUNCION INT ID np_declfunc np_comienzaFunc OPAREN np_esParametro declaracionFuncionParametros np_yaNoEsParametro CPAREN declaracionFuncionVariables OBRACKET estatutos CBRACKET np_endFunc
+                       | FUNCION FLOAT ID np_declfunc np_comienzaFunc OPAREN np_esParametro declaracionFuncionParametros np_yaNoEsParametro CPAREN declaracionFuncionVariables OBRACKET estatutos CBRACKET np_endFunc
+                       | FUNCION CHAR ID np_declfunc np_comienzaFunc OPAREN np_esParametro declaracionFuncionParametros np_yaNoEsParametro CPAREN declaracionFuncionVariables OBRACKET estatutos CBRACKET np_endFunc
     '''
     global funcionActual
     funcionActual = "PROGRAMA"
@@ -209,6 +209,12 @@ def p_np_declprincipal(p):
     global funcionActual
     funcionActual = p[-1]
     gc.mt.addFuncion(p[-1], 'VOID')
+
+def p_np_comienzaFunc(p):
+    '''
+    np_comienzaFunc :
+    '''
+    gc.mt.comienzaFunc(p[-2], len(gc.outputCuadruplos) + 1)
 
 def p_estatutos_1(p):
     '''
@@ -328,7 +334,7 @@ def p_np_agregarFondoParam(p):
     '''
     np_agregarFondoParam :
     '''
-    gc.agregarFondoParam()
+    gc.agregarFondoParam(p[-3])
 
 def p_np_quitarFondoParam(p):
     '''

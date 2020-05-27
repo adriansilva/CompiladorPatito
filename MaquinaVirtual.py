@@ -11,10 +11,13 @@ class MaquinaVirtual:
 
     def processInput(self, cuadruplos, mt):
         ip = 0
-
+        pilaReturn = []
+        
         print("INICIA MAQUINA VIRTUAL")
 
         while cuadruplos[ip][0] != 'END':
+            
+            #input(cuadruplos[ip])
 
             #GOTO
 
@@ -109,7 +112,7 @@ class MaquinaVirtual:
 
             if cuadruplos[ip][0] == 'READ':
                 temp = input("input: ")
-                print(cuadruplos[ip][3])
+                #print(cuadruplos[ip][3])
                 try:
                     val = int(temp)
                     if ((cuadruplos[ip][3] >= 5000 and cuadruplos[ip][3] <6000) or
@@ -146,8 +149,24 @@ class MaquinaVirtual:
             if cuadruplos[ip][0] == 'ERA': # agrega un segmento de memoria
                 self.stack.append({})
 
-            if cuadruplos[ip][0] == 'ENDfunc': # agrega un segmento de memoria
+            if cuadruplos[ip][0] == 'PARAM':
+                valor = self.getValue(cuadruplos[ip][1])
+                self.setValue(cuadruplos[ip][3], valor)
+
+            if cuadruplos[ip][0] == 'ENDfunc': # elimina segmento de memoria
                 self.stack.pop()
+                ip = pilaReturn.pop()
+                continue
+
+            if cuadruplos[ip][0] == 'GOSUB':
+                pilaReturn.append(ip + 1)
+                ip = cuadruplos[ip][3] - 1
+                continue
+
+            if cuadruplos[ip][0] == 'RETURN':
+                valor = self.getValue(cuadruplos[ip][1])
+                self.setValue(cuadruplos[ip][3], valor)
+            
 
             # INCREMENTA INSTRUCTION POINTER
             ip += 1

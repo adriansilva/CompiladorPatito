@@ -15,6 +15,8 @@ class generadorDeCuadruplos:
     pilaIDFor = None
     pilaParams = None
     constanteDeclarada = None # revisa si el cuadruplo de asignacion de una constate ya existe
+    firmaFunc = None
+    contadorParam = None
     mt = None
 
 
@@ -32,6 +34,8 @@ class generadorDeCuadruplos:
         self.pilaParams = []
         self.constanteDeclarada = []
         self.mt = tablas.ManejadorDeTablas()
+        self.firmaFunc = []
+        self.contadorParam = []
 
 
     def updateDirFunc(self,func):
@@ -349,7 +353,7 @@ class generadorDeCuadruplos:
                 tipo = self.pilaTipos.pop()
                 self.pilaDimensiones.pop()
 
-                self.outputCuadruplos.append(list(('RETURN',None,None,operando)))
+                self.outputCuadruplos.append(list(('RETURN',operando,None,self.mt.getDireccionVariable('PROGRAMA', func))))
                 self.pilaReturns.append(len(self.outputCuadruplos))
                 self.outputCuadruplos.append(list(('GOTO',None,None,None)))
 
@@ -367,8 +371,12 @@ class generadorDeCuadruplos:
     def llamadaFuncion(self,func):
         self.outputCuadruplos.append(list(('ERA',None,None,func)))
 
-    def agregarFondoParam(self):
+    def agregarFondoParam(self, nombreFuncion):
         self.pilaParams.append('(')
+
+        self.firmaFunc.append(self.mt.getParamsFuncion(nombreFuncion))
+        self.contadorParam.append([9000,10000,11000,12000])
+
 
     def quitarFondoParam(self,nombreFuncion):
         params = ""
@@ -391,23 +399,46 @@ class generadorDeCuadruplos:
         else:
             print("Se llamó exitosamente a la función",nombreFuncion,"!\n\n\n\n\n")
 
+        self.firmaFunc.pop()
+        self.contadorParam.pop()
+
     def resolverParam(self, func):
         #if self.pilaTipos[-1] !=
         operando = self.pilaOperandos.pop()
         self.pilaParams.append(self.pilaTipos.pop())
         self.pilaDimensiones.pop()
+
+        tipoParam = self.firmaFunc[-1][0]
+
+        if len(self.firmaFunc[-1]) > 1:
+            self.firmaFunc[-1] = self.firmaFunc[-1][1:]
+
+        address = None
+
+        if tipoParam == 'i':
+            address = self.contadorParam[-1][0]
+            self.contadorParam[-1][0] += 1
+        elif tipoParam == 'f':
+            address = self.contadorParam[-1][1]
+            self.contadorParam[-1][1] += 1
+        if tipoParam == 'c':
+            address = self.contadorParam[-1][2]
+            self.contadorParam[-1][2] += 1
+        if tipoParam == 'b':
+            address = self.contadorParam[-1][3]
+            self.contadorParam[-1][3] += 1
+
         #Falta determinar donde se va a guardar el parámetro,
         #probablemente en alguna variable dentro de la función objetivo
-        self.outputCuadruplos.append(list(('PARAM',operando,None,'Tabla de Variables de: '+func)))
+        self.outputCuadruplos.append(list(('PARAM',operando,None,address)))
 
     def goSUB(self,func):
-        self.outputCuadruplos.append(list(('GOSUB',None,None,func)))
+        self.outputCuadruplos.append(list(('GOSUB',None,None,self.mt.getFuncComienza(func))))
 
         tipoNuevoTemporal = self.mt.getTipoFuncion(func)
         nuevoTemporal = self.mt.getNewTemporal(tipoNuevoTemporal)
 
         self.outputCuadruplos.append(list(('=',self.mt.getDireccionVariable('PROGRAMA',func),None,nuevoTemporal)))
-        #print("OPERANDOOOO")
         self.operando('Temporal_'+str(nuevoTemporal),tipoNuevoTemporal,0,'TEMPORALES')
 
     def gotoMain(self):
