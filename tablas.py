@@ -35,15 +35,15 @@ class Variable:
     tipo = None
     dimension = None
     dirAlmacenamiento = None
-    dimensionX = None
-    dimensionY = None
+    d1 = None
+    d2 = None
 
-    def __init__(self, tipo, dirAlmacenamiento):
+    def __init__(self, tipo, dirAlmacenamiento, d1, d2):
         self.tipo = tipo
         self.dirAlmacenamiento = dirAlmacenamiento
         self.dimension = 0
-        self.dimensionX = 1
-        self.dimensionY = 1
+        self.d1 = d1
+        self.d2 = d2
 
 class ManejadorDeTablas:
     tablaFunciones = None
@@ -127,23 +127,23 @@ class ManejadorDeTablas:
 
             if nombreFuncion == 'TEMPORALES':
                 nombreVariable = 'Temporal_'+str(direccion)
-        v = Variable(tipoVariable, direccion)
+        v = Variable(tipoVariable, direccion,1,1)
         self.tablaFunciones[nombreFuncion].tablaVariable[nombreVariable] = v
         #print(self.tablaFunciones[nombreFuncion].tablaVariable)
 
     def actualizarDimensiones(self, nombreFuncion, nombreVariable, dimension):
         self.tablaFunciones[nombreFuncion].tablaVariable[nombreVariable].dimension = dimension
 
-    def asignarDimensionX(self,func,var,valor):
-        self.tablaFunciones[func].tablaVariable[var].dimensionX = valor
+    def asignard1(self,func,var,valor):
+        self.tablaFunciones[func].tablaVariable[var].d1 = valor
         self.tablaFunciones[func].tablaVariable[var].dimension = 1
 
-    def asignarDimensionY(self,func,var,valor):
-        self.tablaFunciones[func].tablaVariable[var].dimensionY = valor
+    def asignard2(self,func,var,valor):
+        self.tablaFunciones[func].tablaVariable[var].d2 = valor
         self.tablaFunciones[func].tablaVariable[var].dimension = 2
 
     def asignarMemoria(self,func,var,tipoVariable):
-        nuevaMemoria = self.tablaFunciones[func].tablaVariable[var].dimensionX*self.tablaFunciones[func].tablaVariable[var].dimensionY - 1 #Porque ya reservaste 1 espacio automáticamente añ añadirla a la función
+        nuevaMemoria = self.tablaFunciones[func].tablaVariable[var].d1*self.tablaFunciones[func].tablaVariable[var].d2 - 1 #Porque ya reservaste 1 espacio automáticamente añ añadirla a la función
 
         if tipoVariable == 'INT':
             self.tablaFunciones[func].contadorInt += nuevaMemoria
@@ -167,6 +167,12 @@ class ManejadorDeTablas:
         else:
             return self.tablaFunciones['PROGRAMA'].tablaVariable[var].tipo
 
+    def getDsVariable(self, func, var):
+        if var in self.tablaFunciones[func].tablaVariable:
+            return (self.tablaFunciones[func].tablaVariable[var].d1,self.tablaFunciones[func].tablaVariable[var].d2)
+        else:
+            return (self.tablaFunciones['PROGRAMA'].tablaVariable[var].d1,self.tablaFunciones['PROGRAMA'].tablaVariable[var].d2)
+
     def getDireccionVariable(self,func,var):
         #print(self.tablaFunciones['TEMPORALES'].tablaVariable)
         #print("Esto es un var:",var, "Y aqui termina.")
@@ -183,7 +189,19 @@ class ManejadorDeTablas:
                     print()
                     return self.tablaFunciones['TEMPORALES'].tablaVariable[var].dirAlmacenamiento
 
-    def getNewTemporal(self,tipoVariable):
+    def getFuncionVariable(self,func,var):
+        if var in self.tablaFunciones[func].tablaVariable:
+            return func
+        else:
+            if var in self.tablaFunciones['PROGRAMA'].tablaVariable:
+                return 'PROGRAMA'
+            else:
+                if var in self.tablaFunciones['CONSTANTES'].tablaVariable:
+                    return 'CONSTANTES'
+                else:
+                    return 'TEMPORALES'
+
+    def getNewTemporal(self,tipoVariable,d1,d2):
         direccion = 16000
         if tipoVariable == 'INT':
             direccion += self.tablaFunciones['TEMPORALES'].contadorInt
@@ -198,7 +216,7 @@ class ManejadorDeTablas:
             direccion += self.tablaFunciones['TEMPORALES'].contadorBool + 6000 #Bools en 8000/11000
             self.tablaFunciones['TEMPORALES'].contadorBool += 1
         #print("***************",direccion,"**************")
-        v = Variable(tipoVariable, direccion)
+        v = Variable(tipoVariable, direccion, d1, d2)
 
         self.tablaFunciones['TEMPORALES'].tablaVariable['Temporal_'+str(direccion)] = v
         self.tablaFunciones['TEMPORALES'].contadorTemporales += 1
@@ -234,7 +252,7 @@ class ManejadorDeTablas:
         if tipoVariable == 'BOOL':
             direccion += self.tablaFunciones['CONSTANTES'].contadorBool + 3000 #Bools en 8000/11000
             self.tablaFunciones['CONSTANTES'].contadorBool += 1
-        v = Variable(tipoVariable, direccion)
+        v = Variable(tipoVariable, direccion,1,1)
 
         self.tablaFunciones['CONSTANTES'].tablaVariable[con] = v
         #print(self.tablaFunciones['CONSTANTES'].tablaVariable[con].dirAlmacenamiento)

@@ -94,7 +94,13 @@ cuboDimensiones = [[ #ValorÚnico  Arreglo  Matriz
                    ],
 
                    [ #ValorÚnico  Arreglo  Matriz
-                         [0,        -1,      -1], #ValorÚnico       TYPE: '==', '<>', '='
+                         [0,        -1,      -1], #ValorÚnico       TYPE: '==', '<>'
+                         [-1,        0,      -1], #Arreglo
+                         [-1,       -1,       0]  #Matriz
+                   ],
+
+                   [ #ValorÚnico  Arreglo  Matriz
+                         [0,        -1,      -1], #ValorÚnico       TYPE: '='
                          [-1,        1,      -1], #Arreglo
                          [-1,       -1,       2]  #Matriz
                    ]
@@ -130,6 +136,32 @@ def typeToInt(tipo):
         print(tipo)
         exit(-1)
 
+def typeToIntDimension(tipo):
+    switcher = {
+        '+':     0,
+        '-':     1,
+        '*':     2,
+        '/':     3,
+        '&&':    4,
+        '||':    4,
+        '<=':    5,
+        '>=':    5,
+        '>':     5,
+        '<':     5,
+        '<>':    6,
+        '==':    6,
+        '=':     7,
+        'UNDEF': 5,
+    }
+    regresa = switcher.get(tipo, "Caracter inválido.")
+    if isinstance(regresa,int):
+        #print(tipo)
+        #print(type(regresa))
+        return regresa
+    else:
+        print(tipo)
+        exit(-1)
+
 def intToType(entero):
     switcher = {
         0:    'INT',
@@ -140,10 +172,10 @@ def intToType(entero):
     regresa = switcher.get(entero, "Caracter inválido.")
     return regresa
 
-def cubo(tipo1, tipo2, operacion, dimension1, dimension2):
+def cubo(tipo1, tipo2, operacion, dimension1, dimension2, dsO1, dsO2):
     print(tipo1, tipo2)
     tipoResultante = cuboTipos[typeToInt(operacion) if (operacion != '=') else 6][typeToInt(tipo1)][typeToInt(tipo2)]
-    dimensionResultante = cuboDimensiones[typeToInt(operacion) if (operacion != '<>' and operacion != '==' and operacion != '=') else 6][dimension1][dimension2]
+    dimensionResultante = cuboDimensiones[typeToIntDimension(operacion)][dimension1][dimension2]
     if dimensionResultante == -1:
         print("Esta operación aritmética no es válida por discrepancias de dimensiones.")
         exit(-1)
@@ -151,5 +183,5 @@ def cubo(tipo1, tipo2, operacion, dimension1, dimension2):
         print("Esta operación aritmética no es válida por incongruencias de tipos.")
         exit(-1)
     #print("tipo:",tipoResultante, " // dimension:",dimensionResultante)
-    return (intToType(tipoResultante),dimensionResultante)
+    return (operacion,intToType(tipoResultante),dimensionResultante,dsO1)
     # if dimensiones == (0): regresas un

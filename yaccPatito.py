@@ -27,6 +27,8 @@ funcionActual = 'PROGRAMA'
 currentDimension = 0
 esParametro = False
 esUMINUS = False
+restarDimension = 0
+IDActual = []
 funcionObjetivo = 'PRINCIPAL'
 
 gc.mt.addFuncion(funcionActual,'VOID')
@@ -472,9 +474,7 @@ def p_termino1_uminus(p):
 
 def p_posibleID_1(p):
     '''
-    posibleID : ID np_contieneID np_enviarACuadruplos
-              | ID np_contieneID np_enviarACuadruplos OCORCH np_agregarFondo expresion np_quitarFondo CCORCH
-              | ID np_contieneID np_enviarACuadruplos OCORCH np_agregarFondo expresion np_quitarFondo COMA np_agregarFondo expresion np_quitarFondo CCORCH
+    posibleID : ID np_defIDActual np_contieneID posibleID2 np_quitarIDActual
     '''
     p[0] = p[1] #NO BORRAR lo usa lectura
     #Restar la dimension actual en 1 por cada expresion
@@ -482,25 +482,84 @@ def p_posibleID_1(p):
     #Guardar las dimensiones (tops de pila) en la variable que estas utilizando
     # funcion{nombre, tipo, tablaVariables}
     # tablaVariables{nombre, tipo, dirección, dimension, dimensionx, dimensiony, referencias[(1),(2,4),(5,6)]}
-    #                                                                           * (M(5*limS1+6)) (B) C
+    # * (M(5*limS1+6)) (B) C
+
+def p_posibleID2(p):
+    '''
+    posibleID2 : OCORCH np_agregarFondo expresion np_quitarFondo np_verificarD1 posibleID3 CCORCH
+               | np_enviarACuadruplos2
+    '''
+def p_posibleID3(p):
+    '''
+    posibleID3 : COMA np_agregarFondo expresion np_quitarFondo np_verificarD2 np_enviarACuadruplos4
+               | np_enviarACuadruplos3
+    '''
+
+def p_np_defIDActual(p):
+    '''
+    np_defIDActual :
+    '''
+    global IDActual
+    IDActual.append(p[-1])
+
+def p_np_quitarIDActual(p):
+    '''
+    np_quitarIDActual :
+    '''
+    global IDActual
+    IDActual.pop()
+
+def p_np_restarDimension0(p):
+    '''
+    np_restarDimension0 :
+    '''
+    global restarDimension
+    restarDimension = 0
+
+def p_np_restarDimension1(p):
+    '''
+    np_restarDimension1 :
+    '''
+    global restarDimension
+    restarDimension = 1
+
+def p_np_restarDimension2(p):
+    '''
+    np_restarDimension2 :
+    '''
+    global restarDimension
+    restarDimension = 2
+
+def p_np_verificarD1(p):
+    '''
+    np_verificarD1 :
+    '''
+    gc.verificarD1(gc.mt.getDsVariable(gc.mt.getFuncionVariable(funcionActual,IDActual[-1]),IDActual[-1]))
+
+def p_np_verificarD2(p):
+    '''
+    np_verificarD2 :
+    '''
+    gc.verificarD2(gc.mt.getDsVariable(gc.mt.getFuncionVariable(funcionActual,IDActual[-1]),IDActual[-1]))
+
 def p_posibleIDDeclaracion_1(p):
     '''
     posibleIDDeclaracion : ID np_addVariable np_enviarACuadruplos np_actualizarDimensiones
-                         | ID np_addVariable np_enviarACuadruplos np_actualizarDimensiones OCORCH ENTERO np_addConstanteINT np_asignarDimensionX CCORCH np_asignarMemoria1
-                         | ID np_addVariable np_enviarACuadruplos np_actualizarDimensiones OCORCH ENTERO np_addConstanteINT np_asignarDimensionX COMA ENTERO np_addConstanteINT np_asignarDimensionY CCORCH np_asignarMemoria2
+                         | ID np_addVariable np_enviarACuadruplos np_actualizarDimensiones OCORCH ENTERO np_addConstanteINT np_asignarD1 CCORCH np_asignarMemoria1
+                         | ID np_addVariable np_enviarACuadruplos np_actualizarDimensiones OCORCH ENTERO np_addConstanteINT np_asignarD1 COMA ENTERO np_addConstanteINT np_asignarD2 CCORCH np_asignarMemoria2
     '''
 
-def p_np_asignarDimensionX(p):
+def p_np_asignarD1(p):
     '''
-    np_asignarDimensionX :
+    np_asignarD1 :
     '''
-    gc.mt.asignarDimensionX(funcionActual,p[-7],p[-2])
+    gc.mt.asignard1(funcionActual,p[-7],p[-2])
 
-def p_np_asignarDimensionY(p):
+def p_np_asignarD2(p):
     '''
-    np_asignarDimensionY :
+    np_asignarD2 :
     '''
-    gc.mt.asignarDimensionY(funcionActual,p[-11],p[-2])
+    gc.mt.asignard2(funcionActual,p[-11],p[-2])
 
 def p_np_asignarMemoria1(p):
     '''
@@ -516,14 +575,21 @@ def p_np_asignarMemoria2(p):
 
 def p_estatutoRepeticionIncondicional(p):
     '''
-    estatutoRepeticionIncondicional : DESDE ID np_contieneID HASTA np_iniciaFor np_agregarFondo expresion np_quitarFondo np_forFalso HAZ OBRACKET estatutos CBRACKET np_terminaFor
+    estatutoRepeticionIncondicional : DESDE ID np_verificarValorUnico np_contieneID HASTA np_iniciaFor np_agregarFondo expresion np_quitarFondo np_forFalso HAZ OBRACKET estatutos CBRACKET np_terminaFor
     '''
+def p_np_verificarValorUnico(p):
+    '''
+    np_verificarValorUnico :
+    '''
+    if gc.mt.getDimensionVariable(gc.mt.getFuncionVariable(funcionActual,p[-1]),p[-1]) != 0:
+        print("La variable de condición del for no debe tener más de una dimensión.")
+        exit(-1)
 
 def p_np_iniciaFor(p):
     '''
     np_iniciaFor :
     '''
-    gc.forStatementInicia(funcionActual, p[-3])
+    gc.forStatementInicia(funcionActual, p[-4])
 
 def p_np_forFalso(p):
     '''
@@ -582,7 +648,7 @@ def p_np_contieneID(p):
     '''
     np_contieneID :
     '''
-    if not gc.mt.contieneID(funcionActual,p[-1]):
+    if not gc.mt.contieneID(funcionActual,p[-2]):
         print("El ID:",p[-1],"no existe en la funcion:", funcionActual)
         exit(-1)
 
@@ -637,6 +703,25 @@ def p_np_enviarACuadruplos(p):
     np_enviarACuadruplos :
     '''
     gc.operando(p[-2],gc.mt.getTipoVariable(funcionActual,p[-2]),gc.mt.getDimensionVariable(funcionActual,p[-2]),funcionActual)
+
+def p_np_enviarACuadruplos2(p):
+    '''
+    np_enviarACuadruplos2 :
+    '''
+    gc.operando(IDActual[-1],gc.mt.getTipoVariable(funcionActual,IDActual[-1]),gc.mt.getDimensionVariable(funcionActual,IDActual[-1]),funcionActual)
+
+def p_np_enviarACuadruplos3(p):
+    '''
+    np_enviarACuadruplos3 :
+    '''
+    gc.operando(IDActual[-1],gc.mt.getTipoVariable(funcionActual,IDActual[-1]),gc.mt.getDimensionVariable(funcionActual,IDActual[-1])-1,funcionActual)
+
+def p_np_enviarACuadruplos4(p):
+    '''
+    np_enviarACuadruplos4 :
+    '''
+    gc.operando(IDActual[-1],gc.mt.getTipoVariable(funcionActual,IDActual[-1]),gc.mt.getDimensionVariable(funcionActual,IDActual[-1])-2,funcionActual)
+
 
 def p_np_enviarACuadruplosC(p):
     '''

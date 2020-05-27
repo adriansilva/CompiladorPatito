@@ -96,11 +96,6 @@ def t_COLON(t):
     t.type = 'COLON'
     return t
 
-def t_COMA(t):
-    r'\,'
-    t.type = 'COMA'
-    return t
-
 def t_IGNORE(t):
     r'\ '
     pass
@@ -153,6 +148,11 @@ def t_OCORCH(t):
 def t_CCORCH(t):
     r'\]'
     t.type = 'CCORCH'
+    return t
+
+def t_COMA(t):
+    r'\,'
+    t.type = 'COMA'
     return t
 
 def t_SEMICOLON(t):
