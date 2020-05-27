@@ -1,9 +1,9 @@
 PROGRAMA p;
-VAR INT: a, b = -2, z;
+VAR INT: a = 0, b = 2, z;
 VAR FLOAT: c = -1.445-4;
 VAR CHAR: r = 'b';
 
-FUNCION CHAR f(INT k, FLOAT u, CHAR i){
+FUNCION CHAR f(INT k){
     z = 3;
     REGRESA '?';
 }
@@ -16,16 +16,35 @@ FUNCION INT f2(INT v, INT x){
     REGRESA v + x;
 }
 
+FUNCION INT fib(INT a){
+
+    SI (a == 0) ENTONCES{
+        REGRESA 0;
+    }
+
+    SI (a == 1) ENTONCES{
+        REGRESA 1;
+    }
+
+    SI (a == 2) ENTONCES{
+        REGRESA 1;
+    }
+    
+    REGRESA fib(a - 1) + fib(a - 2);
+}
+
+
+
 PRINCIPAL(){
-    %%r = f(2, 2.3, f(4,4.5,'v'));
 
-    %%a = 4 + f2(2,f2(3,3));
+    DESDE a HASTA 7 HAZ{
+        ESCRIBE(fib(a));
+    }
+    
 
-    a = f2(2,3);
-
-    ESCRIBE(r);
+    %%ESCRIBE(r); esto causa un bug si r = 'b' y hay una variable b
     ESCRIBE(c);
-    ESCRIBE(a);
+    %%ESCRIBE(a);
     %%LEE(a);
     %%LEE(r);
     %%LEE(a,b);

@@ -4,10 +4,14 @@ class MaquinaVirtual:
     heap = None
     stack = None
 
+    isParam = None
+
     def __init__(self):
         self.heap = {}      # memoria que almacena variables globales, constantes y temporales
         self.stack = [{}]   # memoria local, cada ves que se usa una funcion, se agrega otro diccionario a esta
                             # lista de diccionarios y representa una nueva seccion de memoria
+
+        self.isParam = False
 
     def processInput(self, cuadruplos, mt):
         ip = 0
@@ -148,9 +152,10 @@ class MaquinaVirtual:
             # FUNCION ---------------------------------
             if cuadruplos[ip][0] == 'ERA': # agrega un segmento de memoria
                 self.stack.append({})
+                self.isParam = True
 
             if cuadruplos[ip][0] == 'PARAM':
-                valor = self.getValue(cuadruplos[ip][1], True)
+                valor = self.getValue(cuadruplos[ip][1])
                 self.setValue(cuadruplos[ip][3], valor)
 
             if cuadruplos[ip][0] == 'ENDfunc': # elimina segmento de memoria
@@ -161,6 +166,7 @@ class MaquinaVirtual:
             if cuadruplos[ip][0] == 'GOSUB':
                 pilaReturn.append(ip + 1)
                 ip = cuadruplos[ip][3] - 1
+                self.isParam = False
                 continue
 
             if cuadruplos[ip][0] == 'RETURN':
@@ -171,13 +177,16 @@ class MaquinaVirtual:
             # INCREMENTA INSTRUCTION POINTER
             ip += 1
 
-    def getValue(self, address, isParam = False):
+    def getValue(self, address):
 
-        if isParam:
+        if self.isParam:
             if address >= 9000 and address < 13000: # la direccion es local entonces esta almacenada en stack
                 return self.stack[-2][address]
 
         if address >= 9000 and address < 13000: # la direccion es local entonces esta almacenada en stack
+            return self.stack[-1][address]
+
+        if address >= 16000: # la direccion es temporal entonces esta almacenada en stack
             return self.stack[-1][address]
 
         else: # la direccion esta almacenada en heap
@@ -186,6 +195,9 @@ class MaquinaVirtual:
     def setValue(self, address, value):
 
         if address >= 9000 and address < 13000: # la direccion es local entonces esta almacenada en stack
+            self.stack[-1][address] = value
+
+        if address >= 16000: # la direccion es temporal entonces esta almacenada en stack
             self.stack[-1][address] = value
 
         else: # la direccion esta almacenada en heap
