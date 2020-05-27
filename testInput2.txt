@@ -9,13 +9,19 @@ FUNCION CHAR f(INT k, FLOAT u, CHAR i){
 }
 
 FUNCION INT f2(INT v, INT x){
+    SI ( v < x ) ENTONCES
+    {
+        v = f2(x,v);
+    }
     REGRESA v + x;
 }
 
 PRINCIPAL(){
-    r = f(2, 2.3, f(4,4.5,'v'));
+    %%r = f(2, 2.3, f(4,4.5,'v'));
 
-    a = 4 + f2(2,f2(3,3));
+    %%a = 4 + f2(2,f2(3,3));
+
+    a = f2(2,3);
 
     ESCRIBE(r);
     ESCRIBE(c);

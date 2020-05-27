@@ -150,7 +150,7 @@ class MaquinaVirtual:
                 self.stack.append({})
 
             if cuadruplos[ip][0] == 'PARAM':
-                valor = self.getValue(cuadruplos[ip][1])
+                valor = self.getValue(cuadruplos[ip][1], True)
                 self.setValue(cuadruplos[ip][3], valor)
 
             if cuadruplos[ip][0] == 'ENDfunc': # elimina segmento de memoria
@@ -171,7 +171,11 @@ class MaquinaVirtual:
             # INCREMENTA INSTRUCTION POINTER
             ip += 1
 
-    def getValue(self, address):
+    def getValue(self, address, isParam = False):
+
+        if isParam:
+            if address >= 9000 and address < 13000: # la direccion es local entonces esta almacenada en stack
+                return self.stack[-2][address]
 
         if address >= 9000 and address < 13000: # la direccion es local entonces esta almacenada en stack
             return self.stack[-1][address]

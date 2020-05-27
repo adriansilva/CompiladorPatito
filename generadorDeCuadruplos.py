@@ -213,9 +213,9 @@ class generadorDeCuadruplos:
         #print(self.pilaOperadores)
 
     def constanteCuadruplo(self, con):
-        if con not in self.constanteDeclarada:
-            self.outputCuadruplos.append(list(('=', con, None, self.mt.getDireccionVariable('CONSTANTES', str(con)))))
-            self.constanteDeclarada.append(con)
+        #if con not in self.constanteDeclarada:
+        self.outputCuadruplos.append(list(('=', con, None, self.mt.getDireccionVariable('CONSTANTES', str(con)))))
+            #self.constanteDeclarada.append(con)
 
     def print(self, s = None):
         if s == None:
