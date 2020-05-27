@@ -486,13 +486,13 @@ def p_posibleID_1(p):
 
 def p_posibleID2(p):
     '''
-    posibleID2 : OCORCH np_agregarFondo expresion np_quitarFondo np_verificarD1 posibleID3 CCORCH
+    posibleID2 : OCORCH np_agregarFondo expresion np_quitarFondo posibleID3 CCORCH
                | np_enviarACuadruplos2
     '''
 def p_posibleID3(p):
     '''
     posibleID3 : COMA np_agregarFondo expresion np_quitarFondo np_verificarD2 np_enviarACuadruplos4
-               | np_enviarACuadruplos3
+               | np_verificarD1 np_enviarACuadruplos3
     '''
 
 def p_np_defIDActual(p):
@@ -534,13 +534,13 @@ def p_np_verificarD1(p):
     '''
     np_verificarD1 :
     '''
-    gc.verificarD1(gc.mt.getDsVariable(gc.mt.getFuncionVariable(funcionActual,IDActual[-1]),IDActual[-1]))
+    gc.verificarD1(gc.mt.getDsVariable(gc.mt.getFuncionVariable(funcionActual,IDActual[-1]),IDActual[-1]),funcionActual,IDActual[-1])
 
 def p_np_verificarD2(p):
     '''
     np_verificarD2 :
     '''
-    gc.verificarD2(gc.mt.getDsVariable(gc.mt.getFuncionVariable(funcionActual,IDActual[-1]),IDActual[-1]))
+    gc.verificarD2(gc.mt.getDsVariable(gc.mt.getFuncionVariable(funcionActual,IDActual[-1]),IDActual[-1]), funcionActual, IDActual[-1])
 
 def p_posibleIDDeclaracion_1(p):
     '''

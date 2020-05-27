@@ -462,17 +462,82 @@ class generadorDeCuadruplos:
         self.firmaFunc.pop()
         self.contadorParam.pop()
 
-    def verificarD1(self, ds):
-        self.outputCuadruplos.append(list(('VER',self.pilaOperandos[-1],0,ds[0])))
-        self.pilaTipos.pop()
-        self.pilaDimensiones.pop()
-        self.pilaDs.pop()
+    def verificarD1(self, ds, func, var):
+        tempOperando = self.pilaOperandos.pop()
+        tempTipo = self.pilaTipos.pop()
+        tempDimension = self.pilaDimensiones.pop()
+        tempDs = self.pilaDs.pop()
 
-    def verificarD2(self, ds):
-        self.outputCuadruplos.append(list(('VER',self.pilaOperandos[-1],0,ds[1])))
-        self.pilaTipos.pop()
-        self.pilaDimensiones.pop()
-        self.pilaDs.pop()
+        self.outputCuadruplos.append(list(('VER',tempOperando,0,ds[0])))
+
+        resultado = cs.cubo(tempTipo,"INT",
+                            "*",
+                            tempDimension,0,
+                            tempDs,(1,1))
+
+        nuevoTemporal = self.mt.getNewTemporal(resultado[1],1,1)
+
+        self.outputCuadruplos.append(list(('*',tempOperando,self.mt.getDireccionVariable('CONSTANTES',str(ds[1])),nuevoTemporal)))
+
+        resultado2 = cs.cubo(resultado[1],"INT",
+                            "+",
+                            resultado[2],0,
+                            resultado[3],(1,1))
+
+        nuevoTemporal2 = self.mt.getNewTemporal("POINT",1,1)
+
+        self.outputCuadruplos.append(list(('+',nuevoTemporal,self.mt.getDireccionVariable(func,var),nuevoTemporal2)))
+
+        self.pilaOperandos.append(nuevoTemporal2)
+        self.pilaTipos.append(resultado2[1])
+        self.pilaDimensiones.append(resultado2[2])
+        self.pilaDs.append(resultado2[3])
+
+    def verificarD2(self, ds, func, var):
+        tempOperando2 = self.pilaOperandos.pop()
+        tempTipo2 = self.pilaTipos.pop()
+        tempDimension2 = self.pilaDimensiones.pop()
+        tempDs2 = self.pilaDs.pop()
+
+        tempOperando1 = self.pilaOperandos.pop()
+        tempTipo1 = self.pilaTipos.pop()
+        tempDimension1 = self.pilaDimensiones.pop()
+        tempDs1 = self.pilaDs.pop()
+
+        self.outputCuadruplos.append(list(('VER',tempOperando1,0,ds[0])))
+        self.outputCuadruplos.append(list(('VER',tempOperando2,0,ds[1])))
+
+        resultado = cs.cubo(tempTipo1,"INT",
+                            "*",
+                            tempDimension1,0,
+                            tempDs1,(1,1))
+
+        nuevoTemporal = self.mt.getNewTemporal(resultado[1],1,1)
+
+        self.outputCuadruplos.append(list(('*',tempOperando1,self.mt.getDireccionVariable('CONSTANTES',str(ds[1])),nuevoTemporal)))
+
+        resultado2 = cs.cubo(resultado[1],"INT",
+                            "+",
+                            resultado[2],0,
+                            resultado[3],(1,1))
+
+        nuevoTemporal2 = self.mt.getNewTemporal("INT",1,1)
+
+        self.outputCuadruplos.append(list(('+',nuevoTemporal,tempOperando2,nuevoTemporal2)))
+
+        resultado3 = cs.cubo(resultado2[1],"INT",
+                            "+",
+                            resultado2[2],0,
+                            resultado2[3],(1,1))
+
+        nuevoTemporal3 = self.mt.getNewTemporal("POINT",1,1)
+
+        self.outputCuadruplos.append(list(('+',nuevoTemporal2,self.mt.getDireccionVariable(func,var),nuevoTemporal3)))
+
+        self.pilaOperandos.append(nuevoTemporal3)
+        self.pilaTipos.append(resultado3[1])
+        self.pilaDimensiones.append(resultado3[2])
+        self.pilaDs.append(resultado3[3])
 
     def resolverParam(self, func):
         #if self.pilaTipos[-1] !=

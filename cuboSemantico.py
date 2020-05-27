@@ -174,6 +174,10 @@ def intToType(entero):
 
 def cubo(tipo1, tipo2, operacion, dimension1, dimension2, dsO1, dsO2):
     print(tipo1, tipo2)
+    if tipo1 == "POINT":
+        tipo1 = "INT"
+    if tipo2 == "POINT":
+        tipo2 = "INT"
     tipoResultante = cuboTipos[typeToInt(operacion) if (operacion != '=') else 6][typeToInt(tipo1)][typeToInt(tipo2)]
     dimensionResultante = cuboDimensiones[typeToIntDimension(operacion)][dimension1][dimension2]
     if dimensionResultante == -1:
