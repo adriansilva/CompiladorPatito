@@ -16,11 +16,11 @@ class MaquinaVirtual:
     def processInput(self, cuadruplos, mt):
         ip = 0
         pilaReturn = []
-        
+
         print("INICIA MAQUINA VIRTUAL")
 
         while cuadruplos[ip][0] != 'END':
-            
+
             #input(cuadruplos[ip])
 
             #GOTO
@@ -110,13 +110,14 @@ class MaquinaVirtual:
             # PRINT ---------------------------------
 
             if cuadruplos[ip][0] == 'PRINT':
+                #print(cuadruplos[ip][1]," print.")
                 print(self.getValue(cuadruplos[ip][1]))
 
             # READ ---------------------------------
 
             if cuadruplos[ip][0] == 'READ':
-                temp = input("input: ")
-                #print(cuadruplos[ip][3])
+                #temp = input("input: ")
+                print(cuadruplos[ip][3],"MHM")
                 try:
                     val = int(temp)
                     if ((cuadruplos[ip][3] >= 5000 and cuadruplos[ip][3] <6000) or
@@ -172,7 +173,7 @@ class MaquinaVirtual:
             if cuadruplos[ip][0] == 'RETURN':
                 valor = self.getValue(cuadruplos[ip][1])
                 self.setValue(cuadruplos[ip][3], valor)
-            
+
 
             # INCREMENTA INSTRUCTION POINTER
             ip += 1

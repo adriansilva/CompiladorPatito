@@ -596,7 +596,7 @@ def p_np_addConstanteINT(p):
         #print("SI CAMBIO!",temp,"!!!!!!!!!!!!!!!!!!!!!\n\n\n\n")
     gc.mt.addConstante(str(temp), "INT")
     gc.constanteCuadruplo(int(temp))
-    gc.operando(str(temp),'INT',0,funcionActual)
+    gc.operando(str(temp),'INT',0,'CONSTANTES')
 
 def p_np_addConstanteFLOAT(p):
     '''
@@ -608,7 +608,7 @@ def p_np_addConstanteFLOAT(p):
         #print("SI CAMBIO!",temp,"!!!!!!!!!!!!!!!!!!!!!\n\n\n\n")
     gc.mt.addConstante(str(temp), "FLOAT")
     gc.constanteCuadruplo(float(temp))
-    gc.operando(str(temp),'FLOAT',0,funcionActual)
+    gc.operando(str(temp),'FLOAT',0,'CONSTANTES')
 
 def p_np_addConstanteCHAR(p):
     '''
@@ -618,7 +618,7 @@ def p_np_addConstanteCHAR(p):
     gc.mt.addConstante(p[-1][1],"CHAR")
     print(p[-1][1],"WOOOOW")
     gc.constanteCuadruplo(p[-1][1])
-    gc.operando(p[-1][1],'CHAR',0,funcionActual)
+    gc.operando(p[-1][1],'CHAR',0,'CONSTANTES')
 
 def p_np_addVariableParametro(p):
     '''
