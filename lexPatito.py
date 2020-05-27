@@ -37,7 +37,7 @@ tokens = [
     'CHAR',
     'ENTERO',
     'FLOTANTE',
-    'CARACTER',
+    'CARACT',
     'VOID',
     'NEWLINE',
     'COMENTARIO',
@@ -175,11 +175,6 @@ def t_STRING(t):
     t.type = 'STRING'
     return t
 
-def t_QUOT(t):
-    r'\"'
-    t.type = 'QUOT'
-    return t
-
 def t_FLOTANTE(t):
     r'\d+\.\d+'
     t.value = float(t.value)
@@ -285,9 +280,9 @@ def t_ID(t):
     t.type = 'ID'
     return t
 
-def t_CARACTER(t):
-    r'.'
-    t.type = 'CARACTER'
+def t_CARACT(t):
+    r'\'[A-Za-z_0-9$%&/\(\)\"#=\?\¿\´\+\*\-\.\,\{\}\[\]]\''
+    t.type = 'CARACT'
     return t
 
 def t_error(t):

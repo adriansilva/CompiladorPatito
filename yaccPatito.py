@@ -380,6 +380,7 @@ def p_np_read(p):
     np_read :
     '''
     gc.read(p[-1],funcionActual)
+    print(p[-1],funcionActual,'AIIAAAAAA')
 
 def p_asignacion(p):
     '''
@@ -439,7 +440,7 @@ def p_termino1_1(p):
     '''
     termino1 : posibleID
              | constante
-             | QUOT CARACTER np_addConstanteCHAR np_enviarACuadruplosC QUOT
+             | CARACT np_addConstanteCHAR
              | llamadaFuncion
     '''
     p[0] = p[1]
@@ -571,10 +572,6 @@ def p_np_returnVOID(p):
     '''
     gc.regresa(gc.mt.getTipoFuncion(funcionActual),'VOID',funcionActual)
 
-def p_error(p):
-    print("Hay un error de sintaxis!")
-    exit(-1)
-
 def p_np_contieneID(p):
     '''
     np_contieneID :
@@ -593,7 +590,7 @@ def p_np_addConstanteINT(p):
         #print("SI CAMBIO!",temp,"!!!!!!!!!!!!!!!!!!!!!\n\n\n\n")
     gc.mt.addConstante(str(temp), "INT")
     gc.constanteCuadruplo(int(temp))
-    gc.operando(str(temp),gc.mt.getTipoVariable('CONSTANTES',str(temp)),0,funcionActual)
+    gc.operando(str(temp),'INT',0,funcionActual)
 
 def p_np_addConstanteFLOAT(p):
     '''
@@ -605,27 +602,29 @@ def p_np_addConstanteFLOAT(p):
         #print("SI CAMBIO!",temp,"!!!!!!!!!!!!!!!!!!!!!\n\n\n\n")
     gc.mt.addConstante(str(temp), "FLOAT")
     gc.constanteCuadruplo(float(temp))
-    gc.operando(str(temp),gc.mt.getTipoVariable('CONSTANTES',str(temp)),0,funcionActual)
+    gc.operando(str(temp),'FLOAT',0,funcionActual)
 
 def p_np_addConstanteCHAR(p):
     '''
     np_addConstanteCHAR :
     '''
     print("Llego")
-    gc.mt.addConstante(p[-1],"CHAR")
-    gc.constanteCuadruplo(char(p[-1]))
+    gc.mt.addConstante(p[-1][1],"CHAR")
+    print(p[-1][1],"WOOOOW")
+    gc.constanteCuadruplo(p[-1][1])
+    gc.operando(p[-1][1],'CHAR',0,funcionActual)
 
 def p_np_addVariableParametro(p):
     '''
     np_addVariableParametro :
     '''
-    gc.mt.addVariable(funcionActual, p[-1], tipoVariable, esParametro) 
+    gc.mt.addVariable(funcionActual, p[-1], tipoVariable, esParametro)
 
 def p_np_addVariable(p):
     '''
     np_addVariable :
     '''
-    gc.mt.addVariable(funcionActual, p[-1], tipoVariable, esParametro) 
+    gc.mt.addVariable(funcionActual, p[-1], tipoVariable, esParametro)
 
 def p_np_enviarACuadruplos(p):
     '''
@@ -677,6 +676,11 @@ def p_empty(p):
     '''
     empty :
     '''
+
+def p_error(p):
+    print(p)
+    print("Hay un error de sintaxis!")
+    exit(-1)
 
 parser = yacc.yacc(start='')
 

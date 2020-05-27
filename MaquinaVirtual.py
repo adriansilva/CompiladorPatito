@@ -6,7 +6,7 @@ class MaquinaVirtual:
 
     def __init__(self):
         self.heap = {}      # memoria que almacena variables globales, constantes y temporales
-        self.stack = [{}]   # memoria local, cada ves que se usa una funcion, se agrega otro diccionario a esta 
+        self.stack = [{}]   # memoria local, cada ves que se usa una funcion, se agrega otro diccionario a esta
                             # lista de diccionarios y representa una nueva seccion de memoria
 
     def processInput(self, cuadruplos, mt):
@@ -55,7 +55,7 @@ class MaquinaVirtual:
             # ASIGNACION ---------------------------------
 
             if cuadruplos[ip][0] == '=':
-                
+
                 if cuadruplos[ip][3]  >= 13000 and cuadruplos[ip][3] < 16000: # SI estamos agregando una constante
                     constante = cuadruplos[ip][1]
                     self.setValue(cuadruplos[ip][3], constante)
@@ -109,6 +109,7 @@ class MaquinaVirtual:
 
             if cuadruplos[ip][0] == 'READ':
                 temp = input("input: ")
+                print(cuadruplos[ip][3])
                 try:
                     val = int(temp)
                     if ((cuadruplos[ip][3] >= 5000 and cuadruplos[ip][3] <6000) or
@@ -166,5 +167,3 @@ class MaquinaVirtual:
 
         else: # la direccion esta almacenada en heap
             self.heap[address] = value
-
-        

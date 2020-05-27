@@ -165,14 +165,15 @@ class ManejadorDeTablas:
         if var in self.tablaFunciones[func].tablaVariable:
             return self.tablaFunciones[func].tablaVariable[var].dirAlmacenamiento
         else:
-            if var in self.tablaFunciones['CONSTANTES'].tablaVariable:
-                return self.tablaFunciones['CONSTANTES'].tablaVariable[var].dirAlmacenamiento
+            if var in self.tablaFunciones['PROGRAMA'].tablaVariable:
+                #print(self.tablaFunciones['CONSTANTES'].tablaVariable[var].dirAlmacenamiento)
+                return self.tablaFunciones['PROGRAMA'].tablaVariable[var].dirAlmacenamiento
             else:
-                if var in self.tablaFunciones['TEMPORALES'].tablaVariable:
-                    return self.tablaFunciones['TEMPORALES'].tablaVariable[var].dirAlmacenamiento
+                if var in self.tablaFunciones['CONSTANTES'].tablaVariable:
+                    return self.tablaFunciones['CONSTANTES'].tablaVariable[var].dirAlmacenamiento
                 else:
                     print()
-                    return self.tablaFunciones['PROGRAMA'].tablaVariable[var].dirAlmacenamiento
+                    return self.tablaFunciones['TEMPORALES'].tablaVariable[var].dirAlmacenamiento
 
     def getNewTemporal(self,tipoVariable):
         direccion = 16000
@@ -228,6 +229,7 @@ class ManejadorDeTablas:
         v = Variable(tipoVariable, direccion)
 
         self.tablaFunciones['CONSTANTES'].tablaVariable[con] = v
+        #print(self.tablaFunciones['CONSTANTES'].tablaVariable[con].dirAlmacenamiento)
 
     def printTablas(self):
         for i in self.tablaFunciones:

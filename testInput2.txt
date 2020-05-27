@@ -1,10 +1,10 @@
 PROGRAMA p;
-VAR INT: a, b = -2;
+VAR INT: a, b = -2, z;
 VAR FLOAT: c = -1.445-4;
-VAR CHAR: r;
+VAR CHAR: r = 'b';
 
 FUNCION CHAR f(){
-REGRESA r;
+REGRESA '?';
 }
 
 PRINCIPAL(){
