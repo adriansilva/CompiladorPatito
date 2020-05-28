@@ -223,3 +223,25 @@ def cubo(tipo1, tipo2, operacion, dimension1, dimension2, dsO1, dsO2):
     #print("tipo:",tipoResultante, " // dimension:",dimensionResultante)
     return (operacion,intToType(tipoResultante),dimensionResultante,dsO1)
     # if dimensiones == (0): regresas un
+
+def cuboSolitario(tipo1, operacion, dimension1, dsO1):
+    if dimension == 0:
+        print("Las operaciones matriciales sólo se pueden hacer con matríces y no con valores únicos.")
+        exit(-1)
+    if operacion == '$':
+        if dimension1 != 2 or dsO1[0] != dsO1[1]:
+            print("Para obtener el determinante de una matriz, se necesita que esta sea cuadrada.")
+            exit(-1)
+        else:
+            return (operacion,'FLOAT',0,(1,1)) # El determinante es un valor único de tipo FLOAT
+    if operacion == '¡':
+        if dimension1 == 1:
+            return (operacion,tipo1,2,(dsO1[1],dsO1[0])) # Si era un arreglo, la transpuesta va a ser una matriz de dimension (1,x)
+        else:
+            return (operacion,tipo1,1,(dsO1[1],dsO1[0])) # Si era una matriz, el resultado es la transpuesta tal cual con las mismas dimensiones.
+    if operacion == '?':
+        if dimension1 != 2 or dsO1[0] != dsO1[1]:
+            print("Para obtener la inversa de una matriz, se necesita que esta sea cuadrada.")
+            exit(-1)
+        else:
+            return (operacion,'FLOAT',2,dsO1) # La inversa de una matriz mantiene sus dimensiones pero los valores pueden llegar a ser flotantes independientemente de si antes eran enteros o no.

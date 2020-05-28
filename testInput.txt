@@ -1,41 +1,6 @@
 PROGRAMA p;
-VAR INT: a, b, c, d;
+VAR INT: a[10,10];
 
-FUNCION VOID f()
-{
-  REGRESA;
-}
-
-FUNCION INT f2(){
-  REGRESA 1;
-}
-
-
-
-PRINCIPAL( %%Aquí there's a comment
-
-){ %%Un comentario
-
-  a = 0;
-  b = 0;
-  c = 4;
-  d = 0;
-
-  DESDE a HASTA 1*c HAZ{ %% Aquí también se puede escribir
-    DESDE b HASTA 2 HAZ{
-      d = b+c;
-    }
-  }
-
-  ESCRIBE(d);
-
-  SI(a<b)ENTONCES{
-    b = c*a*a;%%Esto es un comentario
-    ESCRIBE %%Esto es otro comentario
-    (b);
-  }
-
-  ESCRIBE(4+2*2.3, 4*5);
-
-  LEE(a, b);
+PRINCIPAL(){
+a = a?;
 }
