@@ -44,6 +44,10 @@ class MaquinaVirtual:
             # operadores primitivos ---------------------------------
 
             if cuadruplos[ip][0] == '+':
+                if cuadruplos[ip][3] >= 24000:
+                    valor = self.getValue(cuadruplos[ip][1]) + cuadruplos[ip][2]
+                    self.setValue(cuadruplos[ip][3], valor)
+
                 valor = self.getValue(cuadruplos[ip][1]) + self.getValue(cuadruplos[ip][2])
                 self.setValue(cuadruplos[ip][3], valor)
 
@@ -119,7 +123,7 @@ class MaquinaVirtual:
                 #temp = input("input: ")
                 print(cuadruplos[ip][3],"MHM")
                 try:
-                    val = int(temp)
+                    #val = int(temp)
                     if ((cuadruplos[ip][3] >= 5000 and cuadruplos[ip][3] <6000) or
                         (cuadruplos[ip][3] >= 9000 and cuadruplos[ip][3] <10000) or
                         (cuadruplos[ip][3] >= 13000 and cuadruplos[ip][3] <14000) or
@@ -131,7 +135,7 @@ class MaquinaVirtual:
 
                 except ValueError:
                     try:
-                        val = float(temp)
+                        #val = float(temp)
                         if ((cuadruplos[ip][3] >= 6000 and cuadruplos[ip][3] <7000) or
                             (cuadruplos[ip][3] >= 10000 and cuadruplos[ip][3] <11000) or
                             (cuadruplos[ip][3] >= 14000 and cuadruplos[ip][3] <15000) or
@@ -174,6 +178,12 @@ class MaquinaVirtual:
                 valor = self.getValue(cuadruplos[ip][1])
                 self.setValue(cuadruplos[ip][3], valor)
 
+            
+            # ARREGLOS Y MATRICES ---------------------------------
+            if cuadruplos[ip][0] == 'VER':
+                if self.getValue(cuadruplos[ip][1]) < 0 or self.getValue(cuadruplos[ip][1]) > cuadruplos[ip][3]:
+                    print("RUNTIME ERROR: el indice de acceso excede el tamano de la variable")
+                    exit(-1)
 
             # INCREMENTA INSTRUCTION POINTER
             ip += 1
@@ -187,8 +197,12 @@ class MaquinaVirtual:
         if address >= 9000 and address < 13000: # la direccion es local entonces esta almacenada en stack
             return self.stack[-1][address]
 
-        if address >= 16000: # la direccion es temporal entonces esta almacenada en stack
+        if address >= 16000 and address < 24000: # la direccion es temporal entonces esta almacenada en stack. 
             return self.stack[-1][address]
+
+        if address >= 24000: #la direccion es un pointer a otro address. #Se deberia de agregar esto tambien dentro de stack y a is param?
+            newAddress = self.heap[address]
+            return self.getValue(newAddress)
 
         else: # la direccion esta almacenada en heap
             return self.heap[address]
@@ -198,7 +212,7 @@ class MaquinaVirtual:
         if address >= 9000 and address < 13000: # la direccion es local entonces esta almacenada en stack
             self.stack[-1][address] = value
 
-        if address >= 16000: # la direccion es temporal entonces esta almacenada en stack
+        if address >= 16000 and address < 24000: # la direccion es temporal entonces esta almacenada en stack
             self.stack[-1][address] = value
 
         else: # la direccion esta almacenada en heap
