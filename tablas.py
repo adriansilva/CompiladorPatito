@@ -207,19 +207,19 @@ class ManejadorDeTablas:
         direccion = 16000
         if tipoVariable == 'INT':
             direccion += self.tablaFunciones['TEMPORALES'].contadorInt
-            self.tablaFunciones['TEMPORALES'].contadorInt += 1
+            self.tablaFunciones['TEMPORALES'].contadorInt += d1*d2
         if tipoVariable == 'FLOAT':
             direccion += self.tablaFunciones['TEMPORALES'].contadorFloat + 2000
-            self.tablaFunciones['TEMPORALES'].contadorFloat += 1
+            self.tablaFunciones['TEMPORALES'].contadorFloat += d1*d2
         if tipoVariable == 'CHAR':
             direccion += self.tablaFunciones['TEMPORALES'].contadorChar + 4000
-            self.tablaFunciones['TEMPORALES'].contadorChar += 1
+            self.tablaFunciones['TEMPORALES'].contadorChar += d1*d2
         if tipoVariable == 'BOOL':
             direccion += self.tablaFunciones['TEMPORALES'].contadorBool + 6000
-            self.tablaFunciones['TEMPORALES'].contadorBool += 1
+            self.tablaFunciones['TEMPORALES'].contadorBool += d1*d2
         if tipoVariable == 'POINT':
             direccion += self.tablaFunciones['TEMPORALES'].contadorPoints + 8000
-            self.tablaFunciones['TEMPORALES'].contadorPoints += 1
+            self.tablaFunciones['TEMPORALES'].contadorPoints += d1*d2
         #print("***************",direccion,"**************")
         v = Variable(tipoVariable, direccion, d1, d2)
 

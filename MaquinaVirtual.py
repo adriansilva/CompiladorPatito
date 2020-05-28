@@ -44,9 +44,35 @@ class MaquinaVirtual:
             # operadores primitivos ---------------------------------
 
             if cuadruplos[ip][0][0] == '+':
+                #print("Entró al +")
                 if len(cuadruplos[ip][0]) > 1:
-                    if cuadruplos[ip][0][1] == 1:
-                        print("Se está sumando arreglo multidimensional.")
+                    print("deberia entrar.")
+                    '''
+                    Para este punto, ya se asegura el cubo de que las dimensiones de cada arreglo
+                    sean las correctas para realizar las operaciones. Sólo falta la lógica de la
+                    operación dependiendo de cada caso. (arreglo+valor, arreglo+arreglo, matriz+valor, etc)
+                    '''
+                    if cuadruplos[ip][0][1] == '1' and cuadruplos[ip][0][2] == '0':
+                            #Falta implementarlo para que funcione con pointers.
+                            valor = self.getValue(cuadruplos[ip][1][0]+i) + self.getValue(cuadruplos[ip][2][0])
+                            self.setValue(cuadruplos[ip][3]+i, valor)
+
+                            #print("i:",cuadruplos[ip][1][0]+i)
+                            #print("valor:",valor)
+                            #print("Entro aquí xd.")
+                    if cuadruplos[ip][0][1] == '1' and cuadruplos[ip][0][2] == '1':
+                        #Aquí sería que cada elemento del arreglo 1 le sumas su respectivo elemento de arreglo2
+                        pass
+                    if cuadruplos[ip][0][1] == '2' and cuadruplos[ip][0][2] == '0':
+                        #A todos los elementos de la matriz, le sumas el valor único
+                        pass
+                    if cuadruplos[ip][0][1] == '2' and cuadruplos[ip][0][2] == '1':
+                        #Para todas las filas de la matriz, le sumas respectivamente el valor de cada columna del arreglo
+                        pass
+                    if cuadruplos[ip][0][1] == '2' and cuadruplos[ip][0][2] == '2':
+                        #Por cada elemento de la matriz 1 le sumas su respectivo valor de la matriz 2
+                        pass
+
                 else:
                     if cuadruplos[ip][3] >= 24000: # si se esta asignando a un pointer, entonces el 3 elemento del cuadurplo no va a ser un address, si no una constante
                         valor = self.getValue(cuadruplos[ip][1]) + cuadruplos[ip][2]

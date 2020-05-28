@@ -174,6 +174,8 @@ def intToType(entero):
 
 def modificarDs(operacion, dimension1, dimension2, dsO1, dsO2):
     if operacion == '+':
+        if dimension1 ==1 and dimension2 == 0:
+            return (operacion+str(dimension1)+str(dimension2),dsO1)
         if dimension1 == 1 and dimension2 == 1:
             if dsO1 != dsO2:
                 print("Para hacer una suma entre arreglos, es necesario que ambos sean del mismo tamaño.",dsO1,dsO2)
@@ -181,8 +183,21 @@ def modificarDs(operacion, dimension1, dimension2, dsO1, dsO2):
             else:
                 print("Si se pudo burro.\n\n\n\n\n\n\n\n")
                 return (operacion+str(dimension1)+str(dimension2),dsO1)
-        if dimension1 ==1 and dimension2 == 0:
+        if dimension1 == 2 and dimension2== 0:
             return (operacion+str(dimension1)+str(dimension2),dsO1)
+        if dimension1 == 2 and dimension2 == 1:
+            if dsO1[1] != dsO2[0]:
+                print("Para hacer una suma entre matriz y arreglo, es necesario que el tamaño del arreglo sea igual que la cantidad de columnas de la matriz.",dsO1,dsO2)
+                exit(-1)
+            else:
+                return (operacion+str(dimension1)+str(dimension2),dsO1)
+        if dimension1 ==2 and dimension2 == 2:
+            if dsO1 != dsO2:
+                print("Para hacer una suma entre matríces, es necesario que ambas tengan las mismas dimensiones.",dsO1,dsO2)
+                exit(-1)
+            else:
+                print("Si se pudo burro.\n\n\n\n\n\n\n\n")
+                return (operacion+str(dimension1)+str(dimension2),dsO1)
 
         #return (operacion+str(dimension1)+str(dimension2),dsO1)
 

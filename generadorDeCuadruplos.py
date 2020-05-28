@@ -68,8 +68,8 @@ class generadorDeCuadruplos:
                 self.pilaTipos.pop()
                 self.pilaDimensiones.pop()
                 self.pilaDimensiones.pop()
-                self.pilaDs.pop()
-                self.pilaDs.pop()
+                dsO2 = self.pilaDs.pop()
+                dsO1 = self.pilaDs.pop()
                 print(tempOperador)
                 print(resultado[0])
                 if resultado[0] == '=':
@@ -77,7 +77,10 @@ class generadorDeCuadruplos:
                     self.pilaOperandos.append(tempOperando1)
                 else:
                     nuevoTemporal = self.mt.getNewTemporal(resultado[1],1,1)
-                    self.outputCuadruplos.append(list((resultado[0],tempOperando1,tempOperando2,nuevoTemporal)))
+                    if '0' in resultado[0] or '1' in resultado[0] or '2' in resultado[0]:
+                        self.outputCuadruplos.append(list((resultado[0],(tempOperando1,dsO1),(tempOperando2,dsO2),nuevoTemporal)))
+                    else:
+                        self.outputCuadruplos.append(list((resultado[0],tempOperando1,tempOperando2,nuevoTemporal)))
                     self.pilaOperandos.append(nuevoTemporal) #Falta agregar ds a temporal
                 self.pilaTipos.append(resultado[1])
                 self.pilaDimensiones.append(resultado[2])
@@ -487,12 +490,16 @@ class generadorDeCuadruplos:
         nuevoTemporal2 = self.mt.getNewTemporal("POINT",1,1)
 
         self.outputCuadruplos.append(list(('+',nuevoTemporal,self.mt.getDireccionVariable(func,var),nuevoTemporal2)))
-
+        print(nuevoTemporal2)
         self.pilaOperandos.append(nuevoTemporal2)
         self.pilaTipos.append(self.mt.getTipoVariable(func,var))
         self.pilaDimensiones.append(self.mt.getDimensionVariable(func,var)-1)
+        print("Esto es la func:",func)
+        print("Esta es la variable:",var)
         tempD = self.mt.getDsVariable(func,var)
+        print(tempD)
         self.pilaDs.append((tempD[1],1))
+        print(self.pilaDs[-1])
 
         if self.pilaDimensiones[-1] < 0:
             print("VerD1 No se puede accesar a una dimensión no existente de la variable:",var)

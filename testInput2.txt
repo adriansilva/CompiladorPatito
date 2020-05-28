@@ -1,6 +1,6 @@
 PROGRAMA p;
 
-VAR INT: a = 0, b = 2, z[3,26], a1[25];
+VAR INT: a = 0, b = 2, z[1,5], a1[5];
 VAR FLOAT: c = -1.445-4;
 VAR CHAR: r = 'b';
 
@@ -24,43 +24,17 @@ FUNCION INT fib(INT a){
 
 
 PRINCIPAL(){
-    z[2,2] = 3;
-    z[2,3] = 6;
-    z[2,4] = 8;
+    z[0,0] = 0;
+    z[0,1] = 1;
+    z[0,2] = 2;
+    z[0,3] = 3;
+    z[0,4] = 4;
 
-    VAR INT: y[3,4];
+    a1[0] = 1;
+    a1[1] = 1;
+    a1[2] = 1;
+    a1[3] = 1;
+    a1[4] = 1;
 
-    y[3,3] = 5;
-    ESCRIBE(y[3,3]);
-
-    a1[24] = 0;
-
-    z[3,3] = z[2,4] + a1[23];
-
-    ESCRIBE(z[2,5]);
-    %%LEE(c);
-
-    a = 2;
-    DESDE a HASTA 4 HAZ{
-        ESCRIBE(z[2,a]);
-    }
-
-    z[2,z[2,5]] = 10;
-    ESCRIBE(z[2,z[2,5]]);
-
-    a = 0;
-
-    DESDE a HASTA 7 HAZ{
-        ESCRIBE(fib(a));
-    }
-
-    %%LEE(c);
-
-    ESCRIBE(r);%% esto causa un bug si r = 'b' y hay una variable b
-    ESCRIBE(c);
-    %%LEE(c);
-    ESCRIBE(111111,z[2,z[2,5]]);
-    %%LEE(a);
-    %%LEE(r);
-    %%LEE(a,b);
+    %%z[0] = z[0] + a1[0];
 }
