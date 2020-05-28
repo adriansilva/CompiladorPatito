@@ -41,53 +41,195 @@ class MaquinaVirtual:
                     ip = cuadruplos[ip][3] - 1
                     continue
 
-            # operadores primitivos ---------------------------------
+            # OPERADORES PRIMITIVOS ---------------------------------
 
-            if cuadruplos[ip][0][0] == '+':
-                #print("Entró al +")
-                if len(cuadruplos[ip][0]) > 1:
-                    print("deberia entrar.")
-                    '''
-                    Para este punto, ya se asegura el cubo de que las dimensiones de cada arreglo
-                    sean las correctas para realizar las operaciones. Sólo falta la lógica de la
-                    operación dependiendo de cada caso. (arreglo+valor, arreglo+arreglo, matriz+valor, etc)
-                    '''
-                    if cuadruplos[ip][0][1] == '1' and cuadruplos[ip][0][2] == '0':
-                            #Falta implementarlo para que funcione con pointers.
-                            valor = self.getValue(cuadruplos[ip][1][0]+i) + self.getValue(cuadruplos[ip][2][0])
-                            self.setValue(cuadruplos[ip][3]+i, valor)
+            # SUMA ============================
 
-                            #print("i:",cuadruplos[ip][1][0]+i)
-                            #print("valor:",valor)
-                            #print("Entro aquí xd.")
-                    if cuadruplos[ip][0][1] == '1' and cuadruplos[ip][0][2] == '1':
-                        #Aquí sería que cada elemento del arreglo 1 le sumas su respectivo elemento de arreglo2
-                        pass
-                    if cuadruplos[ip][0][1] == '2' and cuadruplos[ip][0][2] == '0':
-                        #A todos los elementos de la matriz, le sumas el valor único
-                        pass
-                    if cuadruplos[ip][0][1] == '2' and cuadruplos[ip][0][2] == '1':
-                        #Para todas las filas de la matriz, le sumas respectivamente el valor de cada columna del arreglo
-                        pass
-                    if cuadruplos[ip][0][1] == '2' and cuadruplos[ip][0][2] == '2':
-                        #Por cada elemento de la matriz 1 le sumas su respectivo valor de la matriz 2
-                        pass
-
+            if cuadruplos[ip][0] == '+':
+                if cuadruplos[ip][3] >= 24000: # si se esta asignando a un pointer, entonces el 3 elemento del cuadurplo no va a ser un address, si no una constante
+                    valor = self.getValue(cuadruplos[ip][1]) + cuadruplos[ip][2]
+                    self.setPointer(cuadruplos[ip][3], valor)
                 else:
-                    if cuadruplos[ip][3] >= 24000: # si se esta asignando a un pointer, entonces el 3 elemento del cuadurplo no va a ser un address, si no una constante
-                        valor = self.getValue(cuadruplos[ip][1]) + cuadruplos[ip][2]
-                        self.setPointer(cuadruplos[ip][3], valor)
-                    else:
-                        valor = self.getValue(cuadruplos[ip][1]) + self.getValue(cuadruplos[ip][2])
-                        self.setValue(cuadruplos[ip][3], valor)
+                    valor = self.getValue(cuadruplos[ip][1]) + self.getValue(cuadruplos[ip][2])
+                    self.setValue(cuadruplos[ip][3], valor)
+
+            if cuadruplos[ip][0] == '+10': #suma arreglo con valor unico
+                arrSize = cuadruplos[ip][1][1][0]
+
+                arrAddress = cuadruplos[ip][1][0]
+                if arrAddress >= 24000:
+                    arrAddress = self.getAddressFromPointer(cuadruplos[ip][1][0])
+
+                uniqueVal = self.getValue(cuadruplos[ip][2][0])
+                arr = []
+
+                for i in range(arrSize):
+                    result = self.getValue(arrAddress + i) + uniqueVal
+                    arr.append(result)
+
+                self.setValue(cuadruplos[ip][3], arr)
+            
+            if cuadruplos[ip][0] == '+11': #suma arreglo con arreglo
+                arrSize = cuadruplos[ip][1][1][0]
+
+                arr1Address = cuadruplos[ip][1][0]
+                if arr1Address >= 24000:
+                    arr1Address = self.getAddressFromPointer(cuadruplos[ip][1][0])
+
+                arr2Address = cuadruplos[ip][2][0]
+                if arr2Address >= 24000:
+                    arr2Address = self.getAddressFromPointer(cuadruplos[ip][2][0])
+
+                arr = []
+
+                for i in range(arrSize):
+                    result = self.getValue(arr1Address + i) + self.getValue(arr2Address + i)
+                    arr.append(result)
+
+                self.setValue(cuadruplos[ip][3], arr)
+
+
+            if cuadruplos[ip][0] == '+20': #suma matriz con valor unico
+                matSize = cuadruplos[ip][1][1][0] * cuadruplos[ip][1][1][1]
+
+                matAddress = cuadruplos[ip][1][0]
+
+                uniqueVal = self.getValue(cuadruplos[ip][2][0])
+                arr = []
+
+                for i in range(matSize):
+                    result = self.getValue(matAddress + i) + uniqueVal
+                    arr.append(result)
+
+                self.setValue(cuadruplos[ip][3], arr)
+
+            if cuadruplos[ip][0] == '+21': #suma matriz con arreglo
+                matSize = cuadruplos[ip][1][1][0] * cuadruplos[ip][1][1][1]
+                arrSize = cuadruplos[ip][2][1][0]
+
+                matAddress = cuadruplos[ip][1][0]
+
+                arrAddress = cuadruplos[ip][2][0]
+                if arrAddress >= 24000:
+                    arrAddress = self.getAddressFromPointer(cuadruplos[ip][2][0])
+
+                arr = []
+
+                for i in range(matSize):
+                    result = self.getValue(matAddress + i) + self.getValue(arrAddress + i%arrSize)
+                    arr.append(result)
+
+                self.setValue(cuadruplos[ip][3], arr)
+
+            if cuadruplos[ip][0] == '+22': #suma matriz con matriz
+                matSize = cuadruplos[ip][1][1][0] * cuadruplos[ip][1][1][1]
+
+                mat1Address = cuadruplos[ip][1][0]
+                mat2Address = cuadruplos[ip][2][0]
+
+                arr = []
+
+                for i in range(matSize):
+                    result = self.getValue(mat1Address + i) + self.getValue(mat2Address + i)
+                    arr.append(result)
+
+                self.setValue(cuadruplos[ip][3], arr)
+            
+            # RESTA ============================
 
             if cuadruplos[ip][0] == '-':
                 valor = self.getValue(cuadruplos[ip][1]) - self.getValue(cuadruplos[ip][2])
                 self.setValue(cuadruplos[ip][3], valor)
 
+            if cuadruplos[ip][0] == '-10': #resta arreglo con valor unico
+                arrSize = cuadruplos[ip][1][1][0]
+
+                arrAddress = cuadruplos[ip][1][0]
+                if arrAddress >= 24000:
+                    arrAddress = self.getAddressFromPointer(cuadruplos[ip][1][0])
+
+                uniqueVal = self.getValue(cuadruplos[ip][2][0])
+                arr = []
+
+                for i in range(arrSize):
+                    result = self.getValue(arrAddress + i) - uniqueVal
+                    arr.append(result)
+
+                self.setValue(cuadruplos[ip][3], arr)
+            
+            if cuadruplos[ip][0] == '-11': #resta arreglo con arreglo
+                arrSize = cuadruplos[ip][1][1][0]
+
+                arr1Address = cuadruplos[ip][1][0]
+                if arr1Address >= 24000:
+                    arr1Address = self.getAddressFromPointer(cuadruplos[ip][1][0])
+
+                arr2Address = cuadruplos[ip][2][0]
+                if arr2Address >= 24000:
+                    arr2Address = self.getAddressFromPointer(cuadruplos[ip][2][0])
+
+                arr = []
+
+                for i in range(arrSize):
+                    result = self.getValue(arr1Address + i) - self.getValue(arr2Address + i)
+                    arr.append(result)
+
+                self.setValue(cuadruplos[ip][3], arr)
+
+
+            if cuadruplos[ip][0] == '-20': #resta matriz con valor unico
+                matSize = cuadruplos[ip][1][1][0] * cuadruplos[ip][1][1][1]
+
+                matAddress = cuadruplos[ip][1][0]
+
+                uniqueVal = self.getValue(cuadruplos[ip][2][0])
+                arr = []
+
+                for i in range(matSize):
+                    result = self.getValue(matAddress + i) - uniqueVal
+                    arr.append(result)
+
+                self.setValue(cuadruplos[ip][3], arr)
+
+            if cuadruplos[ip][0] == '-21': #resta matriz con arreglo
+                matSize = cuadruplos[ip][1][1][0] * cuadruplos[ip][1][1][1]
+                arrSize = cuadruplos[ip][2][1][0]
+
+                matAddress = cuadruplos[ip][1][0]
+
+                arrAddress = cuadruplos[ip][2][0]
+                if arrAddress >= 24000:
+                    arrAddress = self.getAddressFromPointer(cuadruplos[ip][2][0])
+
+                arr = []
+
+                for i in range(matSize):
+                    result = self.getValue(matAddress + i) - self.getValue(arrAddress + i%arrSize)
+                    arr.append(result)
+
+                self.setValue(cuadruplos[ip][3], arr)
+
+            if cuadruplos[ip][0] == '-22': #resta matriz con matriz
+                matSize = cuadruplos[ip][1][1][0] * cuadruplos[ip][1][1][1]
+
+                mat1Address = cuadruplos[ip][1][0]
+                mat2Address = cuadruplos[ip][2][0]
+
+                arr = []
+
+                for i in range(matSize):
+                    result = self.getValue(mat1Address + i) - self.getValue(mat2Address + i)
+                    arr.append(result)
+
+                self.setValue(cuadruplos[ip][3], arr)
+
+            # MULTIPLICACION ============================
+
             if cuadruplos[ip][0] == '*':
                 valor = self.getValue(cuadruplos[ip][1]) * self.getValue(cuadruplos[ip][2])
                 self.setValue(cuadruplos[ip][3], valor)
+
+            # DIVISION ============================
 
             if cuadruplos[ip][0] == '/':
                 valor = self.getValue(cuadruplos[ip][1]) / self.getValue(cuadruplos[ip][2])
@@ -97,13 +239,33 @@ class MaquinaVirtual:
 
             if cuadruplos[ip][0] == '=':
 
-                if cuadruplos[ip][3]  >= 13000 and cuadruplos[ip][3] < 16000: # SI estamos agregando una constante
-                    constante = cuadruplos[ip][1]
-                    self.setValue(cuadruplos[ip][3], constante)
+                if cuadruplos[ip][2][1] > 1: #estamos asignando una matriz
+                    tempArr = self.getValue(cuadruplos[ip][1])
+                    matDestino = cuadruplos[ip][3]
 
-                else:
-                    valor = self.getValue(cuadruplos[ip][1])
-                    self.setValue(cuadruplos[ip][3], valor)
+                    for i in range(len(tempArr)):
+                        self.setValue(matDestino + i, tempArr[i])
+                    
+
+                elif cuadruplos[ip][2][0] > 1: #estamos asignando un arreglo
+                    tempArr = self.getValue(cuadruplos[ip][1])
+
+                    arrDestino = cuadruplos[ip][3]
+                    if arrDestino >= 24000:
+                        arrDestino = self.getAddressFromPointer(cuadruplos[ip][3])
+                    
+                    for i in range(len(tempArr)):
+                        self.setValue(arrDestino + i, tempArr[i])
+
+
+                else: #estamos igualando variables unicas
+                    if cuadruplos[ip][3]  >= 13000 and cuadruplos[ip][3] < 16000: # SI estamos agregando una constante
+                        constante = cuadruplos[ip][1]
+                        self.setValue(cuadruplos[ip][3], constante)
+
+                    else:
+                        valor = self.getValue(cuadruplos[ip][1])
+                        self.setValue(cuadruplos[ip][3], valor)
 
 
             # RELOP ---------------------------------
@@ -210,7 +372,7 @@ class MaquinaVirtual:
 
             # ARREGLOS Y MATRICES ---------------------------------
             if cuadruplos[ip][0] == 'VER':
-                if self.getValue(cuadruplos[ip][1]) < 0 or self.getValue(cuadruplos[ip][1]) > cuadruplos[ip][3]:
+                if self.getValue(cuadruplos[ip][1]) < 0 or self.getValue(cuadruplos[ip][1]) >= cuadruplos[ip][3]:
                     print("RUNTIME ERROR: el indice de acceso excede el tamano de la variable")
                     exit(-1)
 
@@ -257,3 +419,6 @@ class MaquinaVirtual:
 
     def setPointer(self, pointer, address):
         self.heap[pointer] = address
+
+    def getAddressFromPointer(self, pointer):
+        return self.heap[pointer]
