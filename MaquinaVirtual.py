@@ -220,7 +220,7 @@ class MaquinaVirtual:
 
         if address >= 24000:
             newAddress = self.heap[address]
-            self.heap[newAddress] = value
+            self.setValue(newAddress, value)
 
         else: # la direccion esta almacenada en heap
             self.heap[address] = value

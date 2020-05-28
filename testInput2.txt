@@ -1,6 +1,6 @@
 PROGRAMA p;
 
-VAR INT: a = 0, b = 2, z[3,26], y = 20;
+VAR INT: a = 0, b = 2, z[3,26];
 VAR FLOAT: c = -1.445-4;
 VAR CHAR: r = 'b';
 
@@ -28,13 +28,23 @@ PRINCIPAL(){
     z[2,3] = 6;
     z[2,4] = 8;
 
+    VAR INT: y[3,4];
+
+    y[3,3] = 5;
+    ESCRIBE(y[3,3]);
+
+    z[2,5] = z[2,4] + z[2,2] - y[3,3];
+
+    ESCRIBE(z[2,5]);
+    LEE(c);
+
     a = 2;
     DESDE a HASTA 4 HAZ{
         ESCRIBE(z[2,a]);
     }
 
     z[2,z[2,5]] = 10;
-    ESCRIBE(z[2,z[2,4]]);
+    ESCRIBE(z[2,z[2,5]]);
 
     a = 0;
     
