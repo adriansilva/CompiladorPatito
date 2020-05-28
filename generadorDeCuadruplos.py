@@ -73,7 +73,7 @@ class generadorDeCuadruplos:
                 print(tempOperador)
                 print(resultado[0])
                 if resultado[0] == '=':
-                    self.outputCuadruplos.append(list((resultado[0],tempOperando2,None,tempOperando1)))
+                    self.outputCuadruplos.append(list((resultado[0],tempOperando2,resultado[3],tempOperando1)))
                     self.pilaOperandos.append(tempOperando1)
                 else:
                     nuevoTemporal = self.mt.getNewTemporal(resultado[1],1,1)
@@ -274,7 +274,7 @@ class generadorDeCuadruplos:
 
     def constanteCuadruplo(self, con):
         #if con not in self.constanteDeclarada:
-        self.outputCuadruplos.append(list(('=', con, None, self.mt.getDireccionVariable('CONSTANTES', str(con)))))
+        self.outputCuadruplos.append(list(('=', con, (1,1), self.mt.getDireccionVariable('CONSTANTES', str(con)))))
             #self.constanteDeclarada.append(con)
 
     def print(self, s = None):
@@ -491,10 +491,11 @@ class generadorDeCuadruplos:
         self.pilaOperandos.append(nuevoTemporal2)
         self.pilaTipos.append(self.mt.getTipoVariable(func,var))
         self.pilaDimensiones.append(self.mt.getDimensionVariable(func,var)-1)
-        self.pilaDs.append(self.mt.getDsVariable(func,var))
+        tempD = self.mt.getDsVariable(func,var)
+        self.pilaDs.append((tempD[1],1))
 
         if self.pilaDimensiones[-1] < 0:
-            print("No se puede accesar a una dimensión no existente de la variable:",var)
+            print("VerD1 No se puede accesar a una dimensión no existente de la variable:",var)
             exit(-1)
 
     def verificarD2(self, ds, func, var):
@@ -541,7 +542,7 @@ class generadorDeCuadruplos:
         self.pilaOperandos.append(nuevoTemporal3)
         self.pilaTipos.append(self.mt.getTipoVariable(func,var))
         self.pilaDimensiones.append(self.mt.getDimensionVariable(func,var)-2)
-        self.pilaDs.append(self.mt.getDsVariable(func,var))
+        self.pilaDs.append((1,1))
 
         if self.pilaDimensiones[-1] < 0:
             print("No se puede accesar a una dimensión no existente de la variable:",var)
@@ -583,7 +584,7 @@ class generadorDeCuadruplos:
         tipoNuevoTemporal = self.mt.getTipoFuncion(func)
         nuevoTemporal = self.mt.getNewTemporal(tipoNuevoTemporal,1,1)
 
-        self.outputCuadruplos.append(list(('=',self.mt.getDireccionVariable('PROGRAMA',func),None,nuevoTemporal)))
+        self.outputCuadruplos.append(list(('=',self.mt.getDireccionVariable('PROGRAMA',func),self.mt.getDimensionVariable('PROGRAMA',func),nuevoTemporal)))
         self.operando('Temporal_'+str(nuevoTemporal),tipoNuevoTemporal,0,'TEMPORALES')
 
     def gotoMain(self):

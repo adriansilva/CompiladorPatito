@@ -172,6 +172,20 @@ def intToType(entero):
     regresa = switcher.get(entero, "Caracter inválido.")
     return regresa
 
+def modificarDs(operacion, dimension1, dimension2, dsO1, dsO2):
+    if operacion == '+':
+        if dimension1 == 1 and dimension2 == 1:
+            if dsO1 != dsO2:
+                print("Para hacer una suma entre arreglos, es necesario que ambos sean del mismo tamaño.",dsO1,dsO2)
+                exit(-1)
+            else:
+                print("Si se pudo burro.\n\n\n\n\n\n\n\n")
+                return (operacion+str(dimension1)+str(dimension2),dsO1)
+        if dimension1 ==1 and dimension2 == 0:
+            return (operacion+str(dimension1)+str(dimension2),dsO1)
+
+        #return (operacion+str(dimension1)+str(dimension2),dsO1)
+
 def cubo(tipo1, tipo2, operacion, dimension1, dimension2, dsO1, dsO2):
     print(tipo1, tipo2)
     if tipo1 == "POINT":
@@ -187,6 +201,10 @@ def cubo(tipo1, tipo2, operacion, dimension1, dimension2, dsO1, dsO2):
     if tipoResultante == -1:
         print("Esta operación aritmética no es válida por incongruencias de tipos.")
         exit(-1)
+    if dimension1+dimension2 > 0 and operacion == '+':
+        resultado = modificarDs(operacion, dimension1, dimension2, dsO1, dsO2)
+        operacion = resultado[0]
+        dsO1 = resultado[1]
     #print("tipo:",tipoResultante, " // dimension:",dimensionResultante)
     return (operacion,intToType(tipoResultante),dimensionResultante,dsO1)
     # if dimensiones == (0): regresas un

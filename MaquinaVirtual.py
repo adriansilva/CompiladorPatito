@@ -43,13 +43,17 @@ class MaquinaVirtual:
 
             # operadores primitivos ---------------------------------
 
-            if cuadruplos[ip][0] == '+':
-                if cuadruplos[ip][3] >= 24000: # si se esta asignando a un pointer, entonces el 3 elemento del cuadurplo no va a ser un address, si no una constante
-                    valor = self.getValue(cuadruplos[ip][1]) + cuadruplos[ip][2]
-                    self.setPointer(cuadruplos[ip][3], valor)
+            if cuadruplos[ip][0][0] == '+':
+                if len(cuadruplos[ip][0]) > 1:
+                    if cuadruplos[ip][0][1] == 1:
+                        print("Se está sumando arreglo multidimensional.")
                 else:
-                    valor = self.getValue(cuadruplos[ip][1]) + self.getValue(cuadruplos[ip][2])
-                    self.setValue(cuadruplos[ip][3], valor)
+                    if cuadruplos[ip][3] >= 24000: # si se esta asignando a un pointer, entonces el 3 elemento del cuadurplo no va a ser un address, si no una constante
+                        valor = self.getValue(cuadruplos[ip][1]) + cuadruplos[ip][2]
+                        self.setPointer(cuadruplos[ip][3], valor)
+                    else:
+                        valor = self.getValue(cuadruplos[ip][1]) + self.getValue(cuadruplos[ip][2])
+                        self.setValue(cuadruplos[ip][3], valor)
 
             if cuadruplos[ip][0] == '-':
                 valor = self.getValue(cuadruplos[ip][1]) - self.getValue(cuadruplos[ip][2])
@@ -177,7 +181,7 @@ class MaquinaVirtual:
                 valor = self.getValue(cuadruplos[ip][1])
                 self.setValue(cuadruplos[ip][3], valor)
 
-            
+
             # ARREGLOS Y MATRICES ---------------------------------
             if cuadruplos[ip][0] == 'VER':
                 if self.getValue(cuadruplos[ip][1]) < 0 or self.getValue(cuadruplos[ip][1]) > cuadruplos[ip][3]:
@@ -196,7 +200,7 @@ class MaquinaVirtual:
         if address >= 9000 and address < 13000: # la direccion es local entonces esta almacenada en stack
             return self.stack[-1][address]
 
-        if address >= 16000 and address < 24000: # la direccion es temporal entonces esta almacenada en stack. 
+        if address >= 16000 and address < 24000: # la direccion es temporal entonces esta almacenada en stack.
             return self.stack[-1][address]
 
         if address >= 24000: #la direccion es un pointer a otro address. #Se deberia de agregar esto tambien dentro de stack y a is param?
@@ -224,6 +228,6 @@ class MaquinaVirtual:
 
         else: # la direccion esta almacenada en heap
             self.heap[address] = value
-    
+
     def setPointer(self, pointer, address):
         self.heap[pointer] = address
