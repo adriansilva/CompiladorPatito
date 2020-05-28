@@ -23,7 +23,7 @@ class MaquinaVirtual:
 
             #input(cuadruplos[ip])
 
-            #GOTO
+            # GOTO ---------------------------------
 
             if cuadruplos[ip][0] == 'GOTO':
                 ip = cuadruplos[ip][3] - 1
@@ -44,12 +44,12 @@ class MaquinaVirtual:
             # operadores primitivos ---------------------------------
 
             if cuadruplos[ip][0] == '+':
-                if cuadruplos[ip][3] >= 24000:
+                if cuadruplos[ip][3] >= 24000: # si se esta asignando a un pointer, entonces el 3 elemento del cuadurplo no va a ser un address, si no una constante
                     valor = self.getValue(cuadruplos[ip][1]) + cuadruplos[ip][2]
+                    self.setPointer(cuadruplos[ip][3], valor)
+                else:
+                    valor = self.getValue(cuadruplos[ip][1]) + self.getValue(cuadruplos[ip][2])
                     self.setValue(cuadruplos[ip][3], valor)
-
-                valor = self.getValue(cuadruplos[ip][1]) + self.getValue(cuadruplos[ip][2])
-                self.setValue(cuadruplos[ip][3], valor)
 
             if cuadruplos[ip][0] == '-':
                 valor = self.getValue(cuadruplos[ip][1]) - self.getValue(cuadruplos[ip][2])
@@ -120,10 +120,9 @@ class MaquinaVirtual:
             # READ ---------------------------------
 
             if cuadruplos[ip][0] == 'READ':
-                #temp = input("input: ")
-                print(cuadruplos[ip][3],"MHM")
+                temp = input("input: ")
                 try:
-                    #val = int(temp)
+                    val = int(temp)
                     if ((cuadruplos[ip][3] >= 5000 and cuadruplos[ip][3] <6000) or
                         (cuadruplos[ip][3] >= 9000 and cuadruplos[ip][3] <10000) or
                         (cuadruplos[ip][3] >= 13000 and cuadruplos[ip][3] <14000) or
@@ -135,7 +134,7 @@ class MaquinaVirtual:
 
                 except ValueError:
                     try:
-                        #val = float(temp)
+                        val = float(temp)
                         if ((cuadruplos[ip][3] >= 6000 and cuadruplos[ip][3] <7000) or
                             (cuadruplos[ip][3] >= 10000 and cuadruplos[ip][3] <11000) or
                             (cuadruplos[ip][3] >= 14000 and cuadruplos[ip][3] <15000) or
@@ -201,8 +200,12 @@ class MaquinaVirtual:
             return self.stack[-1][address]
 
         if address >= 24000: #la direccion es un pointer a otro address. #Se deberia de agregar esto tambien dentro de stack y a is param?
-            newAddress = self.heap[address]
-            return self.getValue(newAddress)
+            try:
+                newAddress = self.heap[address]
+                return self.getValue(newAddress)
+            except:
+                print("La dirreccion del arreglo/matriz a la que se trata de accesar no ha sido no ha sido asignada")
+                exit(-1)
 
         else: # la direccion esta almacenada en heap
             return self.heap[address]
@@ -215,5 +218,12 @@ class MaquinaVirtual:
         if address >= 16000 and address < 24000: # la direccion es temporal entonces esta almacenada en stack
             self.stack[-1][address] = value
 
+        if address >= 24000:
+            newAddress = self.heap[address]
+            self.heap[newAddress] = value
+
         else: # la direccion esta almacenada en heap
             self.heap[address] = value
+    
+    def setPointer(self, pointer, address):
+        self.heap[pointer] = address
