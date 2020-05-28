@@ -173,7 +173,7 @@ def intToType(entero):
     return regresa
 
 def modificarDs(operacion, dimension1, dimension2, dsO1, dsO2):
-    if operacion == '+':
+    if operacion == '+' or operacion == '-':
         if dimension1 ==1 and dimension2 == 0:
             return (operacion+str(dimension1)+str(dimension2),dsO1)
         if dimension1 == 1 and dimension2 == 1:
@@ -216,7 +216,7 @@ def cubo(tipo1, tipo2, operacion, dimension1, dimension2, dsO1, dsO2):
     if tipoResultante == -1:
         print("Esta operación aritmética no es válida por incongruencias de tipos.")
         exit(-1)
-    if dimension1+dimension2 > 0 and operacion == '+':
+    if dimension1+dimension2 > 0 and operacion in ['+','-']:
         resultado = modificarDs(operacion, dimension1, dimension2, dsO1, dsO2)
         operacion = resultado[0]
         dsO1 = resultado[1]
