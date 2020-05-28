@@ -491,8 +491,8 @@ def p_posibleID2(p):
     '''
 def p_posibleID3(p):
     '''
-    posibleID3 : COMA np_agregarFondo expresion np_quitarFondo np_verificarD2 np_enviarACuadruplos4
-               | np_verificarD1 np_enviarACuadruplos3
+    posibleID3 : COMA np_agregarFondo expresion np_quitarFondo np_verificarD2
+               | np_verificarD1
     '''
 
 def p_np_defIDActual(p):

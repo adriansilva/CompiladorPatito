@@ -181,6 +181,7 @@ def cubo(tipo1, tipo2, operacion, dimension1, dimension2, dsO1, dsO2):
     tipoResultante = cuboTipos[typeToInt(operacion) if (operacion != '=') else 6][typeToInt(tipo1)][typeToInt(tipo2)]
     dimensionResultante = cuboDimensiones[typeToIntDimension(operacion)][dimension1][dimension2]
     if dimensionResultante == -1:
+        print(dimension1,dimension2)
         print("Esta operación aritmética no es válida por discrepancias de dimensiones.")
         exit(-1)
     if tipoResultante == -1:

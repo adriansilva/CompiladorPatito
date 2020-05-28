@@ -29,9 +29,9 @@ PRINCIPAL(){
         ESCRIBE(fib(a));
     }
 
-
     ESCRIBE(r);%% esto causa un bug si r = 'b' y hay una variable b
     ESCRIBE(c);
+    z[4,5] = 6;
     ESCRIBE(111111,z[2,z[4,5]]);
     %%LEE(a);
     %%LEE(r);

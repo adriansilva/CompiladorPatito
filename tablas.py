@@ -176,7 +176,7 @@ class ManejadorDeTablas:
             return (self.tablaFunciones['PROGRAMA'].tablaVariable[var].d1,self.tablaFunciones['PROGRAMA'].tablaVariable[var].d2)
 
     def getDireccionVariable(self,func,var):
-        print(self.tablaFunciones['CONSTANTES'].tablaVariable)
+        #print(self.tablaFunciones['CONSTANTES'].tablaVariable)
         #print("Esto es un var:",var, "Y aqui termina.")
         if var in self.tablaFunciones[func].tablaVariable:
             return self.tablaFunciones[func].tablaVariable[var].dirAlmacenamiento
