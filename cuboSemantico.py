@@ -267,7 +267,7 @@ def cubo(tipo1, tipo2, operacion, dimension1, dimension2, dsO1, dsO2):
     # if dimensiones == (0): regresas un
 
 def cuboSolitario(tipo1, operacion, dimension1, dsO1):
-    if dimension == 0:
+    if dimension1 == 0:
         print("Las operaciones matriciales sólo se pueden hacer con matríces y no con valores únicos.")
         exit(-1)
     if operacion == '$':
