@@ -3,20 +3,19 @@ import os,sys
 import tablas
 
 class generadorDeCuadruplos:
-    pilaSaltos = None
+    pilaSaltos = None #Pila que almacena índice del cuádruplo al que se tiene que saltar
     pilaMigajas = None #Pila que almacena dirección de GOTOs pendientes
-    pilaOperandos = None
-    pilaOperadores = None
-    pilaTipos = None
-    pilaDimensiones = None
-    pilaDs = None
-    outputCuadruplos = None
-    contadorTemporales = None
-    pilaReturns = None
-    pilaIDFor = None
-    pilaParams = None
-    constanteDeclarada = None # revisa si el cuadruplo de asignacion de una constate ya existe
-    firmaFunc = None
+    pilaOperandos = None #Pila de operandos
+    pilaOperadores = None #Pila de operadores
+    pilaTipos = None #Pila del tipo del operando
+    pilaDimensiones = None #Pila de las dimensiones del operando
+    pilaDs = None #Pila de las Ds del operando (d1,d2) en forma de cuádruplo
+    pilaReturns = None #Pila que almacena las posiciones de los returns para indicarle a los GOTOs donde termina la función
+    pilaIDFor = None #Pila que almacena los IDs utilizados en la validación del for. Se modifican cada vez que se cumple un ciclo
+    pilaParams = None #Pila de los parámetros de una función que ayuda a definir es string con los tipos y la cantidad de parámetros de una función
+    outputCuadruplos = None #Pila de los cuádruplos generados
+    constanteDeclarada = None #Revisa si el cuadruplo de asignacion de una constate ya existe
+    firmaFunc = None #Pila utilizada para comparar elementos enviados en una llamada de función con la firma de dicha función.
     contadorParam = None
     mt = None
 
@@ -31,7 +30,6 @@ class generadorDeCuadruplos:
         self.pilaMigajas = []
         self.pilaReturns = []
         self.pilaDs = []
-        self.contadorTemporales = 0
         self.pilaIDFor = []
         self.pilaParams = []
         self.constanteDeclarada = []
@@ -88,7 +86,6 @@ class generadorDeCuadruplos:
                 tempOperador = self.pilaOperadores.pop()
                 tempOperando2 = self.pilaOperandos.pop()
                 tempOperando1 = self.pilaOperandos.pop()
-                #print((tempOperador,tempOperando1,tempOperando2))
                 resultado = cs.cubo(self.pilaTipos[-2],self.pilaTipos[-1],
                                     tempOperador,
                                     self.pilaDimensiones[-2],self.pilaDimensiones[-1],
@@ -100,8 +97,17 @@ class generadorDeCuadruplos:
                 self.pilaDimensiones.pop()
                 dsO2 = self.pilaDs.pop()
                 dsO1 = self.pilaDs.pop()
-                print(tempOperador)
-                print(resultado[0])
+
+                # Si el operador inicia con un '=' hay 3 opciones disponibles:
+                # 1. es un '==', esto se condidera en el if y en caso de ser '==' se trata como cualquier otro operador
+                # 2. Es un '=' solo. Esto tiene su propio caso en el que la información del cuádruplo generado varía.
+                # 3. Se trata de un operado '=xx'. Dentro de la excepción se condiera el caso en el que el operador incluye
+                #    información de las dimensiones.
+
+                # En el caso en el que el operador es algún otro diferente a '=', igual se considera la situación
+                # en la que este operador tiene información de dimensiones ('*xx'). De ser así, se genera un cuádruplo
+                # diferente al de la operación normal.
+
                 if resultado[0][0] == '=' and len(resultado[0])>1 and resultado[0][1] != '=':
                     self.outputCuadruplos.append(list((resultado[0],tempOperando2,resultado[3],tempOperando1)))
                     self.pilaOperandos.append(tempOperando1)
@@ -118,21 +124,22 @@ class generadorDeCuadruplos:
             self.pilaOperadores.pop()
 
         if o in ['$','?','¡']:
-
+            # El proceso para procesar los operadores matriciales difiere de todos los demás. Como estamos tratando
+            # con una operación en la que sólo participa 1 operando, se utiliza una versión especial del cubo
+            # que recibe la información de un único operando.
             self.pilaOperadores.append(o)
             while self.pilaOperadores and self.pilaOperadores[-1] in ['$','?','¡']: #mientras haya operadores de mayor o igual jerarquia, ejecutarlos.
                 tempOperador = self.pilaOperadores.pop()
                 tempOperando1 = self.pilaOperandos.pop()
                 dsO1 = self.pilaDs.pop()
 
-                print(tempOperador,tempOperando1,dsO1)
-
                 resultado = cs.cuboSolitario(self.pilaTipos.pop(),tempOperador,self.pilaDimensiones.pop(),dsO1)
 
+                # La lógica de inserción es igual que la de los demás operandos, se puede apreciar la descripción
+                # del manejo de los datos de los demás operandos más abajo.
                 nuevoTemporal = self.mt.getNewTemporal(resultado[1],resultado[3][0],resultado[3][1])
 
                 self.outputCuadruplos.append(list((resultado[0],tempOperando1,(dsO1,resultado[3]),nuevoTemporal)))
-
                 self.pilaOperandos.append(nuevoTemporal)
                 self.pilaTipos.append(resultado[1])
                 self.pilaDimensiones.append(resultado[2])
@@ -163,8 +170,7 @@ class generadorDeCuadruplos:
                 self.pilaDimensiones.pop()
                 dsO2 = self.pilaDs.pop()
                 dsO1 = self.pilaDs.pop()
-                print(tempOperador)
-                print(resultado[0])
+
                 nuevoTemporal = self.mt.getNewTemporal(resultado[1],resultado[3][0],resultado[3][1])
 
                 # Al procesarse si el cubo nos dice que la operación es especial (participan arreglos o matríces),
@@ -188,7 +194,7 @@ class generadorDeCuadruplos:
                 tempOperador = self.pilaOperadores.pop()
                 tempOperando2 = self.pilaOperandos.pop()
                 tempOperando1 = self.pilaOperandos.pop()
-                #print((tempOperador,tempOperando1,tempOperando2))
+
                 resultado = cs.cubo(self.pilaTipos[-2],self.pilaTipos[-1],
                                     tempOperador,
                                     self.pilaDimensiones[-2],self.pilaDimensiones[-1],
@@ -200,8 +206,7 @@ class generadorDeCuadruplos:
                 self.pilaDimensiones.pop()
                 dsO2 = self.pilaDs.pop()
                 dsO1 = self.pilaDs.pop()
-                print(tempOperador)
-                print(resultado[0])
+
                 nuevoTemporal = self.mt.getNewTemporal(resultado[1],resultado[3][0],resultado[3][1])
                 if '0' in resultado[0] or '1' in resultado[0] or '2' in resultado[0]:
                     self.outputCuadruplos.append(list((resultado[0],(tempOperando1,dsO1),(tempOperando2,dsO2),nuevoTemporal)))
@@ -221,7 +226,7 @@ class generadorDeCuadruplos:
                 tempOperador = self.pilaOperadores.pop()
                 tempOperando2 = self.pilaOperandos.pop()
                 tempOperando1 = self.pilaOperandos.pop()
-                #print((tempOperador,tempOperando1,tempOperando2))
+
                 resultado = cs.cubo(self.pilaTipos[-2],self.pilaTipos[-1],
                                     tempOperador,
                                     self.pilaDimensiones[-2],self.pilaDimensiones[-1],
@@ -233,8 +238,7 @@ class generadorDeCuadruplos:
                 self.pilaDimensiones.pop()
                 dsO2 = self.pilaDs.pop()
                 dsO1 = self.pilaDs.pop()
-                print(tempOperador)
-                print(resultado[0])
+
                 nuevoTemporal = self.mt.getNewTemporal(resultado[1],resultado[3][0],resultado[3][1])
                 if '0' in resultado[0] or '1' in resultado[0] or '2' in resultado[0]:
                     self.outputCuadruplos.append(list((resultado[0],(tempOperando1,dsO1),(tempOperando2,dsO2),nuevoTemporal)))
@@ -286,11 +290,7 @@ class generadorDeCuadruplos:
         if o == '=':
             self.pilaOperadores.append(o)
 
-        print(self.pilaOperadores)
-        print(self.pilaOperandos)
-
     def operando(self, o, tipo, dimensiones, func):
-
         # Se busca la dirección del operando y se añaden sus características a sus respectivas pilaSaltos
         self.pilaOperandos.append(self.mt.getDireccionVariable(func,o))
         self.pilaTipos.append(tipo)
@@ -298,38 +298,33 @@ class generadorDeCuadruplos:
         self.pilaDs.append(self.mt.getDsVariable(func,o))
 
     def constanteCuadruplo(self, con):
-        #if con not in self.constanteDeclarada:
+        # Se genera un cuádruplo para definir una constante en la tabla de constantes. Este proceso se repite muchas veces
+        # a pesar de ya tener la cosntante declarada para asegurarse que esa constante en el flujo de ejecución ya está declarada.
         self.outputCuadruplos.append(list(('=', con, (1,1), self.mt.getDireccionVariable('CONSTANTES', str(con)))))
-            #self.constanteDeclarada.append(con)
 
     def print(self, s = None):
+        #Se genera el cuádruplo del print
         if s == None:
             self.outputCuadruplos.append(list(('PRINT', self.pilaOperandos[-1], None, None)))
         else:
             self.outputCuadruplos.append(list(('PRINT', s, None, None)))
 
     def read(self, id, func):
+        #Se genera el cuádruplo del Read
         self.outputCuadruplos.append(list(('READ', None, None, self.mt.getDireccionVariable(func,id))))
 
     def ifStatement(self):
-        #print(self.pilaOperandos)
-        #print(self.pilaTipos)
+        # Inicia el if statement
         operando = self.pilaOperandos.pop()
 
+        # Se valida que la comparación haya sido boleana y que no se utilice un objeto multidimensionado en la comparación
         if self.pilaTipos.pop() == 'BOOL' and self.pilaDimensiones.pop() == 0:
-            #print("Migaja")
             self.pilaMigajas.append(len(self.outputCuadruplos))
-            #print(self.pilaMigajas)
             self.outputCuadruplos.append(list(('GOTOF',operando,None,None)))
-            #print(self.outputCuadruplos)
+
         else:
             print("La expresion del if en el cuadruplo:", len(self.outputCuadruplos), "no tiene resultado boleano o no es un valor único.")
             exit(-1)
-
-        #Haces pop a pila de operandos
-        #Te aseguras que el tipo sea
-        #Meter línea actual a pila de migajas
-        #Generas cuadruplo GOTOF
 
     def terminaIfStatement(self):
         #El jump cuando la condición sea falsa es al final del if
