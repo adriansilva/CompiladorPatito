@@ -634,7 +634,7 @@ class generadorDeCuadruplos:
         tipoNuevoTemporal = self.mt.getTipoFuncion(func)
         nuevoTemporal = self.mt.getNewTemporal(tipoNuevoTemporal,1,1)
 
-        self.outputCuadruplos.append(list(('=',self.mt.getDireccionVariable('PROGRAMA',func),self.mt.getDimensionVariable('PROGRAMA',func),nuevoTemporal)))
+        self.outputCuadruplos.append(list(('=',self.mt.getDireccionVariable('PROGRAMA',func),(1,1),nuevoTemporal)))
         self.operando('Temporal_'+str(nuevoTemporal),tipoNuevoTemporal,0,'TEMPORALES')
 
     def gotoMain(self):
