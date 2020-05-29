@@ -1,6 +1,7 @@
 PROGRAMA p;
 VAR INT: a[10,10];
+VAR FLOAT: f;
 
 PRINCIPAL(){
-a = a?*a;
+f = a$*25+a[0,0];
 }

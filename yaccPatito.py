@@ -1,16 +1,3 @@
-"""
-Se añadieron nuevas reglas al parser y ahora las reglas anteriores arrojan
-resultados en lugar de regresar sólo tuplas. Aún no consideran matríces.
-LYa de arregló el error de la recursión infinita. Ya jalan las reglas de
-programa a pesar de que siguen estando limitadas. Algún input prueba podría
-ser: PROGRAMA p; VAR INT: VAR FLOAT: FUNCION FUNCION PRINCIPAL También las
-reglas de declaración y declaración función están incompletas. Se pusieron
-asi para testear. OJO ahorita el yacc corre como primera regla la de
-programa porque asi está especificado yacc.yacc(start='programa') para
-hacer debugging. Si quieres usar otra regla para comenzar sólo pon el
-nombre de la regla u omite este campo.
-
-"""
 import ply.yacc as yacc
 import sys
 import tablas
@@ -21,7 +8,7 @@ from lexPatito import tokens
 
 gc = generadorDeCuadruplos.generadorDeCuadruplos()
 mv = MaquinaVirtual.MaquinaVirtual()
-#mt = tablas.ManejadorDeTablas()
+
 tipoVariable = None
 funcionActual = 'PROGRAMA'
 currentDimension = 0
@@ -40,7 +27,7 @@ gc.constanteCuadruplo(1)
 precedence = (
     ('left','PLUS','MINUS'),
     ('left','MULTIPLY','DIVIDE'),
-    ('left','OPMATRIZ'),
+    ('right','OPMATRIZ'),
     ('right', 'UMINUS')
 )
 
@@ -775,7 +762,7 @@ def p_error(p):
 
 parser = yacc.yacc(start='')
 
-f = open("testInput2.txt", "r")
+f = open("testInput.txt", "r")
 result = parser.parse(f.read())
 
 print(result)

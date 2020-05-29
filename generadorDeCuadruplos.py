@@ -40,20 +40,50 @@ class generadorDeCuadruplos:
         self.contadorParam = []
 
 
+    #Se le asigna el número del cuádruplo donde empieza la función
     def updateDirFunc(self,func):
         self.mt.tablaFunciones[func].inicianCuadruplos = len(self.outputCuadruplos)+1
-        #print("La dirección del cuádruplo donde empieza la función",func,"es:",self.mt.tablaFunciones[func].inicianCuadruplos)
 
-    # TODO: FALTA agregar el tipo del temporal y sus dimensiones a las pilas respectivas
-    # TODO: FALTA hacer check que las operaciones entre variables sean validas
+    '''
+    A continuación se presentan todos los posibles casos de generador de cuádruplos de operadores y cual es su estructura:
+
+    ['='   ,   dir1   ,    (d1Dir1, d2Dir1)    ,    dir1]
+    ['=xx'   ,   dir1    ,    ((d1dir1,d2dir1),(d1dir2,d2dir2))    ,    dir2]
+    [operacion   ,   dir1   ,   dir2   ,   temporal]
+    ['operacion xx'    ,    (dir1, (d1dir1,d2dir1))   ,    (dir2,(d1dir2,d2dir2))    ,    dir3]
+
+    *Donde las x representan las dimensiones del primer y segundo operando respectivamente.
+
+
+    Para todos los '=':
+
+        Si es un = normal, los cuádruplos se verán asi: ['=', direccion, (d1Direccion, d2Direccion), direccion2]
+        (Esto es asi porque significa que estamos igualando un valor único a otro y no hace falta saber la dimensión de ambos
+        {de hecho de ninguno, pero se hizo para respetar un orden})
+
+        Si es un =xx (operador especial), los cuádruplos se verán asi: ['=xx',direccion1,((d1dir1,d2dir1),(d1dir2,d2dir2)),direccion2]
+        Esto lo necesitamos porque para operaciones de dimensiones diferentes (matriz = arreglo) necesitamos los tamaños de ambos
+        para realizar la operación.
+
+    Para todos los operadores diferentes a '=' (+,-.*,$,?...):
+
+        Si es el operador sólo, los cuádruplos se verán asi: [operacion,direccion1,direccion2,temporal] (nuevamente como se trata
+        de valores únicos, no nos tenemos que preocupar por dimensiones)
+
+        Si el operador va acompañado de las dimensiones ('*xx') los cuádruplos se verán asi:
+        ['operacion xx',(direccion, (d1direccion,d2direccion)),(direccion2,(d1direccion2,d2direccion2)),direccion3],
+        (las ds están justo a un lado de su respectiva dirección) ya es un hecho que la direccion3 tiene el tamaño del
+        resultado de la operación de dir1 y dir2.
+
+
+    '''
     def operador(self, o):
         #Si es paréntesis abierto, se agrega un fondo falso
         if o == '(':
             self.pilaOperadores.append('(')
-        #Si se cierra el paréntesis, se limpia toda la pila hasta el fondo falso
 
+        #Si se cierra el paréntesis, se limpia toda la pila hasta el fondo falso
         if o == ')':
-            #print('Se está limpiando la pila...')
             while self.pilaOperadores[-1] != '(':
                 tempOperador = self.pilaOperadores.pop()
                 tempOperando2 = self.pilaOperandos.pop()
@@ -88,43 +118,40 @@ class generadorDeCuadruplos:
             self.pilaOperadores.pop()
 
         if o in ['$','?','¡']:
+            
+            self.pilaOperadores.append(o)
             while self.pilaOperadores and self.pilaOperadores[-1] in ['$','?','¡']: #mientras haya operadores de mayor o igual jerarquia, ejecutarlos.
                 tempOperador = self.pilaOperadores.pop()
-                tempOperando2 = self.pilaOperandos.pop()
                 tempOperando1 = self.pilaOperandos.pop()
-                #print((tempOperador,tempOperando1,tempOperando2))
-                resultado = cs.cubo(self.pilaTipos[-2],self.pilaTipos[-1],
-                                    tempOperador,
-                                    self.pilaDimensiones[-2],self.pilaDimensiones[-1],
-                                    self.pilaDs[-2],self.pilaDs[-1])
-
-                self.pilaTipos.pop()
-                self.pilaTipos.pop()
-                self.pilaDimensiones.pop()
-                self.pilaDimensiones.pop()
-                dsO2 = self.pilaDs.pop()
                 dsO1 = self.pilaDs.pop()
-                print(tempOperador)
-                print(resultado[0])
-                nuevoTemporal = self.mt.getNewTemporal(resultado[1],resultado[3][0],resultado[3][1])
-                if '0' in resultado[0] or '1' in resultado[0] or '2' in resultado[0]:
-                    self.outputCuadruplos.append(list((resultado[0],(tempOperando1,dsO1),(tempOperando2,dsO2),nuevoTemporal)))
-                else:
-                    self.outputCuadruplos.append(list((resultado[0],tempOperando1,tempOperando2,nuevoTemporal)))
-                self.pilaOperandos.append(nuevoTemporal)
 
+                print(tempOperador,tempOperando1,dsO1)
+
+                resultado = cs.cuboSolitario(self.pilaTipos.pop(),tempOperador,self.pilaDimensiones.pop(),dsO1)
+
+                nuevoTemporal = self.mt.getNewTemporal(resultado[1],resultado[3][0],resultado[3][1])
+
+                self.outputCuadruplos.append(list((resultado[0],tempOperando1,resultado[3],nuevoTemporal)))
+
+                self.pilaOperandos.append(nuevoTemporal)
                 self.pilaTipos.append(resultado[1])
                 self.pilaDimensiones.append(resultado[2])
                 self.pilaDs.append(resultado[3])
 
-            self.pilaOperadores.append(o)
 
+        '''
+            La estructura y la lógica es la misma para todos los casos de operadores:
+            Si el operador está en el top de la pila, mientras haya operadores de igual o mayor jerarquía, los resuelves.
+        '''
         if o in ['*','/']:
             while self.pilaOperadores and self.pilaOperadores[-1] in ['*','/','$','?','¡']: #mientras haya operadores de mayor o igual jerarquia, ejecutarlos.
                 tempOperador = self.pilaOperadores.pop()
                 tempOperando2 = self.pilaOperandos.pop()
                 tempOperando1 = self.pilaOperandos.pop()
-                #print((tempOperador,tempOperando1,tempOperando2))
+
+                # Se le manda información al cubo del tipo, las dimensiones y las ds de los operandos participando en la operación
+                # El resultado determinará el tipo, las dimensiones y las ds del objeto resultante de la operación. Se guarda en un
+                # temporal para procesarse.
                 resultado = cs.cubo(self.pilaTipos[-2],self.pilaTipos[-1],
                                     tempOperador,
                                     self.pilaDimensiones[-2],self.pilaDimensiones[-1],
@@ -139,12 +166,17 @@ class generadorDeCuadruplos:
                 print(tempOperador)
                 print(resultado[0])
                 nuevoTemporal = self.mt.getNewTemporal(resultado[1],resultado[3][0],resultado[3][1])
+
+                # Al procesarse si el cubo nos dice que la operación es especial (participan arreglos o matríces),
+                # Se agrega el cuádruplo correspondiente. Se tiene un cuádruplo para operación especial y operación normal
+                # porque la información que necesita la máquina virtual depende de la operación y las dimensiones.
                 if '0' in resultado[0] or '1' in resultado[0] or '2' in resultado[0]:
                     self.outputCuadruplos.append(list((resultado[0],(tempOperando1,dsO1),(tempOperando2,dsO2),nuevoTemporal)))
                 else:
                     self.outputCuadruplos.append(list((resultado[0],tempOperando1,tempOperando2,nuevoTemporal)))
-                self.pilaOperandos.append(nuevoTemporal)
 
+                # Al final se agrega el temporal a la pila para ser utilizado después en otra operación.
+                self.pilaOperandos.append(nuevoTemporal)
                 self.pilaTipos.append(resultado[1])
                 self.pilaDimensiones.append(resultado[2])
                 self.pilaDs.append(resultado[3])
@@ -249,74 +281,21 @@ class generadorDeCuadruplos:
             self.pilaOperadores.append(o)
 
 
+        # Como el = es el operador de menor jerarquía, sólo se añade a la pila de operadores
+        # porque no va a ser procesado hasta quitar el fondo bajo nuestra implementación.
         if o == '=':
-
             self.pilaOperadores.append(o)
 
-        '''
-        if o == 'end':
-
-            while self.pilaOperadores:
-
-                if self.pilaOperadores[-1] == '=': # si es = entonces asigna el valor mas reciente en la pila de operandos a la variable siguiente de la pila de operandos, no se borra este sigueinte valor por si hay otra asignacion e.j. a = b = 1 - 2;
-                    self.outputCuadruplos.append(list((self.pilaOperadores[-1], self.pilaOperandos[-1], None, self.pilaOperandos[-2])))
-                    self.pilaOperadores.pop() #remueve operador 1
-                    self.pilaOperandos.pop() #remueve operando 1
-                else:
-                    resultado = cs.cubo(self.pilaTipos[-2],self.pilaTipos[-1],self.pilaOperadores[-1],self.pilaDimensiones[-2],self.pilaDimensiones[-1])
-                    nuevoTemporal = self.mt.getNewTemporal(resultado[0])
-
-                    self.outputCuadruplos.append(list((self.pilaOperadores[-1], self.pilaOperandos[-2], self.pilaOperandos[-1], nuevoTemporal)))
-                    self.pilaOperadores.pop() #remueve operador 1
-                    self.pilaOperandos.pop() #remueve operando 1
-                    self.pilaOperandos.pop() #remueve operando 2
-                    self.pilaTipos.pop()
-                    self.pilaTipos.pop()
-                    self.pilaDimensiones.pop()
-                    self.pilaDimensiones.pop()
-
-                    self.pilaOperandos.append(nuevoTemporal)
-                    self.pilaTipos.append(resultado[0])
-                    self.pilaDimensiones.append(resultado[1])
-
-            if self.pilaOperandos: # vaciar la pila de operandos si queda un valor residual. Sirve para el caso de: a = b = 2 * 3;
-                self.pilaOperandos = []
-        '''
-        #Para cada operador, implementar lógica de pops y push
-        #print("Se añadió un operador:",o)
-        #print("Pila operadores:",self.pilaOperadores)
-        #print("Pila operandos: ",self.pilaOperandos)
-        #print("Pila tipos: ",self.pilaTipos)
-        #print()
-
-        for i in self.outputCuadruplos:
-            #print(i)
-            pass
-        #print()
+        print(self.pilaOperadores)
+        print(self.pilaOperandos)
 
     def operando(self, o, tipo, dimensiones, func):
-        #Añadir a pila de operandos
-        #Añadir a pila de tipos
-        #Añadir a pila de dimensiones
-        self.pilaOperandos.append(self.mt.getDireccionVariable(func,o))
-        self.pilaTipos.append(tipo)
-        self.pilaDimensiones.append(dimensiones)
-        self.pilaDs.append(self.mt.getDsVariable(func,o))
-        print("Dimensioon:",dimensiones)
-        #print("Se añadió un operando:", o)
-        #print(self.pilaOperadores)
 
-    def operandoMulti(self, o, tipo, dimensiones, func):
-        #Añadir a pila de operandos
-        #Añadir a pila de tipos
-        #Añadir a pila de dimensiones
+        # Se busca la dirección del operando y se añaden sus características a sus respectivas pilaSaltos
         self.pilaOperandos.append(self.mt.getDireccionVariable(func,o))
         self.pilaTipos.append(tipo)
         self.pilaDimensiones.append(dimensiones)
         self.pilaDs.append(self.mt.getDsVariable(func,o))
-        print("Dimensioon:",dimensiones)
-        #print("Se añadió un operando:", o)
-        #print(self.pilaOperadores)
 
     def constanteCuadruplo(self, con):
         #if con not in self.constanteDeclarada:
