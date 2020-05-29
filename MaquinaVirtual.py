@@ -1,3 +1,4 @@
+#import numpy as np
 
 class MaquinaVirtual:
 
@@ -85,7 +86,6 @@ class MaquinaVirtual:
 
             if cuadruplos[ip][0] == '+20': #suma matriz con valor unico
                 matSize = cuadruplos[ip][1][1][0] * cuadruplos[ip][1][1][1]
-
                 matAddress = cuadruplos[ip][1][0]
 
                 uniqueVal = self.getValue(cuadruplos[ip][2][0])
@@ -204,16 +204,66 @@ class MaquinaVirtual:
                 self.setValue(cuadruplos[ip][3], valor)
 
             if cuadruplos[ip][0] == '*22':
-                print("mat x mat no esta implementado todavia")
-                exit(-1)
+                mat1Address = cuadruplos[ip][1][0]
+                mat1rows = cuadruplos[ip][1][1][0]
+                mat1cols = cuadruplos[ip][1][1][1]
+
+                mat2Address = cuadruplos[ip][2][0]
+                mat2rows = cuadruplos[ip][2][1][0]
+                mat2cols = cuadruplos[ip][2][1][1]
+
+                mat1 = []
+                for i in range(mat1rows):
+                    mat1.append([])
+                    for j in range(mat1cols):
+                        mat1[-1].append(self.getValue(mat1Address + i*mat1cols + j))
+
+                mat2 = []
+                for i in range(mat2rows):
+                    mat2.append([])
+                    for j in range(mat2cols):
+                        mat2[-1].append(self.getValue(mat2Address + i*mat2cols + j))
+
+                mat3 = []
+                mat3rows = mat1rows
+                mat3cols = mat2cols
+                mat3Address = cuadruplos[ip][3]
+
+                for i in range(mat3rows):
+                    mat3.append([])
+                    for j in range(mat3cols):
+                        mat3[-1].append(0)
+
+                for i in range(mat1rows):
+                    for j in range(mat2cols):
+                        for k in range(mat2rows):
+                            mat3[i][j] += mat1[i][k] * mat2[k][j]
+
+                for i in range(mat3rows):
+                    for j in range(mat3cols):
+                        self.setValue(mat3Address + i*mat3cols + j, mat3[i][j])
 
             if cuadruplos[ip][0] == '*21':
                 print("mat x arr no esta implementado todavia")
                 exit(-1)
 
             if cuadruplos[ip][0] == '*20':
-                print("mat x vUnico no esta implementado todavia")
-                exit(-1)
+                mat1Address = cuadruplos[ip][1][0]
+                mat1rows = cuadruplos[ip][1][1][0]
+                mat1cols = cuadruplos[ip][1][1][1]
+
+                vUnico = self.getValue(cuadruplos[ip][2][0])
+
+                mat1 = []
+                for i in range(mat1rows):
+                    mat1.append([])
+                    for j in range(mat1cols):
+                        mat1[-1].append(self.getValue(mat1Address + i*mat1cols + j) * vUnico)
+
+                destAddress = cuadruplos[ip][3]
+                for i in range(mat1rows):
+                    for j in range(mat1cols):
+                        self.setValue(destAddress + i*mat1cols + j, mat1[i][j])
 
             if cuadruplos[ip][0] == '*11':
                 print("arr x arr no esta implementado todavia")
@@ -389,6 +439,19 @@ class MaquinaVirtual:
                 if self.getValue(cuadruplos[ip][1]) < 0 or self.getValue(cuadruplos[ip][1]) >= cuadruplos[ip][3]:
                     print("RUNTIME ERROR: el indice de acceso excede el tamano de la variable")
                     exit(-1)
+
+            if cuadruplos[ip][0] == '?': #transpuesta
+                print("la operacion ? no esta implementada")
+                exit(-1)
+
+            if cuadruplos[ip][0] == '$': #determinante
+                print("la operacion $ no esta implementada")
+                exit(-1)
+            
+            if cuadruplos[ip][0] == '¡': #inversa
+                print("la operacion ¡ no esta implementada")
+                exit(-1)
+
 
             # INCREMENTA INSTRUCTION POINTER
             ip += 1
