@@ -101,8 +101,8 @@ cuboDimensiones = [[ #ValorÚnico  Arreglo  Matriz
 
                    [ #ValorÚnico  Arreglo  Matriz
                          [0,        -1,      -1], #ValorÚnico       TYPE: '='
-                         [-1,        1,      -1], #Arreglo
-                         [-1,       -1,       2]  #Matriz
+                         [1,         1,      -1], #Arreglo
+                         [2,        -1,       2]  #Matriz
                    ]
                   ]
 #mat[3,3]
@@ -207,7 +207,7 @@ def modificarDs(operacion, dimension1, dimension2, dsO1, dsO2):
         if dimension1 == 1 and dimension2 == 2:
             if dsO1[1] != dsO2[0]:
                 print("No se puede multiplicar las matrices porque las dimensiones no coinciden con el formato  a,b * b,c.")
-                exit(-1)
+                exit(-1) # 3x5 =  3x4 * 4x5
             else:
                 return (operacion+str(dimension1)+str(dimension2),(dsO1[0],dsO2[1]))
         if dimension1 == 2 and dimension2 == 0:
@@ -225,6 +225,23 @@ def modificarDs(operacion, dimension1, dimension2, dsO1, dsO2):
             else:
                 return (operacion+str(dimension1)+str(dimension2),(dsO1[0],dsO2[1]))
 
+    if operacion == '=':
+        if dimension1 == 1 and dimension2 == 0:
+            return (operacion+str(dimension1)+str(dimension2),(dsO2,dsO1))
+        if dimension1 == 1 and dimension2 == 1:
+            if dsO1 != dsO2:
+                print("No se pueden igualar arreglos de diferentes dimensiones.")
+                exit(-1)
+            else:
+                return (operacion+str(dimension1)+str(dimension2),(dsO2,dsO1))
+        if dimension1 == 2 and dimension2 == 0:
+            return (operacion+str(dimension1)+str(dimension2),(dsO2,dsO1))
+        if dimension1 == 2 and dimension2 == 2:
+            if dsO1 != dsO2:
+                print("No se pueden igualar matrices de diferentes dimensiones.")
+                exit(-1)
+            else:
+                return (operacion+str(dimension1)+str(dimension2),(dsO2,dsO1))
 def cubo(tipo1, tipo2, operacion, dimension1, dimension2, dsO1, dsO2):
     print(tipo1, tipo2)
     if tipo1 == "POINT":
@@ -240,10 +257,11 @@ def cubo(tipo1, tipo2, operacion, dimension1, dimension2, dsO1, dsO2):
     if tipoResultante == -1:
         print("Esta operación aritmética no es válida por incongruencias de tipos.")
         exit(-1)
-    if dimension1+dimension2 > 0 and operacion in ['+','-','*']:
+    if dimension1+dimension2 > 0 and operacion in ['+','-','*','=']:
         resultado = modificarDs(operacion, dimension1, dimension2, dsO1, dsO2)
         operacion = resultado[0]
         dsO1 = resultado[1]
+        print(resultado[1])
     #print("tipo:",tipoResultante, " // dimension:",dimensionResultante)
     return (operacion,intToType(tipoResultante),dimensionResultante,dsO1)
     # if dimensiones == (0): regresas un

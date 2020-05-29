@@ -72,11 +72,11 @@ class generadorDeCuadruplos:
                 dsO1 = self.pilaDs.pop()
                 print(tempOperador)
                 print(resultado[0])
-                if resultado[0] == '=':
+                if resultado[0][0] == '=':
                     self.outputCuadruplos.append(list((resultado[0],tempOperando2,resultado[3],tempOperando1)))
                     self.pilaOperandos.append(tempOperando1)
                 else:
-                    nuevoTemporal = self.mt.getNewTemporal(resultado[1],1,1)
+                    nuevoTemporal = self.mt.getNewTemporal(resultado[1],resultado[3][0],resultado[3][1])
                     if '0' in resultado[0] or '1' in resultado[0] or '2' in resultado[0]:
                         self.outputCuadruplos.append(list((resultado[0],(tempOperando1,dsO1),(tempOperando2,dsO2),nuevoTemporal)))
                     else:
@@ -87,8 +87,8 @@ class generadorDeCuadruplos:
                 self.pilaDs.append(resultado[3])
             self.pilaOperadores.pop()
 
-        if o in ['*','/']:
-            while self.pilaOperadores and self.pilaOperadores[-1] in ['*','/']: #mientras haya operadores de mayor o igual jerarquia, ejecutarlos.
+        if o in ['$','?','¡']:
+            while self.pilaOperadores and self.pilaOperadores[-1] in ['$','?','¡']: #mientras haya operadores de mayor o igual jerarquia, ejecutarlos.
                 tempOperador = self.pilaOperadores.pop()
                 tempOperando2 = self.pilaOperandos.pop()
                 tempOperando1 = self.pilaOperandos.pop()
@@ -102,13 +102,48 @@ class generadorDeCuadruplos:
                 self.pilaTipos.pop()
                 self.pilaDimensiones.pop()
                 self.pilaDimensiones.pop()
-                self.pilaDs.pop()
-                self.pilaDs.pop()
+                dsO2 = self.pilaDs.pop()
+                dsO1 = self.pilaDs.pop()
                 print(tempOperador)
                 print(resultado[0])
-                nuevoTemporal = self.mt.getNewTemporal(resultado[1],1,1)
-                self.outputCuadruplos.append(list((resultado[0],tempOperando1,tempOperando2,nuevoTemporal)))
-                self.pilaOperandos.append(nuevoTemporal) #Falta agregar ds a temporal
+                nuevoTemporal = self.mt.getNewTemporal(resultado[1],resultado[3][0],resultado[3][1])
+                if '0' in resultado[0] or '1' in resultado[0] or '2' in resultado[0]:
+                    self.outputCuadruplos.append(list((resultado[0],(tempOperando1,dsO1),(tempOperando2,dsO2),nuevoTemporal)))
+                else:
+                    self.outputCuadruplos.append(list((resultado[0],tempOperando1,tempOperando2,nuevoTemporal)))
+                self.pilaOperandos.append(nuevoTemporal)
+
+                self.pilaTipos.append(resultado[1])
+                self.pilaDimensiones.append(resultado[2])
+                self.pilaDs.append(resultado[3])
+
+            self.pilaOperadores.append(o)
+
+        if o in ['*','/']:
+            while self.pilaOperadores and self.pilaOperadores[-1] in ['*','/','$','?','¡']: #mientras haya operadores de mayor o igual jerarquia, ejecutarlos.
+                tempOperador = self.pilaOperadores.pop()
+                tempOperando2 = self.pilaOperandos.pop()
+                tempOperando1 = self.pilaOperandos.pop()
+                #print((tempOperador,tempOperando1,tempOperando2))
+                resultado = cs.cubo(self.pilaTipos[-2],self.pilaTipos[-1],
+                                    tempOperador,
+                                    self.pilaDimensiones[-2],self.pilaDimensiones[-1],
+                                    self.pilaDs[-2],self.pilaDs[-1])
+
+                self.pilaTipos.pop()
+                self.pilaTipos.pop()
+                self.pilaDimensiones.pop()
+                self.pilaDimensiones.pop()
+                dsO2 = self.pilaDs.pop()
+                dsO1 = self.pilaDs.pop()
+                print(tempOperador)
+                print(resultado[0])
+                nuevoTemporal = self.mt.getNewTemporal(resultado[1],resultado[3][0],resultado[3][1])
+                if '0' in resultado[0] or '1' in resultado[0] or '2' in resultado[0]:
+                    self.outputCuadruplos.append(list((resultado[0],(tempOperando1,dsO1),(tempOperando2,dsO2),nuevoTemporal)))
+                else:
+                    self.outputCuadruplos.append(list((resultado[0],tempOperando1,tempOperando2,nuevoTemporal)))
+                self.pilaOperandos.append(nuevoTemporal)
 
                 self.pilaTipos.append(resultado[1])
                 self.pilaDimensiones.append(resultado[2])
@@ -117,7 +152,7 @@ class generadorDeCuadruplos:
             self.pilaOperadores.append(o)
 
         if o in ['+','-']:
-            while self.pilaOperadores and self.pilaOperadores[-1] in ['*','/', '+','-']: #mientras haya operadores de mayor o igual jerarquia, ejecutarlos.
+            while self.pilaOperadores and self.pilaOperadores[-1] in ['*','/', '+','-','$','?','¡']: #mientras haya operadores de mayor o igual jerarquia, ejecutarlos.
                 tempOperador = self.pilaOperadores.pop()
                 tempOperando2 = self.pilaOperandos.pop()
                 tempOperando1 = self.pilaOperandos.pop()
@@ -131,13 +166,16 @@ class generadorDeCuadruplos:
                 self.pilaTipos.pop()
                 self.pilaDimensiones.pop()
                 self.pilaDimensiones.pop()
-                self.pilaDs.pop()
-                self.pilaDs.pop()
+                dsO2 = self.pilaDs.pop()
+                dsO1 = self.pilaDs.pop()
                 print(tempOperador)
                 print(resultado[0])
-                nuevoTemporal = self.mt.getNewTemporal(resultado[1],1,1)
-                self.outputCuadruplos.append(list((resultado[0],tempOperando1,tempOperando2,nuevoTemporal)))
-                self.pilaOperandos.append(nuevoTemporal) #Falta agregar ds a temporal
+                nuevoTemporal = self.mt.getNewTemporal(resultado[1],resultado[3][0],resultado[3][1])
+                if '0' in resultado[0] or '1' in resultado[0] or '2' in resultado[0]:
+                    self.outputCuadruplos.append(list((resultado[0],(tempOperando1,dsO1),(tempOperando2,dsO2),nuevoTemporal)))
+                else:
+                    self.outputCuadruplos.append(list((resultado[0],tempOperando1,tempOperando2,nuevoTemporal)))
+                self.pilaOperandos.append(nuevoTemporal)
 
                 self.pilaTipos.append(resultado[1])
                 self.pilaDimensiones.append(resultado[2])
@@ -147,7 +185,7 @@ class generadorDeCuadruplos:
 
         if o in ['<=','>=','<>','>','<','==']:
 
-            while self.pilaOperadores and self.pilaOperadores[-1] in ['*','/', '+','-', '<=','>=','<>','>','<','==']: #mientras haya operadores de mayor o igual jerarquia, ejecutarlos.
+            while self.pilaOperadores and self.pilaOperadores[-1] in ['*','/', '+','-', '<=','>=','<>','>','<','==','$','?','¡']: #mientras haya operadores de mayor o igual jerarquia, ejecutarlos.
                 tempOperador = self.pilaOperadores.pop()
                 tempOperando2 = self.pilaOperandos.pop()
                 tempOperando1 = self.pilaOperandos.pop()
@@ -161,13 +199,16 @@ class generadorDeCuadruplos:
                 self.pilaTipos.pop()
                 self.pilaDimensiones.pop()
                 self.pilaDimensiones.pop()
-                self.pilaDs.pop()
-                self.pilaDs.pop()
+                dsO2 = self.pilaDs.pop()
+                dsO1 = self.pilaDs.pop()
                 print(tempOperador)
                 print(resultado[0])
-                nuevoTemporal = self.mt.getNewTemporal(resultado[1],1,1)
-                self.outputCuadruplos.append(list((resultado[0],tempOperando1,tempOperando2,nuevoTemporal)))
-                self.pilaOperandos.append(nuevoTemporal) #Falta agregar ds a temporal
+                nuevoTemporal = self.mt.getNewTemporal(resultado[1],resultado[3][0],resultado[3][1])
+                if '0' in resultado[0] or '1' in resultado[0] or '2' in resultado[0]:
+                    self.outputCuadruplos.append(list((resultado[0],(tempOperando1,dsO1),(tempOperando2,dsO2),nuevoTemporal)))
+                else:
+                    self.outputCuadruplos.append(list((resultado[0],tempOperando1,tempOperando2,nuevoTemporal)))
+                self.pilaOperandos.append(nuevoTemporal)
 
                 self.pilaTipos.append(resultado[1])
                 self.pilaDimensiones.append(resultado[2])
@@ -176,7 +217,7 @@ class generadorDeCuadruplos:
             self.pilaOperadores.append(o)
 
         if o in ['&&', '||']:
-            while self.pilaOperadores and self.pilaOperadores[-1] in ['*','/', '+','-', '<=','>=','<>','>','<','==', '&&', '||']: #mientras haya operadores de mayor o igual jerarquia, ejecutarlos.
+            while self.pilaOperadores and self.pilaOperadores[-1] in ['*','/', '+','-', '<=','>=','<>','>','<','==', '&&', '||','$','?','¡']: #mientras haya operadores de mayor o igual jerarquia, ejecutarlos.
                 tempOperador = self.pilaOperadores.pop()
                 tempOperando2 = self.pilaOperandos.pop()
                 tempOperando1 = self.pilaOperandos.pop()
@@ -190,14 +231,16 @@ class generadorDeCuadruplos:
                 self.pilaTipos.pop()
                 self.pilaDimensiones.pop()
                 self.pilaDimensiones.pop()
-                self.pilaDs.pop()
-                self.pilaDs.pop()
-
-                nuevoTemporal = self.mt.getNewTemporal(resultado[1],1,1)
+                dsO2 = self.pilaDs.pop()
+                dsO1 = self.pilaDs.pop()
                 print(tempOperador)
                 print(resultado[0])
-                self.outputCuadruplos.append(list((resultado[0],tempOperando1,tempOperando2,nuevoTemporal)))
-                self.pilaOperandos.append(nuevoTemporal) #Falta agregar ds a temporal
+                nuevoTemporal = self.mt.getNewTemporal(resultado[1],resultado[3][0],resultado[3][1])
+                if '0' in resultado[0] or '1' in resultado[0] or '2' in resultado[0]:
+                    self.outputCuadruplos.append(list((resultado[0],(tempOperando1,dsO1),(tempOperando2,dsO2),nuevoTemporal)))
+                else:
+                    self.outputCuadruplos.append(list((resultado[0],tempOperando1,tempOperando2,nuevoTemporal)))
+                self.pilaOperandos.append(nuevoTemporal)
 
                 self.pilaTipos.append(resultado[1])
                 self.pilaDimensiones.append(resultado[2])

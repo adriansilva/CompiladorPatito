@@ -2,5 +2,5 @@ PROGRAMA p;
 VAR INT: a[10,10];
 
 PRINCIPAL(){
-a = a?;
+a = a?*a;
 }
