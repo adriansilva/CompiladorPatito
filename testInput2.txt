@@ -54,5 +54,5 @@ PRINCIPAL(){
     a1[4] = 5;
 
     z = z + y[1];
-    ESCRIBE(z[1,1]);
+    ESCRIBE(fib(z[1,1] - y[1,4]));
 }
