@@ -1,4 +1,4 @@
-#import numpy as np
+import numpy as np
 
 class MaquinaVirtual:
 
@@ -440,15 +440,27 @@ class MaquinaVirtual:
                     print("RUNTIME ERROR: el indice de acceso excede el tamano de la variable")
                     exit(-1)
 
-            if cuadruplos[ip][0] == '?': #transpuesta
+            if cuadruplos[ip][0] == '?': #inversa
                 print("la operacion ? no esta implementada")
                 exit(-1)
 
             if cuadruplos[ip][0] == '$': #determinante
-                print("la operacion $ no esta implementada")
-                exit(-1)
+
+                matAddress = cuadruplos[ip][1]
+                matrows = cuadruplos[ip][2][0][0]
+                matcols = cuadruplos[ip][2][0][1]
+                mat = []
+                for i in range(matrows):
+                    mat.append([])
+                    for j in range(matcols):
+                        mat[-1].append(self.getValue(matAddress + i*matcols + j))
+
+
+                det = np.linalg.det(mat)
+
+                self.setValue(cuadruplos[ip][3], det)
             
-            if cuadruplos[ip][0] == '¡': #inversa
+            if cuadruplos[ip][0] == '¡': #transpuesta
                 print("la operacion ¡ no esta implementada")
                 exit(-1)
 

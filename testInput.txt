@@ -3,6 +3,12 @@ VAR INT: a[2,3], b[3,2], d = 2, c[2, 2];
 VAR FLOAT: f;
 
 PRINCIPAL(){
+
+    c[0,0] = 1;
+    c[0,1] = 2;
+    c[1,0] = 3;
+    c[1,1] = 4;
+
     f = c$;
 
     a[0,0] = 2;
@@ -19,14 +25,12 @@ PRINCIPAL(){
     b[2,0] = 2;
     b[2,1] = 1;
 
-    SI (d==2) ENTONCES{
-
-    }
+    ESCRIBE(f);
 
     c = a*b;
     ESCRIBE(c[0,0], c[1,0]);
 
-    c = c + d - 5;
+    c = c * d - 5;
 
     ESCRIBE(c[0,0], c[1,0]);
 }
