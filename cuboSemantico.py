@@ -88,13 +88,13 @@ cuboDimensiones = [[ #ValorÚnico  Arreglo  Matriz
                    ],
 
                    [ #ValorÚnico  Arreglo  Matriz
-                         [-1,       -1,      -1], #ValorÚnico       TYPE: '<=', '>=', '<', '>'
+                         [0,        -1,      -1], #ValorÚnico       TYPE: '<=', '>=', '<', '>'
                          [-1,       -1,      -1], #Arreglo
                          [-1,       -1,      -1]  #Matriz
                    ],
 
                    [ #ValorÚnico  Arreglo  Matriz
-                         [-1,       -1,      -1], #ValorÚnico       TYPE: '==', '<>'
+                         [0,        -1,      -1], #ValorÚnico       TYPE: '==', '<>'
                          [-1,       -1,      -1], #Arreglo
                          [-1,       -1,      -1]  #Matriz
                    ],
