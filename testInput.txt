@@ -4,7 +4,7 @@ VAR FLOAT: f;
 
 PRINCIPAL(){
     f = c$;
-    
+
     a[0,0] = 2;
     a[0,1] = 5;
     a[0,2] = 3;
@@ -19,6 +19,9 @@ PRINCIPAL(){
     b[2,0] = 2;
     b[2,1] = 1;
 
+    SI (d==2) ENTONCES{
+
+    }
 
     c = a*b;
     ESCRIBE(c[0,0], c[1,0]);

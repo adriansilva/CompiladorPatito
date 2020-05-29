@@ -102,7 +102,7 @@ class generadorDeCuadruplos:
                 dsO1 = self.pilaDs.pop()
                 print(tempOperador)
                 print(resultado[0])
-                if resultado[0][0] == '=':
+                if resultado[0][0] == '=' and len(resultado[0])>1 and resultado[0][1] != '=':
                     self.outputCuadruplos.append(list((resultado[0],tempOperando2,resultado[3],tempOperando1)))
                     self.pilaOperandos.append(tempOperando1)
                 else:
@@ -118,7 +118,7 @@ class generadorDeCuadruplos:
             self.pilaOperadores.pop()
 
         if o in ['$','?','¡']:
-            
+
             self.pilaOperadores.append(o)
             while self.pilaOperadores and self.pilaOperadores[-1] in ['$','?','¡']: #mientras haya operadores de mayor o igual jerarquia, ejecutarlos.
                 tempOperador = self.pilaOperadores.pop()
@@ -131,7 +131,7 @@ class generadorDeCuadruplos:
 
                 nuevoTemporal = self.mt.getNewTemporal(resultado[1],resultado[3][0],resultado[3][1])
 
-                self.outputCuadruplos.append(list((resultado[0],tempOperando1,resultado[3],nuevoTemporal)))
+                self.outputCuadruplos.append(list((resultado[0],tempOperando1,(dsO1,resultado[3]),nuevoTemporal)))
 
                 self.pilaOperandos.append(nuevoTemporal)
                 self.pilaTipos.append(resultado[1])
