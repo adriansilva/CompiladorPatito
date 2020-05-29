@@ -108,7 +108,7 @@ class generadorDeCuadruplos:
                 # en la que este operador tiene información de dimensiones ('*xx'). De ser así, se genera un cuádruplo
                 # diferente al de la operación normal.
 
-                if resultado[0][0] == '=' and len(resultado[0])>1 and resultado[0][1] != '=':
+                if (resultado[0][0] == '=' and len(resultado[0])>1 and resultado[0][1] != '=') or resultado[0][0] == '=' and len(resultado[0])==1:
                     self.outputCuadruplos.append(list((resultado[0],tempOperando2,resultado[3],tempOperando1)))
                     self.pilaOperandos.append(tempOperando1)
                 else:
