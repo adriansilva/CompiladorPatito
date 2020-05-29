@@ -280,7 +280,10 @@ def cuboSolitario(tipo1, operacion, dimension1, dsO1):
         if dimension1 == 1:
             return (operacion,tipo1,2,(dsO1[1],dsO1[0])) # Si era un arreglo, la transpuesta va a ser una matriz de dimension (1,x)
         else:
-            return (operacion,tipo1,1,(dsO1[1],dsO1[0])) # Si era una matriz, el resultado es la transpuesta tal cual con las mismas dimensiones.
+            if dsO1[0] == 1: # 1x4 = 4x1
+                return (operacion,tipo1,1,(dsO1[1],dsO1[0])) # Si era una matriz, el resultado es la transpuesta tal cual con las mismas dimensiones.
+            else: # 2x4 = 4x2
+                return (operacion,tipo1,2,(dsO1[1],dsO1[0])) # Si era una matriz, el resultado es la transpuesta tal cual con las mismas dimensiones.
     if operacion == '?':
         if dimension1 != 2 or dsO1[0] != dsO1[1]:
             print("Para obtener la inversa de una matriz, se necesita que esta sea cuadrada.")
