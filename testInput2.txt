@@ -56,6 +56,6 @@ PRINCIPAL(){
     a1[4] = 5;
 
     z = z + y[1,2]*y[0,2];
-    ESCRIBE(2);
+    ESCRIBE(y[1,2]*y[0,2]+15);
     ESCRIBE(z[1,1]);
 }
