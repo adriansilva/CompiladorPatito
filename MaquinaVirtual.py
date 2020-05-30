@@ -441,8 +441,21 @@ class MaquinaVirtual:
                     exit(-1)
 
             if cuadruplos[ip][0] == '?': #inversa
-                print("la operacion ? no esta implementada")
-                exit(-1)
+                matAddress = cuadruplos[ip][1]
+                matrows = cuadruplos[ip][2][0][0]
+                matcols = cuadruplos[ip][2][0][1]
+                mat = []
+                for i in range(matrows):
+                    mat.append([])
+                    for j in range(matcols):
+                        mat[-1].append(self.getValue(matAddress + i*matcols + j))
+
+                matInv = np.linalg.inv(mat)
+
+                for i in range(matrows):
+                    for j in range(matcols):
+                        self.setValue(cuadruplos[ip][3] + i*matcols + j, matInv[i][j])
+
 
             if cuadruplos[ip][0] == '$': #determinante
 
@@ -461,8 +474,22 @@ class MaquinaVirtual:
                 self.setValue(cuadruplos[ip][3], det)
             
             if cuadruplos[ip][0] == '¡': #transpuesta
-                print("la operacion ¡ no esta implementada")
-                exit(-1)
+                matAddress = cuadruplos[ip][1]
+                matrows = cuadruplos[ip][2][0][0]
+                matcols = cuadruplos[ip][2][0][1]
+                mat = []
+
+                for i in range(matrows):
+                    mat.append([])
+                    for j in range(matcols):
+                        mat[-1].append(self.getValue(matAddress + i*matcols + j))
+
+                matRes = np.transpose(mat)
+
+                for i in range(matrows):
+                    for j in range(matcols):
+                        self.setValue(cuadruplos[ip][3] + i*matcols + j, matRes[i][j])
+
 
 
             # INCREMENTA INSTRUCTION POINTER
