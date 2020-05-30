@@ -51,7 +51,7 @@ cuboTipos =   [[#INT  FLOAT  CHAR  BOOL
 
                [#INT  FLOAT  CHAR  BOOL
                [0,    -1,    -1,   -1], #INT       TYPE: '='
-               [-1,    1,    -1,   -1], #FLOAT
+               [1,     1,    -1,   -1], #FLOAT
                [-1,   -1,     2,   -1], #CHAR
                [-1,   -1,    -1,    3], #BOOL
                ]

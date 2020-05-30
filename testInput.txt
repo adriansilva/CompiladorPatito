@@ -1,6 +1,6 @@
 PROGRAMA p;
-VAR INT: a[2,3], ad, b[3,2], c[2,2];
-VAR FLOAT: d[5,5], cd;
+VAR INT: ad, c[2,2];
+VAR FLOAT: a[2,3], d[5,5], cd, cf[2,2], b[3,2];
 VAR CHAR: e[1,1];
 
 FUNCION INT fibonacciRecursivo(INT n){
@@ -44,15 +44,14 @@ VAR INT: i = 3;
 }
 
 PRINCIPAL(){
-    ESCRIBE("Fibonacci\n Iterativo:", fibonacciIterativo(10));
+    ESCRIBE("Fibonacci Iterativo:", fibonacciIterativo(10));
     ESCRIBE("Fibonacci Recursivo:", fibonacciRecursivo(10));
 
     VAR INT: i = 0, j = 0;
 
     DESDE i HASTA 1 HAZ{ %%Inicializar matriz con dimensiones 2,3
       DESDE j HASTA 2 HAZ{
-          a[i,j] = i*3+j;
-          ESCRIBE(a[i,j]);
+          a[i,j] = i*3.0+j;%%Se le asigna un valor incremental empezando en 0
       }
       j = 0;
     }
@@ -60,22 +59,31 @@ PRINCIPAL(){
     i = 0;
     DESDE i HASTA 1 HAZ{%%Inicializar matriz con dimensiones 2,2
       DESDE j HASTA 1 HAZ{
-          c[i,j] = i*2+j;
-          ESCRIBE("i:\n",i,"j:",j,c[i,j]);
+          c[i,j] = i*2+j;%%Se le asigna un valor incremental empezando en 0
       }
       j = 0;
     }
 
     %%Probar transpuesta
-    %%b = a¡;
-    %%ESCRIBE(b[2,1]);
+    b = a¡;
+    ESCRIBE("Matriz transpuesta:",b[2,1]);
 
     %%Probar determinante con una matriz no cuadrada
     %%ad = a$;
-    %%ESCRIBE(ad);
+    %%ESCRIBE("Determinante no cuadruado:",ad);
 
     %%Probar determinante con matriz cuadrada
     cd = c$;
-    ESCRIBE(cd);
+    ESCRIBE("Determinante:",cd);
 
+    %%Probar la inversa de una matriz cuadrada
+    cf = c?;
+    ESCRIBE("Inversa:",cf[0,1]);
+
+    %%Probar caso extremo
+    ESCRIBE("Extremo!");
+    b = 1.0;
+    ESCRIBE(b[0,0],b[0,1],b[1,0],b[1,1],b[2,0],b[2,1]);
+    b = (c?*a)¡+b*2.0;
+    ESCRIBE(b[0,0],b[0,1],b[1,0],b[1,1],b[2,0],b[2,1]);
 }
