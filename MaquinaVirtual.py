@@ -312,7 +312,7 @@ class MaquinaVirtual:
                 matAddress = cuadruplos[ip][1]
                 matDestAddress = cuadruplos[ip][3]
                 sz = cuadruplos[ip][2][0][0] * cuadruplos[ip][2][0][1]
-                
+
                 for i in range(sz):
                     valor = self.getValue(matAddress + i)
                     self.setValue(matDestAddress + i, valor)
@@ -370,8 +370,14 @@ class MaquinaVirtual:
             # PRINT ---------------------------------
 
             if cuadruplos[ip][0] == 'PRINT':
-                #print(cuadruplos[ip][1]," print.")
-                print(self.getValue(cuadruplos[ip][1]))
+                output = self.getValue(cuadruplos[ip][1])
+                if isinstance(output, str):
+                    outputList = output.split("\\n")
+                    for out in outputList:
+                        print(out)
+                else:
+                    print(output)
+
 
             # READ ---------------------------------
 
