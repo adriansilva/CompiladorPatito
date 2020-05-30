@@ -88,9 +88,10 @@ PRINCIPAL(){
     a2 = a1 + a1 + a1;
     ESCRIBE(a2[0],a2[4]);
 
-    a = z[1,1] - y[1,4];
+    a = z[1,0] - y[0,2];
 
-    ESCRIBE(fib(3));
+    ESCRIBE(a);
+    ESCRIBE(fib(z[1,0] - y[0,2]));
 
     %%z = y;
 }
