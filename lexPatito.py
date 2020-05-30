@@ -171,7 +171,7 @@ def t_CPAREN(t):
     return t
 
 def t_STRING(t):
-    r'\"(.)*\"'
+    r'\"[^"]*\"'
     t.type = 'STRING'
     return t
 

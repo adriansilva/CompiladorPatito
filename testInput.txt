@@ -1,6 +1,6 @@
 PROGRAMA p;
-VAR INT: a[2,3], b[3,2], c[4,4];
-VAR FLOAT: d[5,5];
+VAR INT: a[2,3], ad, b[3,2], c[2,2];
+VAR FLOAT: d[5,5], cd;
 VAR CHAR: e[1,1];
 
 FUNCION INT fibonacciRecursivo(INT n){
@@ -49,7 +49,7 @@ PRINCIPAL(){
 
     VAR INT: i = 0, j = 0;
 
-    DESDE i HASTA 1 HAZ{
+    DESDE i HASTA 1 HAZ{ %%Inicializar matriz con dimensiones 2,3
       DESDE j HASTA 2 HAZ{
           a[i,j] = i*3+j;
           ESCRIBE(a[i,j]);
@@ -57,9 +57,25 @@ PRINCIPAL(){
       j = 0;
     }
 
-    b = a¡;
+    i = 0;
+    DESDE i HASTA 1 HAZ{%%Inicializar matriz con dimensiones 2,2
+      DESDE j HASTA 1 HAZ{
+          c[i,j] = i*2+j;
+          ESCRIBE("i:\n",i,"j:",j,c[i,j]);
+      }
+      j = 0;
+    }
 
-    ESCRIBE(b[2,1]);
+    %%Probar transpuesta
+    %%b = a¡;
+    %%ESCRIBE(b[2,1]);
 
+    %%Probar determinante con una matriz no cuadrada
+    %%ad = a$;
+    %%ESCRIBE(ad);
+
+    %%Probar determinante con matriz cuadrada
+    cd = c$;
+    ESCRIBE(cd);
 
 }
