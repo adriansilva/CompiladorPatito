@@ -312,7 +312,7 @@ class MaquinaVirtual:
                 matAddress = cuadruplos[ip][1]
                 matDestAddress = cuadruplos[ip][3]
                 sz = cuadruplos[ip][2][0][0] * cuadruplos[ip][2][0][1]
-
+                
                 for i in range(sz):
                     valor = self.getValue(matAddress + i)
                     self.setValue(matDestAddress + i, valor)
@@ -486,10 +486,9 @@ class MaquinaVirtual:
 
                 matRes = np.transpose(mat)
 
-                for i in range(matrows):
-                    for j in range(matcols):
-                        self.setValue(cuadruplos[ip][3] + i*matcols + j, matRes[i][j])
-
+                for i in range(matcols):
+                    for j in range(matrows):
+                        self.setValue(cuadruplos[ip][3] + i*matrows + j, matRes[i][j])
 
 
             # INCREMENTA INSTRUCTION POINTER
