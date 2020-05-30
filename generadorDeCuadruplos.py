@@ -307,7 +307,7 @@ class generadorDeCuadruplos:
         if s == None:
             self.outputCuadruplos.append(list(('PRINT', self.pilaOperandos[-1], None, None)))
         else:
-            self.outputCuadruplos.append(list(('PRINT', s, None, None)))
+            self.outputCuadruplos.append(list(('PRINT', s[1:-1], None, None)))
 
     def read(self, id, func):
         #Se genera el cuádruplo del Read

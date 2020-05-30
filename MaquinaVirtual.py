@@ -66,7 +66,7 @@ class MaquinaVirtual:
                 for i in range(arrSize):
                     result = self.getValue(arrAddress + i) + uniqueVal
                     self.setValue(cuadruplos[ip][3] + i, result)
-            
+
             if cuadruplos[ip][0] == '+11': #suma arreglo con arreglo
                 arrSize = cuadruplos[ip][1][1][0]
 
@@ -119,8 +119,8 @@ class MaquinaVirtual:
                 for i in range(matSize):
                     result = self.getValue(mat1Address + i) + self.getValue(mat2Address + i)
                     self.setValue(cuadruplos[ip][3] + i, result)
-                    
-            
+
+
             # RESTA ============================
 
             if cuadruplos[ip][0] == '-':
@@ -140,7 +140,7 @@ class MaquinaVirtual:
                     result = self.getValue(arrAddress + i) - uniqueVal
                     self.setValue(cuadruplos[ip][3] + i, result)
 
-            
+
             if cuadruplos[ip][0] == '-11': #resta arreglo con arreglo
                 arrSize = cuadruplos[ip][1][1][0]
 
@@ -272,7 +272,7 @@ class MaquinaVirtual:
             if cuadruplos[ip][0] == '*10':
                 print("arr x vUnico no esta implementado todavia")
                 exit(-1)
-            
+
 
             # DIVISION ============================
 
@@ -292,7 +292,7 @@ class MaquinaVirtual:
                     valor = self.getValue(cuadruplos[ip][1])
                     self.setValue(cuadruplos[ip][3], valor)
 
-            
+
             if cuadruplos[ip][0] == '=11': #asigna arreglo con arreglo
 
                 arrAddress = cuadruplos[ip][1]
@@ -307,7 +307,7 @@ class MaquinaVirtual:
                 for i in range(sz):
                     valor = self.getValue(arrAddress + i)
                     self.setValue(arrDestAddress + i, valor)
-            
+
             if cuadruplos[ip][0] == '=22': #asigna matriz con matriz
                 matAddress = cuadruplos[ip][1]
                 matDestAddress = cuadruplos[ip][3]
@@ -317,7 +317,7 @@ class MaquinaVirtual:
                     valor = self.getValue(matAddress + i)
                     self.setValue(matDestAddress + i, valor)
 
-            
+
             if cuadruplos[ip][0] == '=21': # quiere asignar un arreglo a una matriz
                 print('asignar un arreglo a una matriz no esta implementado')
                 exit(-1)
@@ -326,10 +326,10 @@ class MaquinaVirtual:
                 print('asignar un valor unico a una matriz no esta implementado')
                 exit(-1)
 
-            if cuadruplos[ip][0] == '=10': # quiere asignar un valor unico a un arreglo 
+            if cuadruplos[ip][0] == '=10': # quiere asignar un valor unico a un arreglo
                 print('asignar un valor unico a un arreglo no esta implementado')
                 exit(-1)
-            
+
 
 
             # RELOP ---------------------------------
@@ -472,7 +472,7 @@ class MaquinaVirtual:
                 det = np.linalg.det(mat)
 
                 self.setValue(cuadruplos[ip][3], det)
-            
+
             if cuadruplos[ip][0] == '¡': #transpuesta
                 matAddress = cuadruplos[ip][1]
                 matrows = cuadruplos[ip][2][0][0]
@@ -496,27 +496,29 @@ class MaquinaVirtual:
             ip += 1
 
     def getValue(self, address):
+        if isinstance(address,str):
+            return address
+        else:
+            if self.isParam:
+                if address >= 9000 and address < 13000: # la direccion es local entonces esta almacenada en stack
+                    return self.stack[-2][address]
 
-        if self.isParam:
             if address >= 9000 and address < 13000: # la direccion es local entonces esta almacenada en stack
-                return self.stack[-2][address]
+                return self.stack[-1][address]
 
-        if address >= 9000 and address < 13000: # la direccion es local entonces esta almacenada en stack
-            return self.stack[-1][address]
+            if address >= 16000 and address < 24000: # la direccion es temporal entonces esta almacenada en stack.
+                return self.stack[-1][address]
 
-        if address >= 16000 and address < 24000: # la direccion es temporal entonces esta almacenada en stack.
-            return self.stack[-1][address]
+            if address >= 24000: #la direccion es un pointer a otro address. #Se deberia de agregar esto tambien dentro de stack y a is param?
+                try:
+                    newAddress = self.heap[address]
+                    return self.getValue(newAddress)
+                except:
+                    print("La dirreccion del arreglo/matriz a la que se trata de accesar no ha sido no ha sido asignada")
+                    exit(-1)
 
-        if address >= 24000: #la direccion es un pointer a otro address. #Se deberia de agregar esto tambien dentro de stack y a is param?
-            try:
-                newAddress = self.heap[address]
-                return self.getValue(newAddress)
-            except:
-                print("La dirreccion del arreglo/matriz a la que se trata de accesar no ha sido no ha sido asignada")
-                exit(-1)
-
-        else: # la direccion esta almacenada en heap
-            return self.heap[address]
+            else: # la direccion esta almacenada en heap
+                return self.heap[address]
 
     def setValue(self, address, value):
 

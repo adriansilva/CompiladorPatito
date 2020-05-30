@@ -1,42 +1,49 @@
 PROGRAMA p;
-VAR INT: a[2,3], b[3,2], d = 2, c[2, 2], e[2,3];
-VAR FLOAT: f, f2[2,2];
+VAR INT: a[2,3], b[3,2], c[4,4];
+VAR FLOAT: d[5,5];
+VAR CHAR: e[1,1];
+
+FUNCION INT fibonacciRecursivo(INT n){
+
+  SI (n == 0) ENTONCES{
+      REGRESA 0;
+  }
+
+  SI (n == 1) ENTONCES{
+      REGRESA 1;
+  }
+
+  SI (n == 2) ENTONCES{
+      REGRESA 1;
+  }
+
+  REGRESA fibonacciRecursivo(n - 1) + fibonacciRecursivo(n - 2);
+}
+
+FUNCION INT fibonacciIterativo(INT n)
+VAR INT: i = 3;
+{
+  SI (n == 0) ENTONCES{
+      REGRESA 0;
+  }
+
+  SI (n == 1) ENTONCES{
+      REGRESA 1;
+  }
+
+  VAR INT: fib[11];
+
+  fib[0] = 1;
+  fib[1] = 1;
+  fib[2] = 1;
+  DESDE i HASTA n HAZ{
+    fib[i] = fib[i-1]+fib[i-2];
+  }
+
+  REGRESA fib[n];
+}
 
 PRINCIPAL(){
-
-    c[0,0] = 1;
-    c[0,1] = 2;
-    c[1,0] = 3;
-    c[1,1] = 4;
-
-    f = c$;
-
-    f2 = c?;
-
-    ESCRIBE(f2[0,0],f2[0,1]);
-    c = c¡;
-    
-
-    a[0,0] = 2;
-    a[0,1] = 5;
-    a[0,2] = 3;
-    a[1,0] = 0;
-    a[1,1] = 8;
-    a[1,2] = 4;
-
-    b[0,0] = 1;
-    b[0,1] = 0;
-    b[1,0] = 3;
-    b[1,1] = 4;
-    b[2,0] = 2;
-    b[2,1] = 1;
-
-    ESCRIBE(f);
-
-    c = a*b;
-    ESCRIBE(c[0,0], c[1,0]);
-
-    c = c * d - 5;
-
-    ESCRIBE(c[0,0], c[1,0]);
+    ESCRIBE("Fibonacci Iterativo:", fibonacciIterativo(10));
+    ESCRIBE("Fibonacci Recursivo:", fibonacciRecursivo(10));
 }

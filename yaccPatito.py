@@ -756,8 +756,7 @@ def p_empty(p):
     '''
 
 def p_error(p):
-    print(p)
-    print("Hay un error de sintaxis!")
+    print("Hay un error de sintaxis en la línea %s!"%p.lineno)
     exit(-1)
 
 parser = yacc.yacc(start='')
