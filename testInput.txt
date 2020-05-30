@@ -46,4 +46,20 @@ VAR INT: i = 3;
 PRINCIPAL(){
     ESCRIBE("Fibonacci Iterativo:", fibonacciIterativo(10));
     ESCRIBE("Fibonacci Recursivo:", fibonacciRecursivo(10));
+
+    VAR INT: i = 0, j = 0;
+
+    DESDE i HASTA 1 HAZ{
+      DESDE j HASTA 2 HAZ{
+          a[i,j] = i*3+j;
+          ESCRIBE(a[i,j]);
+      }
+      j = 0;
+    }
+
+    b = a¡;
+
+    ESCRIBE(b[2,1]);
+
+
 }
