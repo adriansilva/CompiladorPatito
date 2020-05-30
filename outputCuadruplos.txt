@@ -102,7 +102,7 @@
 ['RETURN', 24006, None, 5018]
 ['GOTO', None, None, 104]
 ['ENDfunc', None, None, None]
-['PRINT', 'Fibonacci Iterativo:', None, None]
+['PRINT', 'Fibonacci\\n Iterativo:', None, None]
 ['ERA', None, None, 'fibonacciIterativo']
 ['=', 10, (1, 1), 13006]
 ['PARAM', 13006, None, 9000]

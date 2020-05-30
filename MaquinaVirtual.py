@@ -370,8 +370,14 @@ class MaquinaVirtual:
             # PRINT ---------------------------------
 
             if cuadruplos[ip][0] == 'PRINT':
-                #print(cuadruplos[ip][1]," print.")
-                print(self.getValue(cuadruplos[ip][1]))
+                output = self.getValue(cuadruplos[ip][1])
+                if isinstance(output, str):
+                    outputList = output.split("\\n")
+                    for out in outputList:
+                        print(out)
+                else:
+                    print(output)
+
 
             # READ ---------------------------------
 
@@ -486,10 +492,9 @@ class MaquinaVirtual:
 
                 matRes = np.transpose(mat)
 
-                for i in range(matrows):
-                    for j in range(matcols):
-                        self.setValue(cuadruplos[ip][3] + i*matcols + j, matRes[i][j])
-
+                for i in range(matcols):
+                    for j in range(matrows):
+                        self.setValue(cuadruplos[ip][3] + i*matrows + j, matRes[i][j])
 
 
             # INCREMENTA INSTRUCTION POINTER

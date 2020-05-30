@@ -44,7 +44,7 @@ VAR INT: i = 3;
 }
 
 PRINCIPAL(){
-    ESCRIBE("Fibonacci Iterativo:", fibonacciIterativo(10));
+    ESCRIBE("Fibonacci\n Iterativo:", fibonacciIterativo(10));
     ESCRIBE("Fibonacci Recursivo:", fibonacciRecursivo(10));
 
     VAR INT: i = 0, j = 0;
