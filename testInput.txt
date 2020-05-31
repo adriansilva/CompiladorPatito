@@ -1,5 +1,5 @@
 PROGRAMA p;
-VAR INT: ad, c[2,2];
+VAR INT: ad, c[2,2], arr[3];
 VAR FLOAT: a[2,3], d[5,5], cd, cf[2,2], b[3,2];
 VAR CHAR: e[1,1];
 
@@ -86,4 +86,7 @@ PRINCIPAL(){
     ESCRIBE(b[0,0],b[0,1],b[1,0],b[1,1],b[2,0],b[2,1]);
     b = (c?*a)¡+b*2.0;
     ESCRIBE(b[0,0],b[0,1],b[1,0],b[1,1],b[2,0],b[2,1]);
+    
+    arr = 3;
+    ESCRIBE("EXITO!");
 }

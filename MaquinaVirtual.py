@@ -323,12 +323,23 @@ class MaquinaVirtual:
                 exit(-1)
 
             if cuadruplos[ip][0] == '=20': # quiere asignar un valor unico a una matriz
-                print('asignar un valor unico a una matriz no esta implementado')
-                exit(-1)
+                matAddress = cuadruplos[ip][3]
+                matrows = cuadruplos[ip][2][1][0]
+                matcols = cuadruplos[ip][2][1][1]
+                vUnico = self.getValue(cuadruplos[ip][1])
+                
+                for i in range(matrows):
+                    for j in range(matcols):
+                        self.setValue(matAddress + i*matcols + j, vUnico)
 
             if cuadruplos[ip][0] == '=10': # quiere asignar un valor unico a un arreglo
-                print('asignar un valor unico a un arreglo no esta implementado')
-                exit(-1)
+                arrAddress = cuadruplos[ip][3]
+                arrSize = cuadruplos[ip][2][1][0]
+                vUnico = self.getValue(cuadruplos[ip][1])
+
+                for i in range(arrSize):
+                    self.setValue(arrAddress + i, vUnico)
+
 
 
 
