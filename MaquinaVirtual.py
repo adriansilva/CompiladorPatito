@@ -445,6 +445,7 @@ class MaquinaVirtual:
                 self.isParam = True
 
             if cuadruplos[ip][0] == 'PARAM':
+                self.isParam = True
                 valor = self.getValue(cuadruplos[ip][1])
                 self.setValue(cuadruplos[ip][3], valor)
 
