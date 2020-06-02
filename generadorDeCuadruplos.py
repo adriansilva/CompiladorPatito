@@ -16,8 +16,8 @@ class generadorDeCuadruplos:
     outputCuadruplos = None #Pila de los cuádruplos generados
     constanteDeclarada = None #Revisa si el cuadruplo de asignacion de una constate ya existe
     firmaFunc = None #Pila utilizada para comparar elementos enviados en una llamada de función con la firma de dicha función.
-    contadorParam = None
-    mt = None
+    contadorParam = None #Verifica que los parámetros enviados a una función coincidan con su firma
+    mt = None #Instancia del manejador de tablas
 
 
     def __init__(self):
@@ -117,7 +117,7 @@ class generadorDeCuadruplos:
                         self.outputCuadruplos.append(list((resultado[0],(tempOperando1,dsO1),(tempOperando2,dsO2),nuevoTemporal)))
                     else:
                         self.outputCuadruplos.append(list((resultado[0],tempOperando1,tempOperando2,nuevoTemporal)))
-                    self.pilaOperandos.append(nuevoTemporal) #Falta agregar ds a temporal
+                    self.pilaOperandos.append(nuevoTemporal)
                 self.pilaTipos.append(resultado[1])
                 self.pilaDimensiones.append(resultado[2])
                 self.pilaDs.append(resultado[3])
@@ -302,10 +302,9 @@ class generadorDeCuadruplos:
         # a pesar de ya tener la cosntante declarada para asegurarse que esa constante en el flujo de ejecución ya está declarada.
         self.outputCuadruplos.append(list(('=', con, (1,1), self.mt.getDireccionVariable('CONSTANTES', str(con)))))
 
-    def print(self, s = None):
-        #Se genera el cuádruplo del print
+    def print(self, func, s = None):
         if s == None:
-            self.outputCuadruplos.append(list(('PRINT', self.pilaOperandos[-1], None, None)))
+            self.outputCuadruplos.append(list(('PRINT', self.pilaOperandos[-1], self.pilaDs[-1], None)))
         else:
             self.outputCuadruplos.append(list(('PRINT', s[1:-1], None, None)))
 
@@ -413,6 +412,103 @@ class generadorDeCuadruplos:
         #Generas cuadruplo GOTO hacia top de pila de pilaSaltos
         #Actualizar top de pila de migajas con línea actual
 
+    def verificarD1(self, ds, func, var):
+        tempOperando = self.pilaOperandos.pop()
+        tempTipo = self.pilaTipos.pop()
+        tempDimension = self.pilaDimensiones.pop()
+        tempDs = self.pilaDs.pop()
+
+        #Verificar que el top de la pila esté en el rango válido para ese objeto multidimensional
+        self.outputCuadruplos.append(list(('VER',tempOperando,0,ds[0])))
+
+        resultado = cs.cubo(tempTipo,"INT",
+                            "*",
+                            tempDimension,0,
+                            tempDs,(1,1))
+
+        nuevoTemporal = self.mt.getNewTemporal(resultado[1],1,1)
+
+        #Se multiplica el index por la cantidad de columnas que hay para realizar el desplazamiento
+        #Si se tratara de un arreglo, se multiplicaría el index x 1
+        self.outputCuadruplos.append(list(('*',tempOperando,self.mt.getDireccionVariable('CONSTANTES',str(ds[1])),nuevoTemporal)))
+
+        resultado2 = cs.cubo(resultado[1],"INT",
+                            "+",
+                            resultado[2],0,
+                            resultado[3],(1,1))
+
+        nuevoTemporal2 = self.mt.getNewTemporal("POINT",1,1)
+
+        #Se le suma la dirección base
+        self.outputCuadruplos.append(list(('+',nuevoTemporal,self.mt.getDireccionVariable(func,var),nuevoTemporal2)))
+
+        self.pilaOperandos.append(nuevoTemporal2)
+        self.pilaTipos.append(self.mt.getTipoVariable(func,var))
+        self.pilaDimensiones.append(self.mt.getDimensionVariable(func,var)-1)
+
+        tempD = self.mt.getDsVariable(func,var)
+        self.pilaDs.append((tempD[1],1))
+
+        #Si las dimensiones son menores a cero, se indexó un valor único.
+        if self.pilaDimensiones[-1] < 0:
+            print("VerD1 No se puede accesar a una dimensión no existente de la variable:",var)
+            exit(-1)
+
+    def verificarD2(self, ds, func, var):
+        tempOperando2 = self.pilaOperandos.pop()
+        tempTipo2 = self.pilaTipos.pop()
+        tempDimension2 = self.pilaDimensiones.pop()
+        tempDs2 = self.pilaDs.pop()
+
+        tempOperando1 = self.pilaOperandos.pop()
+        tempTipo1 = self.pilaTipos.pop()
+        tempDimension1 = self.pilaDimensiones.pop()
+        tempDs1 = self.pilaDs.pop()
+
+        #Verificar que el top de la pila esté en el rango válido para ese objeto multidimensional
+        self.outputCuadruplos.append(list(('VER',tempOperando1,0,ds[0])))
+        self.outputCuadruplos.append(list(('VER',tempOperando2,0,ds[1])))
+
+        resultado = cs.cubo(tempTipo1,"INT",
+                            "*",
+                            tempDimension1,0,
+                            tempDs1,(1,1))
+
+        nuevoTemporal = self.mt.getNewTemporal(resultado[1],1,1)
+
+        #Se multiplica el index por la cantidad de columnas que hay para realizar el desplazamiento
+        self.outputCuadruplos.append(list(('*',tempOperando1,self.mt.getDireccionVariable('CONSTANTES',str(ds[1])),nuevoTemporal)))
+
+        resultado2 = cs.cubo(resultado[1],"INT",
+                            "+",
+                            resultado[2],0,
+                            resultado[3],(1,1))
+
+        nuevoTemporal2 = self.mt.getNewTemporal("INT",1,1)
+
+        #Se le suma el index de la columna a la memoria
+        self.outputCuadruplos.append(list(('+',nuevoTemporal,tempOperando2,nuevoTemporal2)))
+
+        resultado3 = cs.cubo(resultado2[1],"INT",
+                            "+",
+                            resultado2[2],0,
+                            resultado2[3],(1,1))
+
+        nuevoTemporal3 = self.mt.getNewTemporal("POINT",1,1)
+
+        #Se le suma la dirección base
+        self.outputCuadruplos.append(list(('+',nuevoTemporal2,self.mt.getDireccionVariable(func,var),nuevoTemporal3)))
+
+        self.pilaOperandos.append(nuevoTemporal3)
+        self.pilaTipos.append(self.mt.getTipoVariable(func,var))
+        self.pilaDimensiones.append(self.mt.getDimensionVariable(func,var)-2)
+        self.pilaDs.append((1,1))
+
+        #Si las dimensiones son menores a cero, se indexó un valor único.
+        if self.pilaDimensiones[-1] < 0:
+            print("No se puede accesar a una dimensión no existente de la variable:",var)
+            exit(-1)
+
     def regresa(self,tipoFunc,tipoVar,func):
         #print(tipoFunc," <---Func | Var---> ",self.pilaTipos[-1])
         self.mt.tablaFunciones[func].tieneReturn = True
@@ -481,96 +577,6 @@ class generadorDeCuadruplos:
 
         self.firmaFunc.pop()
         self.contadorParam.pop()
-
-    def verificarD1(self, ds, func, var):
-        tempOperando = self.pilaOperandos.pop()
-        tempTipo = self.pilaTipos.pop()
-        tempDimension = self.pilaDimensiones.pop()
-        tempDs = self.pilaDs.pop()
-
-        self.outputCuadruplos.append(list(('VER',tempOperando,0,ds[0])))
-
-        resultado = cs.cubo(tempTipo,"INT",
-                            "*",
-                            tempDimension,0,
-                            tempDs,(1,1))
-
-        nuevoTemporal = self.mt.getNewTemporal(resultado[1],1,1)
-
-        self.outputCuadruplos.append(list(('*',tempOperando,self.mt.getDireccionVariable('CONSTANTES',str(ds[1])),nuevoTemporal)))
-
-        resultado2 = cs.cubo(resultado[1],"INT",
-                            "+",
-                            resultado[2],0,
-                            resultado[3],(1,1))
-
-        nuevoTemporal2 = self.mt.getNewTemporal("POINT",1,1)
-
-        self.outputCuadruplos.append(list(('+',nuevoTemporal,self.mt.getDireccionVariable(func,var),nuevoTemporal2)))
-        print(nuevoTemporal2)
-        self.pilaOperandos.append(nuevoTemporal2)
-        self.pilaTipos.append(self.mt.getTipoVariable(func,var))
-        self.pilaDimensiones.append(self.mt.getDimensionVariable(func,var)-1)
-        print("Esto es la func:",func)
-        print("Esta es la variable:",var)
-        tempD = self.mt.getDsVariable(func,var)
-        print(tempD)
-        self.pilaDs.append((tempD[1],1))
-        print(self.pilaDs[-1])
-
-        if self.pilaDimensiones[-1] < 0:
-            print("VerD1 No se puede accesar a una dimensión no existente de la variable:",var)
-            exit(-1)
-
-    def verificarD2(self, ds, func, var):
-        tempOperando2 = self.pilaOperandos.pop()
-        tempTipo2 = self.pilaTipos.pop()
-        tempDimension2 = self.pilaDimensiones.pop()
-        tempDs2 = self.pilaDs.pop()
-
-        tempOperando1 = self.pilaOperandos.pop()
-        tempTipo1 = self.pilaTipos.pop()
-        tempDimension1 = self.pilaDimensiones.pop()
-        tempDs1 = self.pilaDs.pop()
-
-        self.outputCuadruplos.append(list(('VER',tempOperando1,0,ds[0])))
-        self.outputCuadruplos.append(list(('VER',tempOperando2,0,ds[1])))
-
-        resultado = cs.cubo(tempTipo1,"INT",
-                            "*",
-                            tempDimension1,0,
-                            tempDs1,(1,1))
-
-        nuevoTemporal = self.mt.getNewTemporal(resultado[1],1,1)
-
-        self.outputCuadruplos.append(list(('*',tempOperando1,self.mt.getDireccionVariable('CONSTANTES',str(ds[1])),nuevoTemporal)))
-
-        resultado2 = cs.cubo(resultado[1],"INT",
-                            "+",
-                            resultado[2],0,
-                            resultado[3],(1,1))
-
-        nuevoTemporal2 = self.mt.getNewTemporal("INT",1,1)
-
-        self.outputCuadruplos.append(list(('+',nuevoTemporal,tempOperando2,nuevoTemporal2)))
-
-        resultado3 = cs.cubo(resultado2[1],"INT",
-                            "+",
-                            resultado2[2],0,
-                            resultado2[3],(1,1))
-
-        nuevoTemporal3 = self.mt.getNewTemporal("POINT",1,1)
-
-        self.outputCuadruplos.append(list(('+',nuevoTemporal2,self.mt.getDireccionVariable(func,var),nuevoTemporal3)))
-
-        self.pilaOperandos.append(nuevoTemporal3)
-        self.pilaTipos.append(self.mt.getTipoVariable(func,var))
-        self.pilaDimensiones.append(self.mt.getDimensionVariable(func,var)-2)
-        self.pilaDs.append((1,1))
-
-        if self.pilaDimensiones[-1] < 0:
-            print("No se puede accesar a una dimensión no existente de la variable:",var)
-            exit(-1)
 
     def resolverParam(self, func):
         #if self.pilaTipos[-1] !=

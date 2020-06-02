@@ -10,8 +10,6 @@ class Funcion:
     contadorBool = None
     contadorPoints = None
     contadorTemporales = None
-    comienzaFuncion = None
-    #contadorConstantes = None
 
     # Globales: Int 5000 Float 6000 Char 7000 Bool 8000
     # Funcion: Int 9000 Float 10000 Char 11000 Bool 12000
@@ -19,19 +17,19 @@ class Funcion:
     # Temporales: Int 16000 Float 18000 Char 20000 Bool 22000 Pointers 24000
 
     def __init__(self, tipo):
-        self.tipo = tipo
-        self.tablaVariable = {}
-        self.parametros = ""
-        self.inicianCuadruplos = 1
-        self.tieneReturn = False
+        self.tipo = tipo #Tipo de la función
+        self.tablaVariable = {} #Un diccionario cuya llave es un string y su valor es un objeto de tipo variable
+        self.parametros = "" #Un string que lleva la cuenta del tipo y la cantidad de parámetros
+        self.inicianCuadruplos = 1 #Un entero que lleva la posición del cuádruplo en el que inicia la función en cuestión
+        self.tieneReturn = False #Un boleano que determina si la función debería tener un return en base a su tipo
+
+        #Un contador por cada espacio de memoria reservado para ese tipo de variables (si se reserva un arreglo el contador aumentará por el tamaño del arreglo)
         self.contadorInt = 0
         self.contadorFloat = 0
         self.contadorChar = 0
         self.contadorBool = 0
         self.contadorPoints = 0
         self.contadorTemporales = 0
-        self.comienzaFuncion = 0
-        #self.contadorConstantes = 12000
 
 class Variable:
     tipo = None
@@ -41,11 +39,11 @@ class Variable:
     d2 = None
 
     def __init__(self, tipo, dirAlmacenamiento, d1, d2):
-        self.tipo = tipo
-        self.dirAlmacenamiento = dirAlmacenamiento
-        self.dimension = 0
-        self.d1 = d1
-        self.d2 = d2
+        self.tipo = tipo #Tipo de la variable
+        self.dirAlmacenamiento = dirAlmacenamiento #Dirección de almacenamiento
+        self.dimension = 0 #Dimensión {0 si es valor único, 1 si es arreglo, 2 si es matriz}
+        self.d1 = d1 #El tamaño de la dimensión actual 1 (Esto es la cantidad de columnas si es arreglo o la cantidad de filas si es matriz)
+        self.d2 = d2 #El tamaño de la dimensión actual 2 (Cantidad de columnas en una matriz)
 
 class ManejadorDeTablas:
     tablaFunciones = None
@@ -56,14 +54,11 @@ class ManejadorDeTablas:
     def addFuncion(self, nombreFuncion, tipoFuncion):
         f = Funcion(tipoFuncion)
 
-        #print("Añadiendo funcion:",nombreFuncion,"de tipo",tipoFuncion)
-
         if nombreFuncion in self.tablaFunciones:
             print("Error, la funcion", nombreFuncion, "ya fue declarada\n")
             exit(-1)
 
         self.tablaFunciones[nombreFuncion] = f
-        #print(self.tablaFunciones)
 
     def deleteFuncion(self, nombreFuncion):
         self.tablaFunciones[nombreFuncion] = None
@@ -78,13 +73,14 @@ class ManejadorDeTablas:
     def addVariable(self, nombreFuncion, nombreVariable, tipoVariable, esParametro):
         direccion = None
         esTemporal = 1
-        #print("agregando variable", nombreVariable, "a", nombreFuncion)
-        #print()
+
+        #Si la vaiable fue declarada en el ambiente actual arrojar error
         if nombreVariable in self.tablaFunciones[nombreFuncion].tablaVariable:
             print("Error, variable ya fue declarada\n", nombreVariable, nombreFuncion)
             exit(-1)
 
         if esParametro:
+            #Si se trata de un parámetro la dirección es la de las funciones
             direccion = 9000
             if tipoVariable == 'INT':
                 self.tablaFunciones[nombreFuncion].parametros += "i"
@@ -103,6 +99,7 @@ class ManejadorDeTablas:
                 direccion += self.tablaFunciones[nombreFuncion].contadorBool + 3000 #Bools en 8000/11000
                 self.tablaFunciones[nombreFuncion].contadorBool += 1
         else:
+            #En caso de no ser función se le asigna su función respectiva ya sea global, constante, temporal o local
             if nombreFuncion == 'PROGRAMA':
                 direccion = 5000
             if nombreFuncion == 'CONSTANTES':
@@ -114,6 +111,7 @@ class ManejadorDeTablas:
             if nombreFuncion not in ['PROGRAMA','CONSTANTES','TEMPORALES']:
                 direccion = 9000
 
+            #Se le asigna la posición de memoria disponible en base a la cantidad de espacios ocupados
             if tipoVariable == 'INT':
                 direccion += self.tablaFunciones[nombreFuncion].contadorInt
                 self.tablaFunciones[nombreFuncion].contadorInt += 1
@@ -131,7 +129,6 @@ class ManejadorDeTablas:
                 nombreVariable = 'Temporal_'+str(direccion)
         v = Variable(tipoVariable, direccion,1,1)
         self.tablaFunciones[nombreFuncion].tablaVariable[nombreVariable] = v
-        #print(self.tablaFunciones[nombreFuncion].tablaVariable)
 
     def actualizarDimensiones(self, nombreFuncion, nombreVariable, dimension):
         self.tablaFunciones[nombreFuncion].tablaVariable[nombreVariable].dimension = dimension
@@ -176,13 +173,10 @@ class ManejadorDeTablas:
             return (self.tablaFunciones['PROGRAMA'].tablaVariable[var].d1,self.tablaFunciones['PROGRAMA'].tablaVariable[var].d2)
 
     def getDireccionVariable(self,func,var):
-        #print(self.tablaFunciones['CONSTANTES'].tablaVariable)
-        #print("Esto es un var:",var, "Y aqui termina.")
         if var in self.tablaFunciones[func].tablaVariable:
             return self.tablaFunciones[func].tablaVariable[var].dirAlmacenamiento
         else:
             if var in self.tablaFunciones['PROGRAMA'].tablaVariable:
-                #print(self.tablaFunciones['CONSTANTES'].tablaVariable[var].dirAlmacenamiento)
                 return self.tablaFunciones['PROGRAMA'].tablaVariable[var].dirAlmacenamiento
             else:
                 if var in self.tablaFunciones['CONSTANTES'].tablaVariable:
@@ -204,6 +198,7 @@ class ManejadorDeTablas:
                     return 'TEMPORALES'
 
     def getNewTemporal(self,tipoVariable,d1,d2):
+        #Dirección de memoria de las temporales
         direccion = 16000
         if tipoVariable == 'INT':
             direccion += self.tablaFunciones['TEMPORALES'].contadorInt
@@ -220,7 +215,7 @@ class ManejadorDeTablas:
         if tipoVariable == 'POINT':
             direccion += self.tablaFunciones['TEMPORALES'].contadorPoints + 8000
             self.tablaFunciones['TEMPORALES'].contadorPoints += d1*d2
-        #print("***************",direccion,"**************")
+
         v = Variable(tipoVariable, direccion, d1, d2)
 
         self.tablaFunciones['TEMPORALES'].tablaVariable['Temporal_'+str(direccion)] = v
@@ -244,6 +239,7 @@ class ManejadorDeTablas:
         if con in self.tablaFunciones['CONSTANTES'].tablaVariable:
             return
 
+        #Dirección de memoria de las constantes
         direccion = 13000
         if tipoVariable == 'INT':
             direccion += self.tablaFunciones['CONSTANTES'].contadorInt
