@@ -761,7 +761,7 @@ def p_error(p):
 
 parser = yacc.yacc(start='')
 
-f = open("testInput.txt", "r")
+f = open("testInput3.txt", "r")
 result = parser.parse(f.read())
 
 print(result)
