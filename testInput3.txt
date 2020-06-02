@@ -1,4 +1,5 @@
 PROGRAMA p;
+VAR INT: b;
 
 FUNCION INT f1(INT a){
 
@@ -15,4 +16,5 @@ FUNCION INT f(INT a){
 
 PRINCIPAL(){
     ESCRIBE(f(5));
+    LEE(b);
 }

@@ -1,9 +1,4 @@
-if cuadruplos[ip][0] == 'PRINT':
-    #print(cuadruplos[ip][1]," print.")
-    outputTemp = self.getValue(cuadruplos[ip][1]))
-    if isinstance(outputTemp,str):
-        outputLista = outputTemp.split("\n")
-        for out in outputLista:
-            print(out)
-    else:
-        print(outputTemp)
+for i in range(4):
+    for j in range(4):
+        print(i*4+j,end=" ")
+    print()

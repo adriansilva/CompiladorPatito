@@ -327,7 +327,7 @@ class MaquinaVirtual:
                 matrows = cuadruplos[ip][2][1][0]
                 matcols = cuadruplos[ip][2][1][1]
                 vUnico = self.getValue(cuadruplos[ip][1])
-                
+
                 for i in range(matrows):
                     for j in range(matcols):
                         self.setValue(matAddress + i*matcols + j, vUnico)
@@ -387,7 +387,20 @@ class MaquinaVirtual:
                     for out in outputList:
                         print(out)
                 else:
-                    print(output)
+                    matrows = cuadruplos[ip][2][0]
+                    matcols = cuadruplos[ip][2][1]
+
+                    if matrows+matcols > 2:
+                        for j in range(matcols):
+                            print('{:4}'.format(j),end=" ")
+                        print()
+                        for i in range(matrows):
+                            print(i,end=" ")
+                            for j in range(matcols):
+                                print('{:4}'.format(self.getValue(cuadruplos[ip][1] + i*matcols + j)),end=" ")
+                            print()
+                    else:
+                        print(output)
 
 
             # READ ---------------------------------

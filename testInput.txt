@@ -78,15 +78,15 @@ PRINCIPAL(){
 
     %%Probar la inversa de una matriz cuadrada
     cf = c?;
-    ESCRIBE("Inversa:",cf[0,1]);
+    ESCRIBE("Inversa:",cf);
 
     %%Probar caso extremo
     ESCRIBE("Extremo!");
     b = 1.0;
-    ESCRIBE(b[0,0],b[0,1],b[1,0],b[1,1],b[2,0],b[2,1]);
+    ESCRIBE(b);
     b = (c?*a)¡+b*2.0;
-    ESCRIBE(b[0,0],b[0,1],b[1,0],b[1,1],b[2,0],b[2,1]);
-    
+    ESCRIBE(b);
+
     arr = 3;
     ESCRIBE("EXITO!");
 }

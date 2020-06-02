@@ -259,13 +259,13 @@ def p_np_print(p):
     '''
     np_print :
     '''
-    gc.print()
+    gc.print(funcionActual)
 
 def p_np_printStr(p):
     '''
     np_printStr :
     '''
-    gc.print(p[-1])
+    gc.print(funcionActual,p[-1])
 
 def p_decision(p):
     '''
@@ -761,7 +761,7 @@ def p_error(p):
 
 parser = yacc.yacc(start='')
 
-f = open("testInput3.txt", "r")
+f = open("testInput.txt", "r")
 result = parser.parse(f.read())
 
 print(result)
