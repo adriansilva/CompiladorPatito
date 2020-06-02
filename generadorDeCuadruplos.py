@@ -510,17 +510,17 @@ class generadorDeCuadruplos:
             exit(-1)
 
     def regresa(self,tipoFunc,tipoVar,func):
-        #print(tipoFunc," <---Func | Var---> ",self.pilaTipos[-1])
+        #genera cuadrulplo de RETURN y Goto para guardar el valor y saltar a ENDFunc
         self.mt.tablaFunciones[func].tieneReturn = True
-        if tipoVar == 'VOID':
-            if tipoFunc == 'VOID':
+        if tipoVar == 'VOID': #si la funcion es VOID no neecesita return
+            if tipoFunc == 'VOID': 
                 self.outputCuadruplos.append(list(('RETURN',None,None,None)))
                 self.pilaReturns.append(len(self.outputCuadruplos))
                 self.outputCuadruplos.append(list(('GOTO',None,None,None)))
             else:
                 print("El tipo de retorno no matche(VOID) con el tipo de la función.")
                 exit(-1)
-        else:
+        else: #si la funcion no es void, tiene que haber un return, y el tipo de la variable debe de ser igual que el tipo de la funcion
             if self.pilaTipos[-1] != tipoFunc:
                 print("El tipo de retorno no matche(!=VOID) con el tipo de la función.")
                 exit(-1)
@@ -534,6 +534,7 @@ class generadorDeCuadruplos:
                 self.outputCuadruplos.append(list(('GOTO',None,None,None)))
 
     def endFunc(self, func):
+        #si la funcion no tiene return y no es void, marca error
         if not self.mt.tablaFunciones[func].tieneReturn and self.mt.getTipoFuncion(func) != 'VOID':
             print("Todas las funciones de tipo diferente a VOID necesitan un REGRESA.")
             exit(-1)
@@ -542,21 +543,22 @@ class generadorDeCuadruplos:
             index = self.pilaReturns.pop()
             self.outputCuadruplos[index][3] = whereToJump
 
+        #genera cuadruplo ENDfunc
         self.outputCuadruplos.append(list(('ENDfunc',None,None,None)))
 
-    def llamadaFuncion(self,func):
+    def llamadaFuncion(self,func): #genera cuadruplo que crea segmento de memoria en STACK
         self.outputCuadruplos.append(list(('ERA',None,None,func)))
 
-    def agregarFondoParam(self, nombreFuncion):
+    def agregarFondoParam(self, nombreFuncion): 
         self.pilaParams.append('(')
 
         self.firmaFunc.append(self.mt.getParamsFuncion(nombreFuncion))
         self.contadorParam.append([9000,10000,11000,12000])
 
 
-    def quitarFondoParam(self,nombreFuncion):
+    def quitarFondoParam(self,nombreFuncion): #revisa que los parametros mandados en la llamada tengan el mismo numero y tipos que la funcion
         params = ""
-        while self.pilaParams[-1] != '(':
+        while self.pilaParams[-1] != '(': #genera firma de los argumentos
             param = self.pilaParams.pop()
             if param == 'INT':
                 params = "i" + params
@@ -568,7 +570,7 @@ class generadorDeCuadruplos:
                 params = "b" + params
 
         self.pilaParams.pop()
-        if params != self.mt.getParamsFuncion(nombreFuncion):
+        if params != self.mt.getParamsFuncion(nombreFuncion): #consigue firma de la funcion
             print("El número de parámetros o los tipos no coinciden entre la llamada y la función:",nombreFuncion)
             print("Params llamada:",params," /// Params función:",self.mt.getParamsFuncion(nombreFuncion))
             exit(-1)
@@ -579,7 +581,7 @@ class generadorDeCuadruplos:
         self.contadorParam.pop()
 
     def resolverParam(self, func):
-        #if self.pilaTipos[-1] !=
+        # genera cuadruplo que guarda un parametro en una direccion de memoria
         operando = self.pilaOperandos.pop()
         self.pilaParams.append(self.pilaTipos.pop())
         self.pilaDimensiones.pop()
@@ -590,7 +592,7 @@ class generadorDeCuadruplos:
             self.firmaFunc[-1] = self.firmaFunc[-1][1:]
 
         address = None
-
+        #obtiene tipo e parametro para comparar con firma de funcion
         if tipoParam == 'i':
             address = self.contadorParam[-1][0]
             self.contadorParam[-1][0] += 1
@@ -604,28 +606,31 @@ class generadorDeCuadruplos:
             address = self.contadorParam[-1][3]
             self.contadorParam[-1][3] += 1
 
-        #Falta determinar donde se va a guardar el parámetro,
-        #probablemente en alguna variable dentro de la función objetivo
         self.outputCuadruplos.append(list(('PARAM',operando,None,address)))
 
-    def goSUB(self,func):
+    def goSUB(self,func): 
+        # genera cuadruplo GOSUB para ir a la funcion 'func'
         self.outputCuadruplos.append(list(('GOSUB',None,None,self.mt.getFuncComienza(func))))
 
         tipoNuevoTemporal = self.mt.getTipoFuncion(func)
         nuevoTemporal = self.mt.getNewTemporal(tipoNuevoTemporal,1,1)
 
+        # genera cuadruplo de parche guadalupano para guardar el resultado que regresa de la funcion en un temporal
         self.outputCuadruplos.append(list(('=',self.mt.getDireccionVariable('PROGRAMA',func),(1,1),nuevoTemporal)))
         self.operando('Temporal_'+str(nuevoTemporal),tipoNuevoTemporal,0,'TEMPORALES')
 
     def gotoMain(self):
+        # genera cuadrupllo que va a PRINCIPAL despues de declarar variables globales
         self.pilaMigajas.append(len(self.outputCuadruplos))
         self.outputCuadruplos.append(list(('GOTO',None,None,None)))
 
     def updateMain(self):
+        # actualiza cuadruplo de goto main ya que no tenia direccion a donde saltar hasta llegar a main
         update = self.pilaMigajas.pop()
         self.outputCuadruplos[update][3] = len(self.outputCuadruplos) + 1
 
     def endProgram(self):
+        # genera cuadruplo de final de programa
         self.outputCuadruplos.append(list(('END',None, None,None)))
 
     def printCuadruplos(self):
