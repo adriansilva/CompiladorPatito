@@ -1,0 +1,11 @@
+probar variables en diferentes contextos con diferentes tipos,
+global vs local
+
+ej:
+global a = 5;
+
+principal(){
+  int a = 6;
+  int b = 2;
+  ESCRIBE(a+b) %% se espera que funcione a con el valor local y no global
+}

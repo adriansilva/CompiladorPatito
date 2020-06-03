@@ -1,0 +1,1 @@
+probar distintos tipos de funciones, con o sin return, con o sin argumentos

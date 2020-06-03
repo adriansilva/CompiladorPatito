@@ -1,0 +1,1 @@
+probar varias operacionse entre distintos tipos de variables y dimensiones
