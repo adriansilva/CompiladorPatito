@@ -12,7 +12,7 @@ PRINCIPAL(){
 	VAR INT: a = 2, b = 6;
 	ESCRIBE("Prueba imprimir mientras uqe el valor de 'a' sea menor que 'b', duplicar a ");
 	ESCRIBE("'a' igual a 2, 'b' igual a 6");
-	MIENTRAS( a < b ){
+	MIENTRAS( a < b ) HAZ{
 		a = a * 2;
 		ESCRIBE(a);
 	}

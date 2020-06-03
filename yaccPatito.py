@@ -3,9 +3,6 @@ import sys
 import tablas
 import generadorDeCuadruplos
 import MaquinaVirtual
-import os
-from os import listdir
-from os.path import isfile, join
 
 
 
@@ -706,12 +703,8 @@ def p_error(p):
 
 
 
-path = os.path.abspath(os.getcwd())
-files = [f for f in listdir(path + '/tests/') if isfile(join(path + '/tests/', f))]
+
 parser = yacc.yacc(start='')
 
-for fl in files:
-    f = open('tests/' + fl, "r")
-    result = parser.parse(f.read())
-    f.close()
-    parser.restart()
+f = open('tests/' + sys.argv[1], "r")
+result = parser.parse(f.read())
