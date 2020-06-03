@@ -36,7 +36,7 @@ VAR INT: i = 3;
   fib[0] = 1;
   fib[1] = 1;
   fib[2] = 1;
-  DESDE i HASTA n HAZ{
+  DESDE i HASTA n+1 HAZ{
     fib[i] = fib[i-1]+fib[i-2];
   }
 
@@ -49,16 +49,16 @@ PRINCIPAL(){
 
     VAR INT: i = 0, j = 0;
 
-    DESDE i HASTA 1 HAZ{ %%Inicializar matriz con dimensiones 2,3
-      DESDE j HASTA 2 HAZ{
+    DESDE i HASTA 2 HAZ{ %%Inicializar matriz con dimensiones 2,3
+      DESDE j HASTA 3 HAZ{
           a[i,j] = i*3.0+j;%%Se le asigna un valor incremental empezando en 0
       }
       j = 0;
     }
 
     i = 0;
-    DESDE i HASTA 1 HAZ{%%Inicializar matriz con dimensiones 2,2
-      DESDE j HASTA 1 HAZ{
+    DESDE i HASTA 2 HAZ{%%Inicializar matriz con dimensiones 2,2
+      DESDE j HASTA 2 HAZ{
           c[i,j] = i*2+j;%%Se le asigna un valor incremental empezando en 0
       }
       j = 0;

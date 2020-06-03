@@ -182,7 +182,6 @@ class ManejadorDeTablas:
                 if var in self.tablaFunciones['CONSTANTES'].tablaVariable:
                     return self.tablaFunciones['CONSTANTES'].tablaVariable[var].dirAlmacenamiento
                 else:
-                    print()
                     return self.tablaFunciones['TEMPORALES'].tablaVariable[var].dirAlmacenamiento
 
     def getFuncionVariable(self,func,var):

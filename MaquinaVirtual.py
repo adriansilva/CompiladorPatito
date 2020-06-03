@@ -277,8 +277,18 @@ class MaquinaVirtual:
             # DIVISION ============================
 
             if cuadruplos[ip][0] == '/':
-                valor = self.getValue(cuadruplos[ip][1]) / self.getValue(cuadruplos[ip][2])
-                self.setValue(cuadruplos[ip][3], valor)
+                address = cuadruplos[ip][3]
+                if address >= 24000:
+                    address = self.heap[cuadruplos[ip[3]]]
+                if ((address >= 5000 and address<6000) or
+                   (address >= 9000 and address<10000) or
+                   (address >= 13000 and address<14000) or
+                   (address >= 16000 and address<18000)):
+                    valor = self.getValue(cuadruplos[ip][1]) // self.getValue(cuadruplos[ip][2])
+                    self.setValue(cuadruplos[ip][3], valor)
+                else:
+                    valor = self.getValue(cuadruplos[ip][1]) / self.getValue(cuadruplos[ip][2])
+                    self.setValue(cuadruplos[ip][3], valor)
 
             # ASIGNACION ---------------------------------
 
@@ -446,8 +456,11 @@ class MaquinaVirtual:
 
             if cuadruplos[ip][0] == 'PARAM':
                 self.isParam = True
-                valor = self.getValue(cuadruplos[ip][1])
-                self.setValue(cuadruplos[ip][3], valor)
+                tam = cuadruplos[ip][2][0]*cuadruplos[ip][2][1]
+
+                for i in range(tam):
+                    valor = self.getValue(cuadruplos[ip][1]+i)
+                    self.setValue(cuadruplos[ip][3]+i, valor)
 
             if cuadruplos[ip][0] == 'ENDfunc': # elimina segmento de memoria
                 self.stack.pop()

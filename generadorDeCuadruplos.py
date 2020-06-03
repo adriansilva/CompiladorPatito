@@ -257,7 +257,7 @@ class generadorDeCuadruplos:
                 tempOperador = self.pilaOperadores.pop()
                 tempOperando2 = self.pilaOperandos.pop()
                 tempOperando1 = self.pilaOperandos.pop()
-                #print((tempOperador,tempOperando1,tempOperando2))
+
                 resultado = cs.cubo(self.pilaTipos[-2],self.pilaTipos[-1],
                                     tempOperador,
                                     self.pilaDimensiones[-2],self.pilaDimensiones[-1],
@@ -269,8 +269,7 @@ class generadorDeCuadruplos:
                 self.pilaDimensiones.pop()
                 dsO2 = self.pilaDs.pop()
                 dsO1 = self.pilaDs.pop()
-                print(tempOperador)
-                print(resultado[0])
+
                 nuevoTemporal = self.mt.getNewTemporal(resultado[1],resultado[3][0],resultado[3][1])
                 if '0' in resultado[0] or '1' in resultado[0] or '2' in resultado[0]:
                     self.outputCuadruplos.append(list((resultado[0],(tempOperando1,dsO1),(tempOperando2,dsO2),nuevoTemporal)))
@@ -387,7 +386,7 @@ class generadorDeCuadruplos:
         if tipo == 'INT' and self.pilaDimensiones.pop() == 0:
             #Si la 'X' es mayor a tu expresion, ya terminaste el for. Es necesario convertir a boleano para usar el GOTOV
             nuevoTemporal = self.mt.getNewTemporal('BOOL',1,1)
-            self.outputCuadruplos.append(list(('<=',self.pilaIDFor[-1],operando,nuevoTemporal)))
+            self.outputCuadruplos.append(list(('<',self.pilaIDFor[-1],operando,nuevoTemporal)))
 
             #Se necesita crear aquí la nueva variable temporal para que se utilice y guardarla en mt
 
@@ -451,7 +450,7 @@ class generadorDeCuadruplos:
 
         #Si las dimensiones son menores a cero, se indexó un valor único.
         if self.pilaDimensiones[-1] < 0:
-            print("VerD1 No se puede accesar a una dimensión no existente de la variable:",var)
+            print("No se puede accesar a una dimensión no existente de la variable:",var)
             exit(-1)
 
     def verificarD2(self, ds, func, var):
@@ -513,7 +512,7 @@ class generadorDeCuadruplos:
         #genera cuadrulplo de RETURN y Goto para guardar el valor y saltar a ENDFunc
         self.mt.tablaFunciones[func].tieneReturn = True
         if tipoVar == 'VOID': #si la funcion es VOID no neecesita return
-            if tipoFunc == 'VOID': 
+            if tipoFunc == 'VOID':
                 self.outputCuadruplos.append(list(('RETURN',None,None,None)))
                 self.pilaReturns.append(len(self.outputCuadruplos))
                 self.outputCuadruplos.append(list(('GOTO',None,None,None)))
@@ -528,6 +527,7 @@ class generadorDeCuadruplos:
                 operando = self.pilaOperandos.pop()
                 tipo = self.pilaTipos.pop()
                 self.pilaDimensiones.pop()
+                self.pilaDs.pop()
 
                 self.outputCuadruplos.append(list(('RETURN',operando,None,self.mt.getDireccionVariable('PROGRAMA', func))))
                 self.pilaReturns.append(len(self.outputCuadruplos))
@@ -549,7 +549,7 @@ class generadorDeCuadruplos:
     def llamadaFuncion(self,func): #genera cuadruplo que crea segmento de memoria en STACK
         self.outputCuadruplos.append(list(('ERA',None,None,func)))
 
-    def agregarFondoParam(self, nombreFuncion): 
+    def agregarFondoParam(self, nombreFuncion):
         self.pilaParams.append('(')
 
         self.firmaFunc.append(self.mt.getParamsFuncion(nombreFuncion))
@@ -575,7 +575,8 @@ class generadorDeCuadruplos:
             print("Params llamada:",params," /// Params función:",self.mt.getParamsFuncion(nombreFuncion))
             exit(-1)
         else:
-            print("Se llamó exitosamente a la función",nombreFuncion,"!\n\n\n\n\n")
+            #print("Se llamó exitosamente a la función",nombreFuncion,"!\n\n\n\n\n")
+            pass
 
         self.firmaFunc.pop()
         self.contadorParam.pop()
@@ -585,6 +586,7 @@ class generadorDeCuadruplos:
         operando = self.pilaOperandos.pop()
         self.pilaParams.append(self.pilaTipos.pop())
         self.pilaDimensiones.pop()
+        dsO1 = self.pilaDs.pop()
 
         tipoParam = self.firmaFunc[-1][0]
 
@@ -595,29 +597,30 @@ class generadorDeCuadruplos:
         #obtiene tipo e parametro para comparar con firma de funcion
         if tipoParam == 'i':
             address = self.contadorParam[-1][0]
-            self.contadorParam[-1][0] += 1
+            self.contadorParam[-1][0] += dsO1[0]*dsO1[1]
         elif tipoParam == 'f':
             address = self.contadorParam[-1][1]
-            self.contadorParam[-1][1] += 1
+            self.contadorParam[-1][1] += dsO1[0]*dsO1[1]
         if tipoParam == 'c':
             address = self.contadorParam[-1][2]
-            self.contadorParam[-1][2] += 1
+            self.contadorParam[-1][2] += dsO1[0]*dsO1[1]
         if tipoParam == 'b':
             address = self.contadorParam[-1][3]
-            self.contadorParam[-1][3] += 1
+            self.contadorParam[-1][3] += dsO1[0]*dsO1[1]
 
-        self.outputCuadruplos.append(list(('PARAM',operando,None,address)))
+        self.outputCuadruplos.append(list(('PARAM',operando,dsO1,address)))
 
-    def goSUB(self,func): 
+    def goSUB(self,func):
         # genera cuadruplo GOSUB para ir a la funcion 'func'
         self.outputCuadruplos.append(list(('GOSUB',None,None,self.mt.getFuncComienza(func))))
 
         tipoNuevoTemporal = self.mt.getTipoFuncion(func)
-        nuevoTemporal = self.mt.getNewTemporal(tipoNuevoTemporal,1,1)
+        if tipoNuevoTemporal != 'VOID':
+            nuevoTemporal = self.mt.getNewTemporal(tipoNuevoTemporal,1,1)
 
-        # genera cuadruplo de parche guadalupano para guardar el resultado que regresa de la funcion en un temporal
-        self.outputCuadruplos.append(list(('=',self.mt.getDireccionVariable('PROGRAMA',func),(1,1),nuevoTemporal)))
-        self.operando('Temporal_'+str(nuevoTemporal),tipoNuevoTemporal,0,'TEMPORALES')
+            # genera cuadruplo de parche guadalupano para guardar el resultado que regresa de la funcion en un temporal
+            self.outputCuadruplos.append(list(('=',self.mt.getDireccionVariable('PROGRAMA',func),(1,1),nuevoTemporal)))
+            self.operando('Temporal_'+str(nuevoTemporal),tipoNuevoTemporal,0,'TEMPORALES')
 
     def gotoMain(self):
         # genera cuadrupllo que va a PRINCIPAL despues de declarar variables globales

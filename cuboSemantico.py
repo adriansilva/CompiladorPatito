@@ -129,11 +129,9 @@ def typeToInt(tipo):
     }
     regresa = switcher.get(tipo, "Caracter inválido.")
     if isinstance(regresa,int):
-        #print(tipo)
-        #print(type(regresa))
         return regresa
     else:
-        print(tipo)
+        print("Tipo:", tipo)
         exit(-1)
 
 def typeToIntDimension(tipo):
@@ -155,8 +153,6 @@ def typeToIntDimension(tipo):
     }
     regresa = switcher.get(tipo, "Caracter inválido.")
     if isinstance(regresa,int):
-        #print(tipo)
-        #print(type(regresa))
         return regresa
     else:
         print(tipo)
@@ -277,7 +273,6 @@ def cubo(tipo1, tipo2, operacion, dimension1, dimension2, dsO1, dsO2):
         resultado = modificarDs(operacion, dimension1, dimension2, dsO1, dsO2)
         operacion = resultado[0]
         dsO1 = resultado[1]
-        print(resultado[1])
 
     return (operacion,intToType(tipoResultante),dimensionResultante,dsO1)
 

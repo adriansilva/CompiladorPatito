@@ -60,7 +60,7 @@ def p_programa3(p):
 
 def p_principal(p):
     '''
-    principal : PRINCIPAL np_declfuncprincipal np_updateMain OPAREN CPAREN OBRACKET estatutos CBRACKET np_end np_printCuadruplos np_printTablas
+    principal : PRINCIPAL np_declfuncprincipal np_updateMain OPAREN CPAREN OBRACKET estatutos CBRACKET np_end np_printCuadruplos
     '''
     global funcionActual
     funcionActual = "PRINCIPAL"
@@ -375,7 +375,6 @@ def p_np_read(p):
     np_read :
     '''
     gc.read(p[-1],funcionActual)
-    print(p[-1],funcionActual,'AIIAAAAAA')
 
 def p_asignacion(p):
     '''
@@ -384,9 +383,15 @@ def p_asignacion(p):
 
 def p_expresion_3(p):
     '''
-    expresion : expresion LOGIC np_insertarOperador expresion
-              | expresion RELOP np_insertarOperador expresion
+    expresion : expresion logicORelop np_insertarOperador expresion
     '''
+
+def p_logicORelop(p):
+    '''
+    logicORelop : LOGIC
+                | RELOP
+    '''
+    p[0] = p[1]
 
 def p_expresion_1(p):
     '''
@@ -457,7 +462,6 @@ def p_termino1_uminus(p):
     'termino1 : MINUS np_updateUMINUSTRUE constante %prec UMINUS'
 
     p[0] = -p[3]
-    print(p[0])
 
 def p_posibleID_1(p):
     '''
@@ -495,27 +499,6 @@ def p_np_quitarIDActual(p):
     '''
     global IDActual
     IDActual.pop()
-
-def p_np_restarDimension0(p):
-    '''
-    np_restarDimension0 :
-    '''
-    global restarDimension
-    restarDimension = 0
-
-def p_np_restarDimension1(p):
-    '''
-    np_restarDimension1 :
-    '''
-    global restarDimension
-    restarDimension = 1
-
-def p_np_restarDimension2(p):
-    '''
-    np_restarDimension2 :
-    '''
-    global restarDimension
-    restarDimension = 2
 
 def p_np_verificarD1(p):
     '''
@@ -667,17 +650,11 @@ def p_np_addConstanteCHAR(p):
     '''
     np_addConstanteCHAR :
     '''
-    print("Llego")
+    #print("Llego")
     gc.mt.addConstante(p[-1][1],"CHAR")
-    print(p[-1][1],"WOOOOW")
+    #print(p[-1][1],"WOOOOW")
     gc.constanteCuadruplo(p[-1][1])
     gc.operando(p[-1][1],'CHAR',0,'CONSTANTES')
-
-def p_np_addVariableParametro(p):
-    '''
-    np_addVariableParametro :
-    '''
-    gc.mt.addVariable(funcionActual, p[-1], tipoVariable, esParametro)
 
 def p_np_addVariable(p):
     '''
@@ -696,27 +673,6 @@ def p_np_enviarACuadruplos2(p):
     np_enviarACuadruplos2 :
     '''
     gc.operando(IDActual[-1],gc.mt.getTipoVariable(funcionActual,IDActual[-1]),gc.mt.getDimensionVariable(funcionActual,IDActual[-1]),funcionActual)
-
-def p_np_enviarACuadruplos3(p):
-    '''
-    np_enviarACuadruplos3 :
-    '''
-    gc.operando(IDActual[-1],gc.mt.getTipoVariable(funcionActual,IDActual[-1]),gc.mt.getDimensionVariable(funcionActual,IDActual[-1])-1,funcionActual)
-
-def p_np_enviarACuadruplos4(p):
-    '''
-    np_enviarACuadruplos4 :
-    '''
-    gc.operando(IDActual[-1],gc.mt.getTipoVariable(funcionActual,IDActual[-1]),gc.mt.getDimensionVariable(funcionActual,IDActual[-1])-2,funcionActual)
-
-
-def p_np_enviarACuadruplosC(p):
-    '''
-    np_enviarACuadruplosC :
-    '''
-    print(p[-2],"!!!YEAAAH")
-    gc.operando(str(p[-2]),gc.mt.getTipoVariable('CONSTANTES',str(p[-2])),0,funcionActual)
-
 
 def p_np_actualizarDimensiones(p):
     '''
@@ -744,12 +700,6 @@ def p_np_printCuadruplos(p):
     '''
     gc.printCuadruplos()
 
-def p_np_test(p):
-    '''
-    np_test :
-    '''
-    print("SI LLEGA")
-
 def p_empty(p):
     '''
     empty :
@@ -761,7 +711,7 @@ def p_error(p):
 
 parser = yacc.yacc(start='')
 
-f = open("testInput.txt", "r")
+f = open("testBinarySearch.txt", "r")
 result = parser.parse(f.read())
 
 print(result)

@@ -39,9 +39,6 @@ tokens = [
     'FLOTANTE',
     'CARACT',
     'VOID',
-    'NEWLINE',
-    'COMENTARIO',
-    'IGNORE',
     'PLUS',
     'MINUS',
     'MULTIPLY',
@@ -59,7 +56,6 @@ tokens = [
     'OPMATRIZ',
     'COLON',
     'COMA',
-    'QUOT',
     'STRING'
 ]
 
@@ -99,7 +95,6 @@ def t_COLON(t):
 def t_IGNORE(t):
     r'\ '
     pass
-    #t.lexer.skip(1)
 
 def t_NEWLINE(t):
     r'\n+'
