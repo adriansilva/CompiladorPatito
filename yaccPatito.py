@@ -3,6 +3,11 @@ import sys
 import tablas
 import generadorDeCuadruplos
 import MaquinaVirtual
+import os
+from os import listdir
+from os.path import isfile, join
+
+
 
 from lexPatito import tokens
 
@@ -709,9 +714,13 @@ def p_error(p):
     print("Hay un error de sintaxis en la línea %s!"%p.lineno)
     exit(-1)
 
-parser = yacc.yacc(start='')
 
-f = open("testBinarySearch.txt", "r")
-result = parser.parse(f.read())
 
-print(result)
+path = os.path.abspath(os.getcwd())
+files = [f for f in listdir(path + '/tests/') if isfile(join(path + '/tests/', f))]
+
+for fl in files:
+    parser = yacc.yacc(start='')
+    f = open('tests/' + fl, "r")
+    result = parser.parse(f.read())
+    f.close()
