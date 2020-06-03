@@ -52,10 +52,11 @@ FUNCION VOID quickSort(INT arr[10], INT low, INT high){
         stack[top] = high;
       }
     }
-    ESCRIBE(arr);
+    ESCRIBE("arreglo despues de quick sort", arr);
 }
 
 PRINCIPAL(){
+    ESCRIBE("Inicia test Sort ============================\n");
     VAR INT: i = 0;
     arr[0] = 14;
     arr[1] = 50;
@@ -67,6 +68,8 @@ PRINCIPAL(){
     arr[7] = -2;
     arr[8] = 15;
     arr[9] = 6;
+    ESCRIBE("arreglo original", arr);
 
     quickSort(arr,0,9);
+    ESCRIBE("Termina test Sort ============================\n");
 }

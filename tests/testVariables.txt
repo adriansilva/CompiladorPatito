@@ -1,11 +1,11 @@
-probar variables en diferentes contextos con diferentes tipos,
-global vs local
+PROGRAMA p;
 
-ej:
-global a = 5;
+VAR INT: a = 5;
 
-principal(){
-  int a = 6;
-  int b = 2;
-  ESCRIBE(a+b) %% se espera que funcione a con el valor local y no global
+PRINCIPAL(){
+  ESCRIBE("Inicia test Variables ============================\n");
+  VAR INT: a = 6, b = 2;
+  ESCRIBE("Se asigna 6 a la variable local 'a' y el valor 2 a la variable local 'b', como son locales se espera que la suma sea 8 y no tome en cuenta la variable global 'a'");
+  ESCRIBE(a+b); %% se espera que funcione a con el valor local y no global
+  ESCRIBE("Termina test Variables ============================\n");
 }
