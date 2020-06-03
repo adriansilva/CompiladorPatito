@@ -1,5 +1,5 @@
 PROGRAMA p;
-VAR INT: arr[10];
+VAR INT: arr[10], b[5];
 
 FUNCION VOID quickSort(INT arr[10], INT low, INT high){
     VAR INT: pi, stack[10] = 0, top = -1, i, pivot, j, temp;
@@ -68,6 +68,7 @@ PRINCIPAL(){
     arr[7] = -2;
     arr[8] = 15;
     arr[9] = 6;
+
     ESCRIBE("arreglo original", arr);
 
     quickSort(arr,0,9);

@@ -38,10 +38,10 @@ PRINCIPAL(){
     arr[7] = 25;
     arr[8] = 50;
     arr[9] = 1000;
-	
+
     ESCRIBE("Arreglo base:", arr);
     x = 50;
-   
+
     ESCRIBE(binarySearch(arr,x,-1,10));
     ESCRIBE("Valor esperado deberia de ser 8");
 

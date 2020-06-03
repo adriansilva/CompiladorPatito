@@ -309,7 +309,10 @@ class generadorDeCuadruplos:
 
     def read(self, id, func):
         #Se genera el cuádruplo del Read
-        self.outputCuadruplos.append(list(('READ', None, None, self.mt.getDireccionVariable(func,id))))
+        self.outputCuadruplos.append(list(('READ', None, None, self.pilaOperandos.pop())))
+        self.pilaTipos.pop()
+        self.pilaDimensiones.pop()
+        self.pilaDs.pop()
 
     def ifStatement(self):
         # Inicia el if statement

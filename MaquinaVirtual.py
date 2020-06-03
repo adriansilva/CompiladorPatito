@@ -422,13 +422,16 @@ class MaquinaVirtual:
 
             if cuadruplos[ip][0] == 'READ':
                 temp = input("input: ")
+                address = cuadruplos[ip][3]
+                if cuadruplos[ip][3] >= 24000:
+                    address = self.getAddressFromPointer(cuadruplos[ip][3])
                 try:
                     val = int(temp)
-                    if ((cuadruplos[ip][3] >= 5000 and cuadruplos[ip][3] <6000) or
-                        (cuadruplos[ip][3] >= 9000 and cuadruplos[ip][3] <10000) or
-                        (cuadruplos[ip][3] >= 13000 and cuadruplos[ip][3] <14000) or
-                        (cuadruplos[ip][3] >= 16000 and cuadruplos[ip][3] <18000)):
-                        self.setValue(cuadruplos[ip][3], temp)
+                    if ((address >= 5000 and address <6000) or
+                        (address >= 9000 and address <10000) or
+                        (address >= 13000 and address <14000) or
+                        (address >= 16000 and address <18000)):
+                        self.setValue(address, val)
                     else:
                         print("ERROR DE ASIGNACION: El tipo de dato introducido (INT) no matchea con la variable.")
                         exit(-1)
@@ -436,20 +439,20 @@ class MaquinaVirtual:
                 except ValueError:
                     try:
                         val = float(temp)
-                        if ((cuadruplos[ip][3] >= 6000 and cuadruplos[ip][3] <7000) or
-                            (cuadruplos[ip][3] >= 10000 and cuadruplos[ip][3] <11000) or
-                            (cuadruplos[ip][3] >= 14000 and cuadruplos[ip][3] <15000) or
-                            (cuadruplos[ip][3] >= 18000 and cuadruplos[ip][3] <20000)):
-                            self.setValue(cuadruplos[ip][3], temp)
+                        if ((address >= 6000 and address <7000) or
+                            (address >= 10000 and address <11000) or
+                            (address >= 14000 and address <15000) or
+                            (address >= 18000 and address <20000)):
+                            self.setValue(address, val)
                         else:
                             print("ERROR DE ASIGNACION: El tipo de dato introducido (FLOAT) no matchea con la variable.")
                             exit(-1)
                     except ValueError:
-                        if ((cuadruplos[ip][3] >= 7000 and cuadruplos[ip][3] <8000) or
-                            (cuadruplos[ip][3] >= 11000 and cuadruplos[ip][3] <12000) or
-                            (cuadruplos[ip][3] >= 15000 and cuadruplos[ip][3] <16000) or
-                            (cuadruplos[ip][3] >= 20000 and cuadruplos[ip][3] <22000)):
-                            self.setValue(cuadruplos[ip][3], temp)
+                        if ((address >= 7000 and address <8000) or
+                            (address >= 11000 and address <12000) or
+                            (address >= 15000 and address <16000) or
+                            (address >= 20000 and address <22000)):
+                            self.setValue(address, val)
                         else:
                             print("ERROR DE ASIGNACION: El tipo de dato introducido (CHAR/STRING) no matchea con la variable.")
                             exit(-1)

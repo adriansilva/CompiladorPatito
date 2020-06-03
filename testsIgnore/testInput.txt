@@ -44,9 +44,6 @@ VAR INT: i = 3;
 }
 
 PRINCIPAL(){
-    ESCRIBE("Fibonacci Iterativo:", fibonacciIterativo(10));
-    ESCRIBE("Fibonacci Recursivo:", fibonacciRecursivo(10));
-
     VAR INT: i = 0, j = 0;
 
     DESDE i HASTA 2 HAZ{ %%Inicializar matriz con dimensiones 2,3
@@ -66,7 +63,7 @@ PRINCIPAL(){
 
     %%Probar transpuesta
     b = a¡;
-    ESCRIBE("Matriz transpuesta:",b[2,1]);
+    ESCRIBE("Matriz transpuesta:",b);
 
     %%Probar determinante con una matriz no cuadrada
     %%ad = a$;
