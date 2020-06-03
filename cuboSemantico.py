@@ -1,12 +1,3 @@
-'''
-Estoy considerando que tenemos una variable tipo Bool. Recuerdo que
-habiamos dicho que no ibamos a tener, pero después de pensarlo bien,
-me parece que lo mejor es sí tenerla. Habría que cambiar algunas cosas,
-entre ellas los tokens del léxico para aceptar BOOL, TRUE, FALSE. También
-en termino1 habría que agregar True y False, al igual que en todas las
-declaraciones permitir declarar el BOOL.
-'''
-
 cuboTipos =   [[#INT  FLOAT  CHAR  BOOL
                [0,     1,    -1,   -1], #INT       TYPE: '+'
                [1,     1,    -1,   -1], #FLOAT

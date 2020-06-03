@@ -1,18 +1,3 @@
-"""
-Todo el lexer funciona igual. Agregué algunos otros elementos como los operadores
-de logica (&& y ||), brackets y los operadores de matrices. Intente seguirle con
-el YACC y cree algo en base a la documentación pero no funciona. En sí ya tengo
-declaradas las reglas para expresión. Cambié un poco las reglas, porque no es
-necesario tener tantas reglas llamadas "termino". En sí, puedes tener todos los
-operadores en un mismo set, y les añades precedencia en la función de precedence
-que se ve más abajo. El problema es que al tratar de parsear un string, la variable
-'p' no contiene nada. Entonces no puedo trabajar con nada que arroje yacc. Si te fijas
-hay un nuevo documento llamado parser.out. Ahí se puede ver todo lo que hace el parser
-Ya es muy tarde y no tuve mucho tiempo de observarlo para ver si encontraba algo.
-Si puedes dale una repasada a todo lo que codié del YACC y fijate si puedes arreglar
-el bug. Nuevamente el bug es que las variables P tienen valores en [0] y [1] como None.
-"""
-
 import ply.lex as lex
 import sys
 

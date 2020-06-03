@@ -1,20 +1,7 @@
 PROGRAMA p;
-VAR INT: b;
 
-FUNCION INT f1(INT a){
-
-    REGRESA a*2;
-}
-
-
-FUNCION INT f(INT a){
-    SI (a==0)ENTONCES{
-    REGRESA 0;
-    }
-    REGRESA f(a-1)+f1(a);
-}
+VAR INT: a = 5, arr[4] = 5;
 
 PRINCIPAL(){
-    ESCRIBE(f(5));
-    LEE(b);
+  ESCRIBE(arr);
 }
