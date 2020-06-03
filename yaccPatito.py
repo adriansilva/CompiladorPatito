@@ -145,7 +145,6 @@ def p_np_endFunc(p):
     np_endFunc :
     '''
     gc.endFunc(funcionActual)
-    #print("Se llamo a una función.")
 
 def p_declaracionFuncionParametros_1(p): #define argumentos
     '''
@@ -188,12 +187,10 @@ def p_np_declfunc(p):
         gc.mt.addFuncion(funcionActual, p[-2])
         gc.updateDirFunc(funcionActual)
         if p[-2] != 'VOID':
-            #print(p[-2])
             gc.mt.addVariable('PROGRAMA',funcionActual,p[-2],False)
             gc.mt.actualizarDimensiones('PROGRAMA',funcionActual,0)
     else:
-        print("YA EXISTE LA FUNCIÓN:",funcionActual)
-        print(p[-1])
+        print("Ya existe la función:",funcionActual)
         exit(-1)
 
 def p_np_declprincipal(p):
@@ -226,7 +223,6 @@ def p_estatutos_2(p):
               | escritura estatutos
               | decision estatutos
     '''
-    #print("llamando estatutos")
 
 def p_estatutos_3(p):
     '''
@@ -634,7 +630,6 @@ def p_np_addConstanteINT(p):
     temp = p[-1]
     if esUMINUS == True:
         temp = -temp
-        #print("SI CAMBIO!",temp,"!!!!!!!!!!!!!!!!!!!!!\n\n\n\n")
     gc.mt.addConstante(str(temp), "INT")
     gc.constanteCuadruplo(int(temp))
     gc.operando(str(temp),'INT',0,'CONSTANTES')
@@ -646,7 +641,6 @@ def p_np_addConstanteFLOAT(p):
     temp = p[-1]
     if esUMINUS == True:
         temp = -temp
-        #print("SI CAMBIO!",temp,"!!!!!!!!!!!!!!!!!!!!!\n\n\n\n")
     gc.mt.addConstante(str(temp), "FLOAT")
     gc.constanteCuadruplo(float(temp))
     gc.operando(str(temp),'FLOAT',0,'CONSTANTES')
@@ -655,9 +649,7 @@ def p_np_addConstanteCHAR(p):
     '''
     np_addConstanteCHAR :
     '''
-    #print("Llego")
     gc.mt.addConstante(p[-1][1],"CHAR")
-    #print(p[-1][1],"WOOOOW")
     gc.constanteCuadruplo(p[-1][1])
     gc.operando(p[-1][1],'CHAR',0,'CONSTANTES')
 
@@ -689,14 +681,12 @@ def p_np_agregarFondo(p):
     '''
     np_agregarFondo :
     '''
-    #print("se agregó fondo exitosamente.")
     gc.operador('(')
 
 def p_np_quitarFondo(p):
     '''
     np_quitarFondo :
     '''
-    #print("Se quitó fondo exitosamente!")
     gc.operador(')')
 
 def p_np_printCuadruplos(p):
@@ -715,6 +705,11 @@ def p_error(p):
     exit(-1)
 
 
+<<<<<<< HEAD
+f = open("./testsIgnore/testInput2.txt", "r")
+result = parser.parse(f.read())
+=======
+>>>>>>> a64741f515cb17e6a0b6a90d4444a3cc46fcc508
 
 path = os.path.abspath(os.getcwd())
 files = [f for f in listdir(path + '/tests/') if isfile(join(path + '/tests/', f))]

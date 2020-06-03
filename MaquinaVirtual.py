@@ -102,6 +102,7 @@ class MaquinaVirtual:
                 matAddress = cuadruplos[ip][1][0]
 
                 arrAddress = cuadruplos[ip][2][0]
+
                 if arrAddress >= 24000:
                     arrAddress = self.getAddressFromPointer(cuadruplos[ip][2][0])
 
@@ -485,7 +486,7 @@ class MaquinaVirtual:
             # ARREGLOS Y MATRICES ---------------------------------
             if cuadruplos[ip][0] == 'VER':
                 if self.getValue(cuadruplos[ip][1]) < 0 or self.getValue(cuadruplos[ip][1]) >= cuadruplos[ip][3]:
-                    print("RUNTIME ERROR: el indice de acceso excede el tamano de la variable")
+                    print("RUNTIME ERROR: el índice de acceso excede el tamaño de la variable")
                     exit(-1)
 
             if cuadruplos[ip][0] == '?': #inversa
@@ -561,7 +562,7 @@ class MaquinaVirtual:
                     newAddress = self.heap[address]
                     return self.getValue(newAddress)
                 except:
-                    print("La dirreccion del arreglo/matriz a la que se trata de accesar no ha sido no ha sido asignada")
+                    print("La dirreccion del arreglo/matriz a la que se trata de accesar no ha sido asignada")
                     exit(-1)
 
             else: # la direccion esta almacenada en heap

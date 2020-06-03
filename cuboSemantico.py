@@ -262,11 +262,23 @@ def cubo(tipo1, tipo2, operacion, dimension1, dimension2, dsO1, dsO2):
     dimensionResultante = cuboDimensiones[typeToIntDimension(operacion)][dimension1][dimension2]
     #En caso de tener un index de -1, la operación no se pudo realizar con éxito
     if dimensionResultante == -1:
-        print(dimension1,dimension2)
-        print("Esta operación aritmética no es válida por discrepancias de dimensiones o no es soportada por el compilador.")
+        if dimension1 == 0:
+            dimensionO1 = "Valor Único"
+        if dimension1 == 1:
+            dimensionO1 = "Arreglo"
+        if dimension1 == 2:
+            dimensionO1 = "Matriz"
+        if dimension2 == 0:
+            dimensionO2 = "Valor Único"
+        if dimension2 == 1:
+            dimensionO2 = "Arreglo"
+        if dimension2 == 2:
+            dimensionO2 = "Matriz"
+
+        print("Esta operación aritmética no es válida por discrepancias de dimensiones o no es soportada por el compilador:",dimensionO1,operacion,dimensionO2)
         exit(-1)
     if tipoResultante == -1:
-        print("Esta operación aritmética no es válida por incongruencias de tipos.")
+        print("Esta operación aritmética no es válida por incongruencias de tipos:",tipo1,operacion,tipo2)
         exit(-1)
     #Si se trata de un arreglo o una matriz y está ejecutando alguna de las siguientes operaciones, modifica las Ds (dimensiones actuales) y el oeprador para la MV
     if dimension1+dimension2 > 0 and operacion in ['+','-','*','=']:

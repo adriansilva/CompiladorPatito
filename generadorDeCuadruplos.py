@@ -575,7 +575,6 @@ class generadorDeCuadruplos:
             print("Params llamada:",params," /// Params función:",self.mt.getParamsFuncion(nombreFuncion))
             exit(-1)
         else:
-            #print("Se llamó exitosamente a la función",nombreFuncion,"!\n\n\n\n\n")
             pass
 
         self.firmaFunc.pop()
