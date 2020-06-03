@@ -1,0 +1,16 @@
+PROGRAMA p;
+
+FUNCION INT factorial(INT n){
+    SI (n == 0) ENTONCES{
+        REGRESA 1;
+    }
+    REGRESA n * factorial(n-1);
+}
+
+
+
+PRINCIPAL(){
+    ESCRIBE("Inicia test Factorial ============================\n");
+    ESCRIBE("Factorial: Resultado esperado de factorial de 5 es 120", "Resultado obtenido:", factorial(5));
+    ESCRIBE("Termina test Factorial ============================\n");
+}

@@ -41,6 +41,8 @@ VAR INT: i = 3;
 }
 
 PRINCIPAL(){
+    ESCRIBE("Inicia test Fibonacci ============================\n");
     ESCRIBE("Fibonacci Iterativo: Resultado esperado 55", "Resultado obtenido:", fibonacciIterativo(10));
     ESCRIBE("Fibonacci Recursivo: Resultado esperado 55", "Resultado obtenido:", fibonacciRecursivo(10));
+    ESCRIBE("Termina test Fibonacci ============================\n");
 }

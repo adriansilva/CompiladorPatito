@@ -1,1 +1,14 @@
-Probar IF
+PROGRAMA p;
+
+PRINCIPAL(){
+    ESCRIBE("Inicia test Decision ============================\n");
+    VAR INT: a = 2;
+
+    SI (a > 2) ENTONCES{
+        ESCRIBE("ESTE CODIGO NO SE DEBE EJECUTAR");
+    } SINO{
+        ESCRIBE("Este codigo si se debe ejecutar");
+    }
+    
+    ESCRIBE("\nTermina test Decision =========================\n");
+}
