@@ -3,6 +3,11 @@ import sys
 import tablas
 import generadorDeCuadruplos
 import MaquinaVirtual
+import os
+from os import listdir
+from os.path import isfile, join
+
+
 
 from lexPatito import tokens
 
@@ -699,9 +704,18 @@ def p_error(p):
     print("Hay un error de sintaxis en la línea %s!"%p.lineno)
     exit(-1)
 
-parser = yacc.yacc(start='')
 
+<<<<<<< HEAD
 f = open("./testsIgnore/testInput2.txt", "r")
 result = parser.parse(f.read())
+=======
+>>>>>>> a64741f515cb17e6a0b6a90d4444a3cc46fcc508
 
-print(result)
+path = os.path.abspath(os.getcwd())
+files = [f for f in listdir(path + '/tests/') if isfile(join(path + '/tests/', f))]
+
+for fl in files:
+    parser = yacc.yacc(start='')
+    f = open('tests/' + fl, "r")
+    result = parser.parse(f.read())
+    f.close()
