@@ -1,6 +1,22 @@
 PROGRAMA p;
 
 PRINCIPAL(){
-    ESCRIBE("Fibonacci Iterativo: Resultado esperado 55", "Resultado obtenido:");
-    ESCRIBE("Fibonacci Recursivo: Resultado esperado 55", "Resultado obtenido:");
+	VAR INT: i = 0;
+	ESCRIBE("Inicia test Ciclos ============================\n");
+
+	ESCRIBE("Prueba imprimir un valor de 0 a 9");
+	DESDE i HASTA 10 HAZ {
+		ESCRIBE(i);
+	}
+
+	VAR INT: a = 2, b = 6;
+	ESCRIBE("Prueba imprimir mientras uqe el valor de 'a' sea menor que 'b', duplicar a ");
+	ESCRIBE("'a' igual a 2, 'b' igual a 6");
+	MIENTRAS( a < b ){
+		a = a * 2;
+		ESCRIBE(a);
+	}
+
+	ESCRIBE("Termina test Ciclos ============================\n");
+	
 }
