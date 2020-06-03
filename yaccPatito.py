@@ -711,7 +711,7 @@ def p_error(p):
 
 parser = yacc.yacc(start='')
 
-f = open("tests/testFibonacci.txt", "r")
+f = open("testBinarySearch.txt", "r")
 result = parser.parse(f.read())
 
 print(result)

@@ -188,7 +188,7 @@ SINO                 : 59
 STRING               : 53 56
 VAR                  : 11 12 13
 VOID                 : 20
-error                : 
+error                :
 
 Nonterminals, with rules where they appear
 
@@ -251,7 +251,7 @@ np_llamadaFuncion    : 65
 np_print             : 52 55
 np_printCuadruplos   : 7
 np_printStr          : 53 56
-np_printTablas       : 
+np_printTablas       :
 np_quitarFondo       : 16 17 18 19 28 29 30 32 33 34 52 55 59 59 60 72 73 80 80 103 105 118 123 127
 np_quitarFondoParam  : 65
 np_quitarIDActual    : 102
@@ -5600,8 +5600,8 @@ state 359
     ID              reduce using rule 59 (decision -> SI OPAREN np_agregarFondo expresion np_quitarFondo np_iniciaIf CPAREN ENTONCES OBRACKET estatutos CBRACKET SINO OBRACKET np_iniciaElse np_agregarFondo estatutos np_quitarFondo np_terminaElse CBRACKET .)
     CBRACKET        reduce using rule 59 (decision -> SI OPAREN np_agregarFondo expresion np_quitarFondo np_iniciaIf CPAREN ENTONCES OBRACKET estatutos CBRACKET SINO OBRACKET np_iniciaElse np_agregarFondo estatutos np_quitarFondo np_terminaElse CBRACKET .)
 
-WARNING: 
+WARNING:
 WARNING: Conflicts:
-WARNING: 
+WARNING:
 WARNING: shift/reduce conflict for LOGIC in state 226 resolved as shift
 WARNING: shift/reduce conflict for RELOP in state 226 resolved as shift
