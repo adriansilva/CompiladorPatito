@@ -12,7 +12,7 @@ class MaquinaVirtual:
         self.stack = [{}]   # memoria local, cada ves que se usa una funcion, se agrega otro diccionario a esta
                             # lista de diccionarios y representa una nueva seccion de memoria
 
-        self.isParam = False
+        self.isParam = False # flag que detecta si se estan realizando calculos para un parametro, entonces usar el stack anterior
 
     def processInput(self, cuadruplos, mt):
         ip = 0
@@ -245,7 +245,8 @@ class MaquinaVirtual:
                         self.setValue(mat3Address + i*mat3cols + j, mat3[i][j])
 
             if cuadruplos[ip][0] == '*21':
-                print("mat x arr no esta implementado todavia")
+                
+                print("Esta operacino no esta permitida")
                 exit(-1)
 
             if cuadruplos[ip][0] == '*20':
@@ -267,12 +268,28 @@ class MaquinaVirtual:
                         self.setValue(destAddress + i*mat1cols + j, mat1[i][j])
 
             if cuadruplos[ip][0] == '*11':
-                print("arr x arr no esta implementado todavia")
+
+
+                print("Esta operacino no esta permitida")
                 exit(-1)
 
             if cuadruplos[ip][0] == '*10':
-                print("arr x vUnico no esta implementado todavia")
-                exit(-1)
+                arrSize = cuadruplos[ip][1][1][0]
+
+                arrAddress = cuadruplos[ip][1][0]
+
+                if arrAddress >= 24000:
+                    arrAddress = self.getAddressFromPointer(cuadruplos[ip][1][0])
+
+                uniqueVal = self.getValue(cuadruplos[ip][2][0])
+                print(arrSize)
+                print(arrAddress)
+                print(uniqueVal)
+
+                for i in range(arrSize):
+                    result = self.getValue(arrAddress + i) * uniqueVal
+                    print(result)
+                    self.setValue(cuadruplos[ip][3] + i, result)
 
 
             # DIVISION ============================
