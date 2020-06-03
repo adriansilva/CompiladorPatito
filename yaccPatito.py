@@ -705,11 +705,6 @@ def p_error(p):
     exit(-1)
 
 
-<<<<<<< HEAD
-f = open("./testsIgnore/testInput2.txt", "r")
-result = parser.parse(f.read())
-=======
->>>>>>> a64741f515cb17e6a0b6a90d4444a3cc46fcc508
 
 path = os.path.abspath(os.getcwd())
 files = [f for f in listdir(path + '/tests/') if isfile(join(path + '/tests/', f))]
