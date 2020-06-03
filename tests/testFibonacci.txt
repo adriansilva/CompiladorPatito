@@ -1,1 +1,46 @@
-probar fib recursivo e iterativo
+PROGRAMA p;
+
+FUNCION INT fibonacciRecursivo(INT n){
+
+  SI (n == 0) ENTONCES{
+      REGRESA 0;
+  }
+
+  SI (n == 1) ENTONCES{
+      REGRESA 1;
+  }
+
+  SI (n == 2) ENTONCES{
+      REGRESA 1;
+  }
+
+  REGRESA fibonacciRecursivo(n - 1) + fibonacciRecursivo(n - 2);
+}
+
+FUNCION INT fibonacciIterativo(INT n)
+VAR INT: i = 3;
+{
+  SI (n == 0) ENTONCES{
+      REGRESA 0;
+  }
+
+  SI (n == 1) ENTONCES{
+      REGRESA 1;
+  }
+
+  VAR INT: fib[11];
+
+  fib[0] = 1;
+  fib[1] = 1;
+  fib[2] = 1;
+  DESDE i HASTA n+1 HAZ{
+    fib[i] = fib[i-1]+fib[i-2];
+  }
+
+  REGRESA fib[n];
+}
+
+PRINCIPAL(){
+    ESCRIBE("Fibonacci Iterativo: Resultado esperado 55", "Resultado obtenido:", fibonacciIterativo(10));
+    ESCRIBE("Fibonacci Recursivo: Resultado esperado 55", "Resultado obtenido:", fibonacciRecursivo(10));
+}
