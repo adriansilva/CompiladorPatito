@@ -1,1 +1,6 @@
-probar ciclo for y while
+PROGRAMA p;
+
+PRINCIPAL(){
+    ESCRIBE("Fibonacci Iterativo: Resultado esperado 55", "Resultado obtenido:");
+    ESCRIBE("Fibonacci Recursivo: Resultado esperado 55", "Resultado obtenido:");
+}

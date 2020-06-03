@@ -718,9 +718,10 @@ def p_error(p):
 
 path = os.path.abspath(os.getcwd())
 files = [f for f in listdir(path + '/tests/') if isfile(join(path + '/tests/', f))]
+parser = yacc.yacc(start='')
 
 for fl in files:
-    parser = yacc.yacc(start='')
     f = open('tests/' + fl, "r")
     result = parser.parse(f.read())
     f.close()
+    parser.restart()
