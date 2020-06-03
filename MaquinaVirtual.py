@@ -397,8 +397,12 @@ class MaquinaVirtual:
                     for out in outputList:
                         print(out)
                 else:
-                    matrows = cuadruplos[ip][2][0]
-                    matcols = cuadruplos[ip][2][1]
+                    if cuadruplos[ip][2][1] == 1:
+                        matcols = cuadruplos[ip][2][0]
+                        matrows = 1
+                    else:
+                        matrows = cuadruplos[ip][2][0]
+                        matcols = cuadruplos[ip][2][1]
 
                     if matrows+matcols > 2:
                         for j in range(matcols):
